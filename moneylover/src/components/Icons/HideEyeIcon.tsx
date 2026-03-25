@@ -6,12 +6,7 @@ interface IHideEyeIcon extends SVGProps<SVGSVGElement> {
   height?: number;
 }
 
-const HideEyeIcon = ({
-  color = '#6B7280',
-  width = 24,
-  height = 24,
-  ...props
-}: IHideEyeIcon) => (
+const HideEyeIcon = ({ color = '#6B7280', width = 24, height = 24, ...props }: IHideEyeIcon) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={width}
