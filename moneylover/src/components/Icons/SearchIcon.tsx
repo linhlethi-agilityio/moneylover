@@ -6,12 +6,7 @@ interface ISearchIcon extends SVGProps<SVGSVGElement> {
   height?: number;
 }
 
-const SearchIcon = ({
-  color = '#6B7280',
-  width = 24,
-  height = 24,
-  ...props
-}: ISearchIcon) => (
+const SearchIcon = ({ color = '#6B7280', width = 24, height = 24, ...props }: ISearchIcon) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={width}
