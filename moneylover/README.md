@@ -1,36 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Money Lover App
+
+## Overview
+
+This document will overview about estimation for [Next.js Practice](https://docs.google.com/document/d/1eAOdl12x98nnyBqzHQIPnNtFov6x9G13/edit). This practice will build a money management web app.
+
+## Technical stack
+
+- [React](https://react.dev/)
+- [Next.js](https://nextjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Zod](https://zod.dev/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Supabase](https://supabase.com/)
+- [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
+
+## Features
+
+Build a Web application of Money Lover with features below:
+
+- Authentication
+- Onboarding (Currency picker, Wallet creation)
+- Wallet list
+- Add wallet
+- Edit/Delete wallet
+- Add/Edit/Delete transaction
+- Monthly income & expense summary
+- Transaction list grouped by date
+- Dashboard (Total balance, Recent transactions)
 
 ## Getting Started
 
-First, run the development server:
+To get started with this project, follow the instructions below.
+
+### Prerequisites
+
+- node v20.
+- npm
+
+### Installation
+
+1. Clone the repository:
+
+```bash
+git clone git@gitlab.asoft-python.com:linh.lethi/nextjs-training.git
+```
+
+2. Checkout branch:
+
+```bash
+git checkout feat/moneylover
+```
+
+3. Install dependencies:
+
+```bash
+npm install
+```
+
+### Run the application
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+### Lint
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run lint
+```
