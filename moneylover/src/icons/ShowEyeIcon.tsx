@@ -1,17 +1,11 @@
-import { SVGProps } from 'react';
-
-interface IShowEyeIcon extends SVGProps<SVGSVGElement> {
-  color?: string;
-  width?: number;
-  height?: number;
-}
+import { IconProps } from '@/types';
 
 const ShowEyeIcon = ({
   color = '#6B7280',
   width = 24,
   height = 24,
   ...props
-}: IShowEyeIcon) => (
+}: IconProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={width}

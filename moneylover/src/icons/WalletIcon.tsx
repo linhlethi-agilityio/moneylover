@@ -1,17 +1,11 @@
-import { SVGProps } from 'react';
-
-interface IWalletIcon extends SVGProps<SVGSVGElement> {
-  color?: string;
-  width?: number;
-  height?: number;
-}
+import { IconProps } from '@/types';
 
 const WalletIcon = ({
   color = '#6B7280',
   width = 24,
   height = 24,
   ...props
-}: IWalletIcon) => (
+}: IconProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={width}
