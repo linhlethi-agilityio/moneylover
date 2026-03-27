@@ -5,3 +5,7 @@ export * from './HideEyeIcon';
 export * from './SearchIcon';
 export * from './MenuIcon';
 export * from './CloseIcon';
+export * from './HomeIcon';
+export * from './TransactionIcon';
+export * from './CategoryIcon';
+export * from './ChevronRightIcon';
