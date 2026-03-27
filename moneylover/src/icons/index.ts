@@ -4,3 +4,4 @@ export * from './ShowEyeIcon';
 export * from './HideEyeIcon';
 export * from './SearchIcon';
 export * from './MenuIcon';
+export * from './CloseIcon';
