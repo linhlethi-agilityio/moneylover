@@ -22,7 +22,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           id={id}
           className={cn(
-            'w-full rounded-lg border border-gray-400 px-3 py-3 text-sm text-gray-900',
+            'w-full rounded-lg border border-gray-400 px-3 py-2 text-sm text-gray-900',
             'placeholder:text-gray-300',
             'focus:border-lime-600 focus:outline-none',
             'disabled:cursor-not-allowed disabled:border-gray-200 disabled:opacity-50',
@@ -38,7 +38,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           </span>
         )}
       </div>
-      <p className="mt-1 min-h-[16px] text-xs text-red-500">{errorMessage}</p>
+      {errorMessage && (
+        <p className="mt-1 min-h-[16px] text-xs text-red-500">{errorMessage}</p>
+      )}
     </div>
   ),
 );
