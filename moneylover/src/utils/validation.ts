@@ -25,9 +25,26 @@ export const isEnableSubmitButton = (
 };
 
 export const signInSchema = z.object({
-  email: z.string().nonempty(ERROR_MESSAGES.EMAIL_REQUIRED).email(ERROR_MESSAGES.EMAIL_INVALID),
+  email: z.string().nonempty(ERROR_MESSAGES.REQUIRED('Email')).email(ERROR_MESSAGES.EMAIL_INVALID),
   password: z
     .string()
-    .nonempty(ERROR_MESSAGES.PASSWORD_REQUIRED)
+    .nonempty(ERROR_MESSAGES.REQUIRED('Password'))
     .min(6, ERROR_MESSAGES.PASSWORD_MIN_LENGTH),
 });
+
+export const signUpSchema = z
+  .object({
+    email: z
+      .string()
+      .nonempty(ERROR_MESSAGES.REQUIRED('Email'))
+      .email(ERROR_MESSAGES.EMAIL_INVALID),
+    password: z
+      .string()
+      .nonempty(ERROR_MESSAGES.REQUIRED('Password'))
+      .min(6, ERROR_MESSAGES.PASSWORD_MIN_LENGTH),
+    confirmPassword: z.string().nonempty(ERROR_MESSAGES.REQUIRED('Confirm password')),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: ERROR_MESSAGES.CONFIRM_PASSWORD_NOT_MATCH,
+    path: ['confirmPassword'],
+  });

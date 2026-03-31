@@ -12,37 +12,39 @@ import { ROUTES } from '@/constants';
 import { ShowEyeIcon, HideEyeIcon } from '@/icons';
 
 // Types
-import { SignInFormData } from '@/types';
+import { SignUpFormData } from '@/types';
 
 // Utils
-import { clearErrorOnChange, isEnableSubmitButton, signInSchema } from '@/utils';
+import { clearErrorOnChange, isEnableSubmitButton, signUpSchema } from '@/utils';
 
 // Components
 import { Button, Input } from '@/components';
 
-const REQUIRED_FIELDS = ['email', 'password'];
+const REQUIRED_FIELDS = ['email', 'password', 'confirmPassword'];
 
-const SignInForm = () => {
+export const SignUpForm = () => {
   const [isShowPassword, setIsShowPassword] = useState(false);
+  const [isShowConfirmPassword, setIsShowConfirmPassword] = useState(false);
 
   const {
     control,
     formState: { dirtyFields, errors },
     clearErrors,
     handleSubmit,
-  } = useForm<SignInFormData>({
-    resolver: zodResolver(signInSchema),
+  } = useForm<SignUpFormData>({
+    resolver: zodResolver(signUpSchema),
     mode: 'onBlur',
     reValidateMode: 'onBlur',
     defaultValues: {
       email: '',
       password: '',
+      confirmPassword: '',
     },
   });
 
-  const handleSignIn = (formData: SignInFormData) => {
-    // TODO: Handle sign in logic here
-    console.log('Sign In form data:', formData);
+  const handleSignUp = (formData: SignUpFormData) => {
+    // TODO: Handle sign up logic here
+    console.log('Sign Up form data:', formData);
   };
 
   const dirtyItems = Object.keys(dirtyFields);
@@ -53,10 +55,11 @@ const SignInForm = () => {
   );
 
   const handleToggleVisiblePassword = () => setIsShowPassword((prev) => !prev);
+  const handleToggleVisibleConfirmPassword = () => setIsShowConfirmPassword((prev) => !prev);
 
   return (
-    <form onSubmit={handleSubmit(handleSignIn)} className="w-full space-y-4">
-      <h1 className="mb-6 text-center text-2xl font-bold text-gray-900">Sign In</h1>
+    <form onSubmit={handleSubmit(handleSignUp)} className="w-full space-y-4">
+      <h1 className="mb-6 text-center text-2xl font-bold text-gray-900">Sign Up</h1>
       <Controller
         name="email"
         control={control}
@@ -98,10 +101,40 @@ const SignInForm = () => {
         )}
       />
 
+      <Controller
+        name="confirmPassword"
+        control={control}
+        render={({ field: { name, onChange, ...rest }, fieldState: { error } }) => (
+          <Input
+            placeholder="Confirm Password"
+            type={isShowConfirmPassword ? 'text' : 'password'}
+            rightIcon={
+              isShowConfirmPassword ? (
+                <HideEyeIcon
+                  className="cursor-pointer"
+                  onClick={handleToggleVisibleConfirmPassword}
+                />
+              ) : (
+                <ShowEyeIcon
+                  className="cursor-pointer"
+                  onClick={handleToggleVisibleConfirmPassword}
+                />
+              )
+            }
+            errorMessage={error?.message}
+            onChange={(e) => {
+              onChange(e.target.value);
+              clearErrorOnChange(name, errors, clearErrors);
+            }}
+            {...rest}
+          />
+        )}
+      />
+
       <p className="text-right text-sm text-gray-500">
-        Don&apos;t have an account?&nbsp;
-        <Link href={ROUTES.SIGN_UP} className="text-green-600 hover:underline">
-          Sign Up
+        Already have an account?&nbsp;
+        <Link href={ROUTES.SIGN_IN} className="text-green-600 hover:underline">
+          Sign In
         </Link>
       </p>
 
@@ -111,5 +144,3 @@ const SignInForm = () => {
     </form>
   );
 };
-
-export default SignInForm;
