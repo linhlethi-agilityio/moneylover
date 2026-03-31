@@ -6,10 +6,11 @@ import { cn } from '@/utils';
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   rightIcon?: ReactNode;
+  errorMessage?: string;
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ label, className, id, rightIcon, ...props }, ref) => (
+  ({ label, className, id, rightIcon, errorMessage, ...props }, ref) => (
     <div>
       {label && (
         <label htmlFor={id} className="mb-1 block text-xs text-gray-400">
@@ -26,6 +27,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             'focus:border-lime-600 focus:outline-none',
             'disabled:cursor-not-allowed disabled:border-gray-200 disabled:opacity-50',
             rightIcon && 'pr-10',
+            errorMessage && 'border-red-500 focus:border-red-500',
             className,
           )}
           {...props}
@@ -36,6 +38,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           </span>
         )}
       </div>
+      <p className="mt-1 min-h-[16px] text-xs text-red-500">{errorMessage}</p>
     </div>
   ),
 );
