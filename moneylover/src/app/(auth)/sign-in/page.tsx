@@ -1,5 +1,5 @@
 // Components
-import SignInForm from '@/components/SignInForm';
+import { SignInForm } from '@/components';
 
 const SignInPage = () => <SignInForm />;
 

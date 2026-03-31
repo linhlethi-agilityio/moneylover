@@ -20,7 +20,7 @@ interface ToastProps extends IToast {
   onClose: (id: string) => void;
 }
 
-const Toast = ({ id, title, description, status, onClose }: ToastProps) => {
+export const Toast = ({ id, title, description, status, onClose }: ToastProps) => {
   const style = statusStyles[status];
 
   const handleClose = () => {
@@ -43,5 +43,3 @@ const Toast = ({ id, title, description, status, onClose }: ToastProps) => {
     </div>
   );
 };
-
-export default Toast;
