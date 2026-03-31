@@ -1,18 +1,25 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useTransition } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 // Constants
-import { ROUTES } from '@/constants';
+import { ERROR_MESSAGES, ROUTES } from '@/constants';
 
 // Icons
 import { ShowEyeIcon, HideEyeIcon } from '@/icons';
 
+// Actions
+import { authenticate } from '@/actions';
+
 // Types
 import { SignInFormData } from '@/types';
+
+// Hooks
+import { useToast } from '@/hooks';
 
 // Utils
 import { clearErrorOnChange, isEnableSubmitButton, signInSchema } from '@/utils';
@@ -24,6 +31,9 @@ const REQUIRED_FIELDS = ['email', 'password'];
 
 export const SignInForm = () => {
   const [isShowPassword, setIsShowPassword] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+  const { showToast } = useToast();
 
   const {
     control,
@@ -41,8 +51,19 @@ export const SignInForm = () => {
   });
 
   const handleSignIn = (formData: SignInFormData) => {
-    // TODO: Handle sign in logic here
-    console.log('Sign In form data:', formData);
+    startTransition(async () => {
+      const error = await authenticate(formData);
+
+      if (error) {
+        return showToast({
+          status: 'error',
+          title: ERROR_MESSAGES.EMAIL_PASSWORD_INVALID,
+          description: error,
+        });
+      }
+
+      router.push(ROUTES.DASHBOARD);
+    });
   };
 
   const dirtyItems = Object.keys(dirtyFields);
@@ -105,7 +126,13 @@ export const SignInForm = () => {
         </Link>
       </p>
 
-      <Button type="submit" size="lg" disabled={!enableSubmit} className="w-full uppercase">
+      <Button
+        type="submit"
+        size="lg"
+        isLoading={isPending}
+        disabled={!enableSubmit}
+        className="w-full uppercase"
+      >
         Submit
       </Button>
     </form>
