@@ -19,7 +19,7 @@ import { Button, Input } from '@/components';
 
 const REQUIRED_FIELDS = ['email', 'password'];
 
-const SignInForm = () => {
+export const SignInForm = () => {
   const [isShowPassword, setIsShowPassword] = useState(false);
 
   const {
@@ -108,5 +108,3 @@ const SignInForm = () => {
     </form>
   );
 };
-
-export default SignInForm;

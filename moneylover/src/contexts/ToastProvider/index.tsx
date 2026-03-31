@@ -6,7 +6,7 @@ import { type ReactNode, useId, useRef, useState, createContext } from 'react';
 import { TOAST_DURATION } from '@/constants';
 
 // Components
-import Toast from '@/components/Toast';
+import { Toast } from '@/components';
 
 export type ToastStatus = 'success' | 'error' | 'info';
 

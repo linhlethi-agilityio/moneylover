@@ -9,7 +9,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   errorMessage?: string;
 }
 
-const Input = forwardRef<HTMLInputElement, InputProps>(
+export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ label, className, id, rightIcon, errorMessage, ...props }, ref) => (
     <div>
       {label && (
@@ -38,13 +38,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           </span>
         )}
       </div>
-      {errorMessage && (
-        <p className="mt-1 min-h-[16px] text-xs text-red-500">{errorMessage}</p>
-      )}
+      {errorMessage && <p className="mt-1 min-h-[16px] text-xs text-red-500">{errorMessage}</p>}
     </div>
   ),
 );
 
 Input.displayName = 'Input';
-
-export default Input;

@@ -11,7 +11,7 @@ const sizes = {
   md: 'h-6 w-6 border-2',
 };
 
-const LoadingIndicator = ({ size = 'md', className }: LoadingIndicatorProps) => (
+export const LoadingIndicator = ({ size = 'md', className }: LoadingIndicatorProps) => (
   <div
     className={cn(
       'animate-spin rounded-full border-gray-300 border-t-lime-600',
@@ -20,5 +20,3 @@ const LoadingIndicator = ({ size = 'md', className }: LoadingIndicatorProps) => 
     )}
   />
 );
-
-export default LoadingIndicator;

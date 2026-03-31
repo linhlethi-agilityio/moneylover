@@ -19,7 +19,7 @@ const sizes = {
   lg: { container: 'h-14 w-14', image: '56px' },
 };
 
-const Avatar = ({
+export const Avatar = ({
   src = DEFAULT_AVATAR,
   alt = '',
   size = 'md',
@@ -47,5 +47,3 @@ const Avatar = ({
     />
   </div>
 );
-
-export default Avatar;

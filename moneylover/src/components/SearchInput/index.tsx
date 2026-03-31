@@ -11,7 +11,7 @@ interface SearchInputProps extends InputHTMLAttributes<HTMLInputElement> {
   onSearch?: (query: string) => void;
 }
 
-const SearchInput = ({
+export const SearchInput = ({
   defaultValue = '',
   placeholder = 'Search...',
   onSearch,
@@ -33,5 +33,3 @@ const SearchInput = ({
     />
   );
 };
-
-export default SearchInput;
