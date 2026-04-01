@@ -4,6 +4,7 @@ export const ERROR_MESSAGES = {
   PASSWORD_MIN_LENGTH: 'Password must be at least 6 characters',
   CONFIRM_PASSWORD_NOT_MATCH: 'Passwords do not match',
 
+  SIGN_UP_FAILED: 'Sign up failed. Please try again.',
   EMAIL_PASSWORD_INVALID: 'Email or password is invalid',
   UNKNOWN_ERROR: 'Something went wrong. Please try again later',
 };
