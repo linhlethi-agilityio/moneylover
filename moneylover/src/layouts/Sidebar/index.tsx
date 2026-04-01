@@ -6,6 +6,9 @@ import { usePathname } from 'next/navigation';
 // Icons
 import { HomeIcon, TransactionIcon, CategoryIcon, ChevronRightIcon } from '@/icons';
 
+// Actions
+import { signOut } from '@/actions';
+
 // Constants
 import { ROUTES } from '@/constants/route';
 
@@ -64,6 +67,7 @@ const Sidebar = () => {
       <div className="border-t border-gray-200 p-4">
         <Button
           variant="ghost"
+          onClick={signOut}
           className="w-full justify-start text-red-500 hover:bg-red-50 hover:text-red-500"
         >
           Logout

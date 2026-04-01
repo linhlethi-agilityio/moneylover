@@ -1,18 +1,25 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useTransition } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 // Constants
-import { ROUTES } from '@/constants';
+import { ERROR_MESSAGES, ROUTES } from '@/constants';
 
 // Icons
 import { ShowEyeIcon, HideEyeIcon } from '@/icons';
 
+// Actions
+import { register } from '@/actions';
+
 // Types
 import { SignUpFormData } from '@/types';
+
+// Hooks
+import { useToast } from '@/hooks';
 
 // Utils
 import { clearErrorOnChange, isEnableSubmitButton, signUpSchema } from '@/utils';
@@ -25,6 +32,9 @@ const REQUIRED_FIELDS = ['email', 'password', 'confirmPassword'];
 export const SignUpForm = () => {
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [isShowConfirmPassword, setIsShowConfirmPassword] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+  const { showToast } = useToast();
 
   const {
     control,
@@ -43,8 +53,19 @@ export const SignUpForm = () => {
   });
 
   const handleSignUp = (formData: SignUpFormData) => {
-    // TODO: Handle sign up logic here
-    console.log('Sign Up form data:', formData);
+    startTransition(async () => {
+      const error = await register(formData);
+
+      if (error) {
+        return showToast({
+          status: 'error',
+          title: ERROR_MESSAGES.SIGN_UP_FAILED,
+          description: error,
+        });
+      }
+
+      router.push(ROUTES.DASHBOARD);
+    });
   };
 
   const dirtyItems = Object.keys(dirtyFields);
@@ -138,7 +159,13 @@ export const SignUpForm = () => {
         </Link>
       </p>
 
-      <Button type="submit" size="lg" disabled={!enableSubmit} className="w-full uppercase">
+      <Button
+        type="submit"
+        size="lg"
+        isLoading={isPending}
+        disabled={!enableSubmit}
+        className="w-full uppercase"
+      >
         Submit
       </Button>
     </form>

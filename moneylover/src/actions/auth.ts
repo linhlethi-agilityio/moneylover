@@ -8,8 +8,11 @@ import { signIn, signOut as signOutAuth } from '@/configs/auth';
 // Constants
 import { AUTH_METHODS, ERROR_MESSAGES, ERROR_TYPES } from '@/constants';
 
+// Libs
+import { supabase } from '@/libs/supabase';
+
 // Types
-import { SignInFormData } from '@/types';
+import { SignInFormData, SignUpFormData } from '@/types';
 
 export const authenticate = async (formData: SignInFormData): Promise<void | string> => {
   try {
@@ -28,6 +31,24 @@ export const authenticate = async (formData: SignInFormData): Promise<void | str
 
     throw error;
   }
+};
+
+export const register = async (
+  formData: SignUpFormData,
+): Promise<void | string> => {
+  const { email, password } = formData;
+
+  const { error } = await supabase.auth.signUp({
+    email,
+    password,
+  });
+
+  if (error) {
+    return error.message;
+  }
+
+  // Auto sign-in after successful registration
+  return authenticate({ email, password });
 };
 
 export const signOut = async () => {
