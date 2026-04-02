@@ -9,3 +9,4 @@ export * from './HomeIcon';
 export * from './TransactionIcon';
 export * from './CategoryIcon';
 export * from './ChevronRightIcon';
+export * from './MoreVerticalIcon';

@@ -34,7 +34,12 @@ const DashboardLayout = async ({
     <div className="flex min-h-screen">
       <Sidebar />
       <div className="flex flex-1 flex-col">
-        <Header email={email} totalBalance={totalBalance} currency={currency} />
+        <Header
+          email={email}
+          totalBalance={totalBalance}
+          currency={currency}
+          wallets={wallets}
+        />
         <main className="flex-1">{children}</main>
       </div>
     </div>
