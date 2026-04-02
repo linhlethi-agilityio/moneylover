@@ -48,3 +48,8 @@ export const signUpSchema = z
     message: ERROR_MESSAGES.CONFIRM_PASSWORD_NOT_MATCH,
     path: ['confirmPassword'],
   });
+
+export const walletSchema = z.object({
+  name: z.string().nonempty(ERROR_MESSAGES.REQUIRED('Wallet name')),
+  currency: z.string().nonempty(ERROR_MESSAGES.REQUIRED('Currency')),
+});

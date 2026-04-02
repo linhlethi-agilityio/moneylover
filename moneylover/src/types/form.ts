@@ -8,3 +8,8 @@ export interface SignUpFormData {
   password: string;
   confirmPassword: string;
 }
+
+export interface WalletFormData {
+  name: string;
+  currency: string;
+}
