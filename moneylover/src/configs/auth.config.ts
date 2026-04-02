@@ -14,8 +14,9 @@ export const authConfig = {
 
       const isOnLoginPage = nextUrl.pathname === ROUTES.SIGN_IN;
       const isOnRegisterPage = nextUrl.pathname === ROUTES.SIGN_UP;
+      const isOnOnboarding = nextUrl.pathname === ROUTES.ONBOARDING;
 
-      // If not logged in and not on login or register page, redirect to login page
+      // If not logged in and not on auth pages, redirect to login
       if (!isLoggedIn && !isOnLoginPage && !isOnRegisterPage) {
         return Response.redirect(new URL(ROUTES.SIGN_IN, nextUrl));
       }
@@ -23,6 +24,11 @@ export const authConfig = {
       // If logged in and on login or register page, redirect to dashboard
       if (isLoggedIn && (isOnLoginPage || isOnRegisterPage)) {
         return Response.redirect(new URL(ROUTES.DASHBOARD, nextUrl));
+      }
+
+      // Allow onboarding page for logged in users
+      if (isLoggedIn && isOnOnboarding) {
+        return true;
       }
 
       return true;

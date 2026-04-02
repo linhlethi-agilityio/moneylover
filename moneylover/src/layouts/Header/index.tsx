@@ -3,16 +3,19 @@
 // Constants
 import { IMAGES } from '@/constants';
 
-// Mocks
-import { MOCK_USER } from '@/mocks';
-
 // Utils
 import { formattedBalance } from '@/utils';
 
 // Components
 import { Avatar, Button, SearchInput } from '@/components';
 
-const Header = () => {
+interface HeaderProps {
+  email: string;
+  totalBalance: number;
+  currency?: string;
+}
+
+const Header = ({ email, totalBalance, currency }: HeaderProps) => {
   const handleSearchValue = (query: string) => {
     //TODO: Implement search logic
     console.log('Search query:', query);
@@ -23,9 +26,9 @@ const Header = () => {
       <div className="flex items-center gap-3">
         <Avatar size="sm" src={IMAGES.TRANSACTION} />
         <div>
-          <p className="text-sm font-medium text-gray-800">{MOCK_USER.username}</p>
+          <p className="text-sm font-medium text-gray-800">{email}</p>
           <p className="text-sm font-semibold text-green-600">
-            {formattedBalance(MOCK_USER.totalBalance)}
+            {formattedBalance(totalBalance, currency)}
           </p>
         </div>
       </div>

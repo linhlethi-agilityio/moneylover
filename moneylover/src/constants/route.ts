@@ -6,4 +6,5 @@ export const ROUTES = {
   // Authentication
   SIGN_IN: '/sign-in',
   SIGN_UP: '/sign-up',
+  ONBOARDING: '/onboarding',
 };

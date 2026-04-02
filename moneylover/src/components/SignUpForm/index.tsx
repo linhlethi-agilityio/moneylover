@@ -64,7 +64,7 @@ export const SignUpForm = () => {
         });
       }
 
-      router.push(ROUTES.DASHBOARD);
+      router.push(ROUTES.ONBOARDING);
     });
   };
 
