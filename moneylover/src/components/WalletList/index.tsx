@@ -9,8 +9,8 @@ interface WalletListProps {
   totalBalance: number;
   currency?: string;
   onAddWallet?: () => void;
-  onEditWallet?: () => void;
-  onDeleteWallet?: () => void;
+  onEditWallet?: (id: string) => void;
+  onDeleteWallet?: (id: string) => void;
 }
 
 export const WalletList = ({
@@ -38,8 +38,8 @@ export const WalletList = ({
               balance={balance}
               currency={currency}
               showMenu
-              onEdit={onEditWallet}
-              onDelete={onDeleteWallet}
+              onEdit={() => onEditWallet?.(id)}
+              onDelete={() => onDeleteWallet?.(id)}
             />
           );
         })}

@@ -6,7 +6,7 @@ import { cacheTag, updateTag } from 'next/cache';
 import { CACHE_TAGS } from '@/constants';
 
 // Services
-import { addWallet, getWallets } from '@/services';
+import { addWallet, getWallets, removeWallet } from '@/services';
 
 interface CreateWalletParams {
   userId: string;
@@ -33,6 +33,16 @@ export const createWallet = async ({
   balance = 0,
 }: CreateWalletParams): Promise<void | string> => {
   const { error } = await addWallet({ user_id: userId, name, currency, balance });
+
+  if (error) {
+    return error.message;
+  }
+
+  updateTag(CACHE_TAGS.WALLETS);
+};
+
+export const deleteWallet = async (walletId: string): Promise<void | string> => {
+  const { error } = await removeWallet(walletId);
 
   if (error) {
     return error.message;

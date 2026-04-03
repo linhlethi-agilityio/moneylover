@@ -12,7 +12,7 @@ interface ConfirmModalProps {
   onCancel: () => void;
 }
 
-const ConfirmModal = ({
+export const ConfirmModal = ({
   isOpen,
   title,
   description,
@@ -30,5 +30,3 @@ const ConfirmModal = ({
     </div>
   </Modal>
 );
-
-export default ConfirmModal;
