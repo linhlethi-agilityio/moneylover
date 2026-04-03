@@ -1,49 +1,28 @@
-import { type ReactNode } from 'react';
-import { redirect } from 'next/navigation';
-
-// Actions
-import { getWalletsInfo } from '@/actions';
-
-// Configs
-import { auth } from '@/configs/auth';
-
-// Constants
-import { ROUTES } from '@/constants';
+import { type ReactNode, Suspense } from 'react';
 
 // Layouts
-import { Header, Sidebar } from '@/layouts';
+import { Sidebar } from '@/layouts';
 
-const DashboardLayout = async ({
+// Components
+import { LoadingIndicator, DashboardContent } from '@/components';
+
+const DashboardLayout = ({
   children,
 }: Readonly<{
   children: ReactNode;
-}>) => {
-  const session = await auth();
-
-  const { user } = session || {};
-  const userId = user?.id || '';
-  const email = user?.email || '';
-
-  const { wallets, totalBalance, currency } = await getWalletsInfo(userId);
-
-  if (!wallets.length) {
-    redirect(ROUTES.ONBOARDING);
-  }
-
-  return (
-    <div className="flex min-h-screen">
-      <Sidebar />
-      <div className="flex flex-1 flex-col">
-        <Header
-          email={email}
-          totalBalance={totalBalance}
-          currency={currency}
-          wallets={wallets}
-        />
-        <main className="flex-1">{children}</main>
-      </div>
-    </div>
-  );
-};
+}>) => (
+  <div className="flex min-h-screen">
+    <Sidebar />
+    <Suspense
+      fallback={
+        <div className="flex flex-1 items-center justify-center">
+          <LoadingIndicator />
+        </div>
+      }
+    >
+      <DashboardContent>{children}</DashboardContent>
+    </Suspense>
+  </div>
+);
 
 export default DashboardLayout;

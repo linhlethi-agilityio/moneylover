@@ -1,12 +1,11 @@
 'use client';
 
 import { useMemo, useTransition } from 'react';
-import { useRouter } from 'next/navigation';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 // Constants
-import { CURRENCIES, ERROR_MESSAGES, ROUTES } from '@/constants';
+import { CURRENCIES, ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/constants';
 
 // Actions
 import { createWallet } from '@/actions';
@@ -18,7 +17,13 @@ import { WalletFormData } from '@/types';
 import { useToast } from '@/hooks';
 
 // Utils
-import { clearErrorOnChange, isEnableSubmitButton, walletSchema } from '@/utils';
+import {
+  clearErrorOnChange,
+  formatCurrency,
+  isEnableSubmitButton,
+  validateBalance,
+  walletSchema,
+} from '@/utils';
 
 // Components
 import { Button, Input } from '@/components';
@@ -27,11 +32,12 @@ const REQUIRED_FIELDS = ['name'];
 
 interface WalletFormProps {
   userId: string;
+  showBalance?: boolean;
+  onSubmit?: () => void;
 }
 
-export const WalletForm = ({ userId }: WalletFormProps) => {
+export const WalletForm = ({ userId, showBalance = false, onSubmit }: WalletFormProps) => {
   const [isPending, startTransition] = useTransition();
-  const router = useRouter();
   const { showToast } = useToast();
 
   const {
@@ -61,7 +67,10 @@ export const WalletForm = ({ userId }: WalletFormProps) => {
 
   const handleFormSubmit = (formData: WalletFormData) => {
     startTransition(async () => {
-      const error = await createWallet({ userId, ...formData });
+      const balance = validateBalance(String(formData.balance ?? 0));
+      const error = await createWallet({ userId, ...formData, balance });
+
+      onSubmit && onSubmit();
 
       if (error) {
         return showToast({
@@ -71,7 +80,10 @@ export const WalletForm = ({ userId }: WalletFormProps) => {
         });
       }
 
-      router.push(ROUTES.DASHBOARD);
+      showToast({
+        status: 'success',
+        title: SUCCESS_MESSAGES.WALLET_CREATED,
+      });
     });
   };
 
@@ -113,6 +125,25 @@ export const WalletForm = ({ userId }: WalletFormProps) => {
           ))}
         </div>
       </div>
+
+      {showBalance && (
+        <Controller
+          name="balance"
+          control={control}
+          render={({ field: { onChange, value, ...rest } }) => (
+            <Input
+              label="Initial Balance"
+              placeholder="0"
+              value={value ?? ''}
+              onChange={(e) => {
+                const num = validateBalance(e.target.value);
+                onChange(num ? formatCurrency(num.toString()) : '');
+              }}
+              {...rest}
+            />
+          )}
+        />
+      )}
 
       <Button
         type="submit"

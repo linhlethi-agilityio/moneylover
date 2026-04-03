@@ -12,4 +12,5 @@ export interface SignUpFormData {
 export interface WalletFormData {
   name: string;
   currency: string;
+  balance?: string | number;
 }

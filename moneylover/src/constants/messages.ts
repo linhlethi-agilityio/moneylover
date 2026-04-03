@@ -9,6 +9,10 @@ export const ERROR_MESSAGES = {
   UNKNOWN_ERROR: 'Something went wrong. Please try again later',
 };
 
+export const SUCCESS_MESSAGES = {
+  WALLET_CREATED: 'Wallet created successfully!',
+};
+
 export const AUTH_METHODS = {
   CREDENTIALS: 'credentials',
 } as const;
