@@ -35,7 +35,7 @@ export const DashboardContent = async ({ children }: { children: ReactNode }) =>
         currency={currency}
         wallets={wallets}
       />
-      <main className="flex-1">{children}</main>
+      <main className="flex-1 bg-gray-50">{children}</main>
     </div>
   );
 };

@@ -1,4 +1,7 @@
-export type FinanceType = 'income' | 'expense';
+export enum FinanceType {
+  Income = 'income',
+  Expense = 'expense',
+}
 
 export interface Transaction {
   id: string;

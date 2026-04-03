@@ -14,3 +14,5 @@ export * from './WalletForm';
 export * from './ConfirmModal';
 export * from './DashboardContent';
 export * from './Skeleton';
+export * from './CategoryItem';
+export * from './CategoryList';
