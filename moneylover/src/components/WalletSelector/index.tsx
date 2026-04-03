@@ -47,6 +47,7 @@ export const WalletSelector = ({
 }: WalletSelectorProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenAddWalletModal, setIsOpenAddWalletModal] = useState(false);
+  const [idWalletEdit, setIdWalletEdit] = useState<string | null>(null);
   const [idWalletDelete, setIdWalletDelete] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const ref = useRef<HTMLDivElement>(null);
@@ -58,6 +59,13 @@ export const WalletSelector = ({
     setIsOpen(false);
     setIsOpenAddWalletModal(true);
   };
+
+  const handleEditWallet = (id: string) => {
+    setIsOpen(false);
+    setIdWalletEdit(id);
+  };
+
+  const handleCloseEditModal = () => setIdWalletEdit(null);
 
   const handleDeleteWallet = (id: string) => {
     setIsOpen(false);
@@ -102,6 +110,7 @@ export const WalletSelector = ({
   const handleCloseAddWalletModal = () => setIsOpenAddWalletModal(false);
 
   const walletDelete = wallets.find((w) => w.id === idWalletDelete);
+  const walletEdit = wallets.find((w) => w.id === idWalletEdit);
 
   const handleCloseDeleteModal = () => setIdWalletDelete(null);
 
@@ -131,6 +140,7 @@ export const WalletSelector = ({
             totalBalance={totalBalance}
             currency={currency}
             onAddWallet={handleAddWallet}
+            onEditWallet={handleEditWallet}
             onDeleteWallet={handleDeleteWallet}
           />
         )}
@@ -139,6 +149,17 @@ export const WalletSelector = ({
       {isOpenAddWalletModal && (
         <Modal isOpen title="Add Wallet" onClose={handleCloseAddWalletModal}>
           <WalletForm userId={userId} showBalance onSubmit={handleCloseAddWalletModal} />
+        </Modal>
+      )}
+
+      {idWalletEdit && (
+        <Modal isOpen title="Edit Wallet" onClose={handleCloseEditModal}>
+          <WalletForm
+            userId={userId}
+            showBalance
+            previewData={walletEdit}
+            onSubmit={handleCloseEditModal}
+          />
         </Modal>
       )}
 

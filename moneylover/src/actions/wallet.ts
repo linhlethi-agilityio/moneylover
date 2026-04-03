@@ -5,8 +5,11 @@ import { cacheTag, updateTag } from 'next/cache';
 // Constants
 import { CACHE_TAGS } from '@/constants';
 
+// Types
+import { Wallet } from '@/types';
+
 // Services
-import { addWallet, getWallets, removeWallet } from '@/services';
+import { addWallet, editWallet, getWallets, removeWallet } from '@/services';
 
 interface CreateWalletParams {
   userId: string;
@@ -33,6 +36,21 @@ export const createWallet = async ({
   balance = 0,
 }: CreateWalletParams): Promise<void | string> => {
   const { error } = await addWallet({ user_id: userId, name, currency, balance });
+
+  if (error) {
+    return error.message;
+  }
+
+  updateTag(CACHE_TAGS.WALLETS);
+};
+
+export const updateWallet = async ({
+  id,
+  name,
+  currency,
+  balance,
+}: Partial<Wallet>): Promise<void | string> => {
+  const { error } = await editWallet({ id, name, currency, balance });
 
   if (error) {
     return error.message;
