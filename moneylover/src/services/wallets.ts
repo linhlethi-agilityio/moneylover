@@ -12,7 +12,6 @@ export const getWallets = async (userId: string) => {
   return data ?? [];
 };
 
-
 export const addWallet = async ({ user_id, name, currency, balance = 0 }: InsertWalletParams) => {
   const { error } = await supabase.from('wallets').insert({
     user_id,
@@ -20,6 +19,12 @@ export const addWallet = async ({ user_id, name, currency, balance = 0 }: Insert
     currency,
     balance,
   });
+
+  return { error };
+};
+
+export const removeWallet = async (walletId: string) => {
+  const { error } = await supabase.from('wallets').delete().eq('id', walletId);
 
   return { error };
 };
