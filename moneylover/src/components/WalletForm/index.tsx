@@ -8,10 +8,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { CURRENCIES, ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/constants';
 
 // Actions
-import { createWallet } from '@/actions';
+import { createWallet, updateWallet } from '@/actions';
 
 // Types
-import { WalletFormData } from '@/types';
+import { Wallet, WalletFormData } from '@/types';
 
 // Hooks
 import { useToast } from '@/hooks';
@@ -33,10 +33,16 @@ const REQUIRED_FIELDS = ['name'];
 interface WalletFormProps {
   userId: string;
   showBalance?: boolean;
+  previewData?: Wallet;
   onSubmit?: () => void;
 }
 
-export const WalletForm = ({ userId, showBalance = false, onSubmit }: WalletFormProps) => {
+export const WalletForm = ({
+  userId,
+  showBalance = false,
+  previewData,
+  onSubmit,
+}: WalletFormProps) => {
   const [isPending, startTransition] = useTransition();
   const { showToast } = useToast();
 
@@ -50,7 +56,7 @@ export const WalletForm = ({ userId, showBalance = false, onSubmit }: WalletForm
     resolver: zodResolver(walletSchema),
     mode: 'onBlur',
     reValidateMode: 'onBlur',
-    defaultValues: {
+    defaultValues: previewData || {
       name: '',
       currency: 'VND',
     },
@@ -61,14 +67,20 @@ export const WalletForm = ({ userId, showBalance = false, onSubmit }: WalletForm
   const dirtyItems = Object.keys(dirtyFields);
 
   const enableSubmit = useMemo(
-    () => isEnableSubmitButton(REQUIRED_FIELDS, dirtyItems, errors),
-    [dirtyItems, errors],
+    () =>
+      previewData
+        ? dirtyItems.length > 0 && !Object.keys(errors).length
+        : isEnableSubmitButton(REQUIRED_FIELDS, dirtyItems, errors),
+    [previewData, dirtyItems, errors],
   );
 
   const handleFormSubmit = (formData: WalletFormData) => {
     startTransition(async () => {
       const balance = validateBalance(String(formData.balance ?? 0));
-      const error = await createWallet({ userId, ...formData, balance });
+
+      const error = previewData
+        ? await updateWallet({ id: previewData.id, ...formData, balance })
+        : await createWallet({ userId, ...formData, balance });
 
       onSubmit && onSubmit();
 
@@ -82,7 +94,7 @@ export const WalletForm = ({ userId, showBalance = false, onSubmit }: WalletForm
 
       showToast({
         status: 'success',
-        title: SUCCESS_MESSAGES.WALLET_CREATED,
+        title: previewData ? SUCCESS_MESSAGES.WALLET_UPDATED : SUCCESS_MESSAGES.WALLET_CREATED,
       });
     });
   };
@@ -126,13 +138,13 @@ export const WalletForm = ({ userId, showBalance = false, onSubmit }: WalletForm
         </div>
       </div>
 
-      {showBalance && (
+      {(showBalance || previewData) && (
         <Controller
           name="balance"
           control={control}
           render={({ field: { onChange, value, ...rest } }) => (
             <Input
-              label="Initial Balance"
+              label={previewData ? 'Balance' : 'Initial Balance'}
               placeholder="0"
               value={value ?? ''}
               onChange={(e) => {
@@ -152,7 +164,7 @@ export const WalletForm = ({ userId, showBalance = false, onSubmit }: WalletForm
         disabled={!enableSubmit}
         className="w-full"
       >
-        Submit
+        {previewData ? 'Save' : 'Submit'}
       </Button>
     </form>
   );

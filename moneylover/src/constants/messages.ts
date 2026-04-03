@@ -11,6 +11,7 @@ export const ERROR_MESSAGES = {
 
 export const SUCCESS_MESSAGES = {
   WALLET_CREATED: 'Wallet created successfully!',
+  WALLET_UPDATED: 'Wallet updated successfully!',
   WALLET_DELETED: 'Wallet deleted successfully!',
 };
 

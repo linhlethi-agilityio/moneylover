@@ -23,6 +23,12 @@ export const addWallet = async ({ user_id, name, currency, balance = 0 }: Insert
   return { error };
 };
 
+export const editWallet = async ({ id, name, currency, balance }: Partial<Wallet>) => {
+  const { error } = await supabase.from('wallets').update({ name, currency, balance }).eq('id', id);
+
+  return { error };
+};
+
 export const removeWallet = async (walletId: string) => {
   const { error } = await supabase.from('wallets').delete().eq('id', walletId);
 
