@@ -9,3 +9,7 @@ export * from './WalletSelector';
 export * from './WalletList';
 export * from './WalletItem';
 export * from './MenuActions';
+export * from './Modal';
+export * from './WalletForm';
+export * from './ConfirmModal';
+export * from './DashboardContent';

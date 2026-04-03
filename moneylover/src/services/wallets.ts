@@ -1,0 +1,25 @@
+// Types
+import { Wallet } from '@/types';
+
+// Libs
+import { supabase } from '@/libs/supabase';
+
+type InsertWalletParams = Omit<Wallet, 'id' | 'created_at'>;
+
+export const getWallets = async (userId: string) => {
+  const { data } = await supabase.from('wallets').select('*').eq('user_id', userId);
+
+  return data ?? [];
+};
+
+
+export const addWallet = async ({ user_id, name, currency, balance = 0 }: InsertWalletParams) => {
+  const { error } = await supabase.from('wallets').insert({
+    user_id,
+    name,
+    currency,
+    balance,
+  });
+
+  return { error };
+};

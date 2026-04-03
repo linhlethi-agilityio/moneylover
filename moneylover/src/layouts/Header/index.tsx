@@ -7,13 +7,14 @@ import { Wallet } from '@/types';
 import { Button, SearchInput, WalletSelector } from '@/components';
 
 interface HeaderProps {
+  userId: string;
   email: string;
   totalBalance: number;
   currency: string;
   wallets: Wallet[];
 }
 
-const Header = ({ email, totalBalance, currency, wallets }: HeaderProps) => {
+const Header = ({ userId, email, totalBalance, currency, wallets }: HeaderProps) => {
   const handleSearchValue = (query: string) => {
     //TODO: Implement search logic
     console.log('Search query:', query);
@@ -22,6 +23,7 @@ const Header = ({ email, totalBalance, currency, wallets }: HeaderProps) => {
   return (
     <header className="relative z-10 flex items-center justify-between border-b border-gray-200 bg-white px-6 py-3 max-w-full gap-4">
       <WalletSelector
+        userId={userId}
         email={email}
         totalBalance={totalBalance}
         currency={currency}

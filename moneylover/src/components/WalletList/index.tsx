@@ -27,22 +27,23 @@ export const WalletList = ({
       {wallets.length > 0 && (
         <p className="px-4 py-2 text-xs font-medium uppercase text-gray-400">Included in Total</p>
       )}
-      {wallets.map((wallet) => {
-        const { id = '', name = '', balance = 0, currency = '' } = wallet;
+      <div className="scrollbar-thin max-h-72 overflow-y-auto">
+        {wallets.map((wallet) => {
+          const { id = '', name = '', balance = 0, currency = '' } = wallet;
 
-        return (
-          <WalletItem
-            key={id}
-            name={name}
-            balance={balance}
-            currency={currency}
-            showMenu
-            onEdit={onEditWallet}
-            onDelete={onDeleteWallet}
-          />
-        );
-      })}
-      ;
+          return (
+            <WalletItem
+              key={id}
+              name={name}
+              balance={balance}
+              currency={currency}
+              showMenu
+              onEdit={onEditWallet}
+              onDelete={onDeleteWallet}
+            />
+          );
+        })}
+      </div>
       <Button
         variant="ghost"
         onClick={onAddWallet}

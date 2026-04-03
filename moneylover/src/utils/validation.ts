@@ -52,4 +52,5 @@ export const signUpSchema = z
 export const walletSchema = z.object({
   name: z.string().nonempty(ERROR_MESSAGES.REQUIRED('Wallet name')),
   currency: z.string().nonempty(ERROR_MESSAGES.REQUIRED('Currency')),
+  balance: z.union([z.string(), z.number()]).optional(),
 });
