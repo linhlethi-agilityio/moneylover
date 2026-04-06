@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { CATEGORY_TYPES, ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/constants';
 
 // Actions
-import { createCategory } from '@/actions';
+import { createCategory, updateCategory } from '@/actions';
 
 // Types
 import { Category, CategoryFormData, FinanceType } from '@/types';
@@ -54,11 +54,17 @@ export const CategoryForm = ({
     resolver: zodResolver(categorySchema),
     mode: 'onBlur',
     reValidateMode: 'onBlur',
-    defaultValues: previewData || {
-      name: '',
-      type: FinanceType.Expense,
-      parentId: '',
-    },
+    defaultValues: previewData
+      ? {
+          name: previewData.name,
+          type: previewData.type,
+          parentId: previewData.parent_id ?? '',
+        }
+      : {
+          name: '',
+          type: FinanceType.Expense,
+          parentId: '',
+        },
   });
 
   const dirtyItems = Object.keys(dirtyFields);
@@ -73,12 +79,21 @@ export const CategoryForm = ({
 
   const handleFormSubmit = (formData: CategoryFormData) => {
     startTransition(async () => {
-      const error = await createCategory({
-        userId,
-        name: formData.name,
-        type: formData.type,
-        parentId: formData.parentId || null,
-      });
+      const { name, type, parentId } = formData;
+
+      const error = isEditMode
+        ? await updateCategory({
+            id: previewData.id,
+            name: name,
+            type: type,
+            parentId: parentId || null,
+          })
+        : await createCategory({
+            userId,
+            name: name,
+            type: type,
+            parentId: parentId || null,
+          });
 
       onSubmit?.();
 
@@ -138,6 +153,7 @@ export const CategoryForm = ({
                   key={key}
                   type="button"
                   variant="ghost"
+                  disabled={isEditMode}
                   onClick={() => setValue('type', key, { shouldDirty: true })}
                   className={cn(
                     'flex-1 rounded-lg border py-2 text-sm font-medium',
