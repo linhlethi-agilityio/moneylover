@@ -9,6 +9,12 @@ export interface SignUpFormData {
   confirmPassword: string;
 }
 
+export interface CategoryFormData {
+  name: string;
+  type: string;
+  parentId?: string;
+}
+
 export interface WalletFormData {
   name: string;
   currency: string;

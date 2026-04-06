@@ -12,20 +12,23 @@ import { cn } from '@/utils';
 import { CATEGORY_TYPES } from '@/constants';
 
 // Components
-import { Button, CategoryItem } from '@/components';
+import { Button, CategoryItem, Modal, CategoryForm } from '@/components';
 
 interface CategoryListProps {
+  userId: string;
   expenseCategories: Category[];
   incomeCategories: Category[];
   subCategories: Category[];
 }
 
 export const CategoryList = ({
+  userId,
   expenseCategories,
   incomeCategories,
   subCategories,
 }: CategoryListProps) => {
   const [activeTab, setActiveTab] = useState<FinanceType>(FinanceType.Expense);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const categoriesMap = {
     [FinanceType.Expense]: expenseCategories,
@@ -38,6 +41,10 @@ export const CategoryList = ({
     () => Object.groupBy(subCategories, (sub) => sub.parent_id ?? ''),
     [subCategories],
   );
+
+  const handleCloseModal = () => setIsModalOpen(false);
+
+  const handleOpenModal = () => setIsModalOpen(true);
 
   return (
     <div className="flex flex-col gap-4">
@@ -59,7 +66,7 @@ export const CategoryList = ({
         ))}
       </div>
 
-      <Button variant="outline" className="w-full">
+      <Button variant="outline" className="w-full" onClick={handleOpenModal}>
         <span className="flex h-5 w-5 items-center justify-center rounded-full bg-lime-100 text-xs text-lime-600">
           +
         </span>
@@ -78,6 +85,17 @@ export const CategoryList = ({
             />
           ))}
         </div>
+      )}
+
+      {isModalOpen && (
+        <Modal isOpen title="New Category" onClose={handleCloseModal}>
+          <CategoryForm
+            userId={userId}
+            expenseCategories={expenseCategories}
+            incomeCategories={incomeCategories}
+            onSubmit={handleCloseModal}
+          />
+        </Modal>
       )}
     </div>
   );

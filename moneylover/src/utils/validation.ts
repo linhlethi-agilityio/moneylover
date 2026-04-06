@@ -49,6 +49,12 @@ export const signUpSchema = z
     path: ['confirmPassword'],
   });
 
+export const categorySchema = z.object({
+  name: z.string().nonempty(ERROR_MESSAGES.REQUIRED('Category name')),
+  type: z.string().nonempty(ERROR_MESSAGES.REQUIRED('Type')),
+  parentId: z.string().optional(),
+});
+
 export const walletSchema = z.object({
   name: z.string().nonempty(ERROR_MESSAGES.REQUIRED('Wallet name')),
   currency: z.string().nonempty(ERROR_MESSAGES.REQUIRED('Currency')),

@@ -13,6 +13,8 @@ export const SUCCESS_MESSAGES = {
   WALLET_CREATED: 'Wallet created successfully!',
   WALLET_UPDATED: 'Wallet updated successfully!',
   WALLET_DELETED: 'Wallet deleted successfully!',
+  CATEGORY_CREATED: 'Category created successfully!',
+  CATEGORY_UPDATED: 'Category updated successfully!',
 };
 
 export const AUTH_METHODS = {

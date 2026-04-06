@@ -15,6 +15,7 @@ export const CategoriesContent = async () => {
 
   return (
     <CategoryList
+      userId={userId}
       expenseCategories={expenseCategories}
       incomeCategories={incomeCategories}
       subCategories={subCategories}
