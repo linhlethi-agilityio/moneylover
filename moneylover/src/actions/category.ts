@@ -1,6 +1,6 @@
 'use server';
 
-import { cacheTag } from 'next/cache';
+import { cacheTag, updateTag } from 'next/cache';
 
 // Constants
 import { CACHE_TAGS } from '@/constants';
@@ -9,7 +9,14 @@ import { CACHE_TAGS } from '@/constants';
 import { FinanceType } from '@/types';
 
 // Services
-import { getParentCategories, getSubCategoriesByParentIds } from '@/services';
+import { addCategory, getParentCategories, getSubCategoriesByParentIds } from '@/services';
+
+interface CreateCategoryParams {
+  userId: string;
+  name: string;
+  type: string;
+  parentId?: string | null;
+}
 
 export const getCategoriesInfo = async (userId: string) => {
   'use cache';
@@ -24,4 +31,24 @@ export const getCategoriesInfo = async (userId: string) => {
   const subCategories = await getSubCategoriesByParentIds(allParentIds);
 
   return { expenseCategories, incomeCategories, subCategories };
+};
+
+export const createCategory = async ({
+  userId,
+  name,
+  type,
+  parentId = null,
+}: CreateCategoryParams): Promise<void | string> => {
+  const { error } = await addCategory({
+    user_id: userId,
+    parent_id: parentId,
+    name,
+    type: type as FinanceType,
+  });
+
+  if (error) {
+    return error.message;
+  }
+
+  updateTag(CACHE_TAGS.CATEGORIES);
 };

@@ -1,0 +1,181 @@
+'use client';
+
+import { useMemo, useTransition } from 'react';
+import { Controller, useForm, useWatch } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+// Constants
+import { CATEGORY_TYPES, ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/constants';
+
+// Actions
+import { createCategory } from '@/actions';
+
+// Types
+import { Category, CategoryFormData, FinanceType } from '@/types';
+
+// Hooks
+import { useToast } from '@/hooks';
+
+// Utils
+import { clearErrorOnChange, cn, isEnableSubmitButton, categorySchema } from '@/utils';
+
+// Components
+import { Button, Input, Dropdown } from '@/components';
+
+const REQUIRED_FIELDS = ['name'];
+
+interface CategoryFormProps {
+  userId: string;
+  expenseCategories?: Category[];
+  incomeCategories?: Category[];
+  previewData?: Category;
+  onSubmit?: () => void;
+}
+
+export const CategoryForm = ({
+  userId,
+  expenseCategories = [],
+  incomeCategories = [],
+  previewData,
+  onSubmit,
+}: CategoryFormProps) => {
+  const [isPending, startTransition] = useTransition();
+  const { showToast } = useToast();
+
+  const isEditMode = !!previewData;
+
+  const {
+    control,
+    formState: { dirtyFields, errors },
+    clearErrors,
+    handleSubmit,
+    setValue,
+  } = useForm<CategoryFormData>({
+    resolver: zodResolver(categorySchema),
+    mode: 'onBlur',
+    reValidateMode: 'onBlur',
+    defaultValues: previewData || {
+      name: '',
+      type: FinanceType.Expense,
+      parentId: '',
+    },
+  });
+
+  const dirtyItems = Object.keys(dirtyFields);
+
+  const enableSubmit = useMemo(
+    () =>
+      isEditMode
+        ? dirtyItems.length > 0 && !Object.keys(errors).length
+        : isEnableSubmitButton(REQUIRED_FIELDS, dirtyItems, errors),
+    [isEditMode, dirtyItems, errors],
+  );
+
+  const handleFormSubmit = (formData: CategoryFormData) => {
+    startTransition(async () => {
+      const error = await createCategory({
+        userId,
+        name: formData.name,
+        type: formData.type,
+        parentId: formData.parentId || null,
+      });
+
+      onSubmit?.();
+
+      if (error) {
+        return showToast({
+          status: 'error',
+          title: ERROR_MESSAGES.UNKNOWN_ERROR,
+          description: error,
+        });
+      }
+
+      showToast({
+        status: 'success',
+        title: isEditMode ? SUCCESS_MESSAGES.CATEGORY_UPDATED : SUCCESS_MESSAGES.CATEGORY_CREATED,
+      });
+    });
+  };
+
+  const selectedType = useWatch({ control, name: 'type' });
+
+  const parentCategories = selectedType === FinanceType.Income ? incomeCategories : expenseCategories;
+
+  const formattedDropdownCategories = useMemo(
+    () => parentCategories.map((cat) => ({ id: cat.id, label: cat.name })),
+    [parentCategories],
+  );
+
+  return (
+    <form onSubmit={handleSubmit(handleFormSubmit)} className="flex flex-col gap-4">
+      <Controller
+        name="name"
+        control={control}
+        render={({ field: { name, onChange, ...rest }, fieldState: { error } }) => (
+          <Input
+            label="Category Name"
+            placeholder="e.g. Restaurant, Coffee"
+            errorMessage={error?.message}
+            onChange={(e) => {
+              onChange(e.target.value);
+              clearErrorOnChange(name, errors, clearErrors);
+            }}
+            {...rest}
+          />
+        )}
+      />
+
+      <div>
+        <p className="mb-1 text-xs text-gray-400">Type</p>
+        <Controller
+          name="type"
+          control={control}
+          render={({ field: { value } }) => (
+            <div className="flex gap-2">
+              {CATEGORY_TYPES.map(({ key, label }) => (
+                <Button
+                  key={key}
+                  type="button"
+                  variant="ghost"
+                  onClick={() => setValue('type', key, { shouldDirty: true })}
+                  className={cn(
+                    'flex-1 rounded-lg border py-2 text-sm font-medium',
+                    value === key
+                      ? 'border-lime-600 bg-lime-50 text-lime-700'
+                      : 'border-gray-200 text-gray-500',
+                  )}
+                >
+                  {label}
+                </Button>
+              ))}
+            </div>
+          )}
+        />
+      </div>
+
+      <Controller
+        name="parentId"
+        control={control}
+        render={({ field: { value } }) => (
+          <Dropdown
+            label="Parent Category (optional)"
+            placeholder="None (Parent category)"
+            items={formattedDropdownCategories}
+            value={value}
+            onChange={(item) => setValue('parentId', item.id, { shouldDirty: true })}
+          />
+        )}
+      />
+
+      <Button
+        type="submit"
+        size="lg"
+        isLoading={isPending}
+        disabled={!enableSubmit}
+        className="w-full"
+      >
+        {isEditMode ? 'Save' : 'Submit'}
+      </Button>
+    </form>
+  );
+};
