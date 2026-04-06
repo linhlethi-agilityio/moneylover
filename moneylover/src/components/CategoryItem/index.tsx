@@ -9,31 +9,38 @@ import { ChevronRightIcon } from '@/icons';
 import { Category } from '@/types';
 
 // Components
-import { CategoryInfo } from '@/components/CategoryInfo';
+import { CategoryInfo, MenuActions } from '@/components';
 
 interface CategoryItemProps {
   category: Category;
   subCategories?: Category[];
+  onDelete?: (id: string) => void;
 }
 
-export const CategoryItem = ({ category, subCategories = [] }: CategoryItemProps) => {
+export const CategoryItem = ({ category, subCategories = [], onDelete }: CategoryItemProps) => {
+  const { name, image_url, id } = category;
   const [isExpanded, setIsExpanded] = useState(false);
   const hasChildren = subCategories.length > 0;
 
-  const handleOpenChildrenCategory = () => {
+  const handleToggle = () => {
     if (hasChildren) {
       setIsExpanded((prev) => !prev);
     }
+  };
+
+  const handleDeleteCategory = () => {
+    onDelete?.(id);
   };
 
   return (
     <div>
       <div
         className="flex cursor-pointer items-center gap-3 border-b border-gray-100 px-4 py-3 last:border-b-0 hover:bg-gray-50"
-        onClick={handleOpenChildrenCategory}
+        onClick={handleToggle}
       >
-        <CategoryInfo name={category.name} imageUrl={category.image_url} />
+        <CategoryInfo name={name} imageUrl={image_url} />
         <div className="flex-1" />
+        <MenuActions onDelete={handleDeleteCategory} />
         {hasChildren && (
           <ChevronRightIcon className={`transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
         )}
@@ -44,9 +51,11 @@ export const CategoryItem = ({ category, subCategories = [] }: CategoryItemProps
           {subCategories.map((sub) => (
             <div
               key={sub.id}
-              className="border-b border-gray-100 px-4 py-2.5 last:border-b-0"
+              className="flex items-center gap-3 border-b border-gray-100 px-4 py-2.5 last:border-b-0"
             >
               <CategoryInfo name={sub.name} imageUrl={sub.image_url} size="sm" />
+              <div className="flex-1" />
+              <MenuActions onDelete={() => onDelete?.(sub.id)} />
             </div>
           ))}
         </div>

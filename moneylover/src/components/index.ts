@@ -19,3 +19,4 @@ export * from './CategoryList';
 export * from './CategoriesContent';
 export * from './CategoryForm';
 export * from './Dropdown';
+export * from './CategoryInfo';

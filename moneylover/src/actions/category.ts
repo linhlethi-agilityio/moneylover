@@ -9,7 +9,12 @@ import { CACHE_TAGS } from '@/constants';
 import { FinanceType } from '@/types';
 
 // Services
-import { addCategory, getParentCategories, getSubCategoriesByParentIds } from '@/services';
+import {
+  addCategory,
+  getParentCategories,
+  getSubCategoriesByParentIds,
+  removeCategory,
+} from '@/services';
 
 interface CreateCategoryParams {
   userId: string;
@@ -45,6 +50,16 @@ export const createCategory = async ({
     name,
     type: type as FinanceType,
   });
+
+  if (error) {
+    return error.message;
+  }
+
+  updateTag(CACHE_TAGS.CATEGORIES);
+};
+
+export const deleteCategory = async (categoryId: string): Promise<void | string> => {
+  const { error } = await removeCategory(categoryId);
 
   if (error) {
     return error.message;

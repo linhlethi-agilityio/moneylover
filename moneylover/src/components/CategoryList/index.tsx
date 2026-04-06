@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useTransition } from 'react';
 
 // Types
 import { Category, FinanceType } from '@/types';
@@ -9,10 +9,16 @@ import { Category, FinanceType } from '@/types';
 import { cn } from '@/utils';
 
 // Constants
-import { CATEGORY_TYPES } from '@/constants';
+import { CATEGORY_TYPES, ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/constants';
+
+// Actions
+import { deleteCategory } from '@/actions';
+
+// Hooks
+import { useToast } from '@/hooks';
 
 // Components
-import { Button, CategoryItem, Modal, CategoryForm } from '@/components';
+import { Button, CategoryItem, Modal, CategoryForm, ConfirmModal } from '@/components';
 
 interface CategoryListProps {
   userId: string;
@@ -29,6 +35,9 @@ export const CategoryList = ({
 }: CategoryListProps) => {
   const [activeTab, setActiveTab] = useState<FinanceType>(FinanceType.Expense);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [deleteCategoryId, setDeleteCategoryId] = useState<string | null>(null);
+  const [, startTransition] = useTransition();
+  const { showToast } = useToast();
 
   const categoriesMap = {
     [FinanceType.Expense]: expenseCategories,
@@ -38,13 +47,48 @@ export const CategoryList = ({
   const activeCategories = categoriesMap[activeTab];
 
   const subCategoriesMap = useMemo(
-    () => Object.groupBy(subCategories, (sub) => sub.parent_id ?? ''),
+    () =>
+      subCategories.reduce<Record<string, Category[]>>((acc, sub) => {
+        const key = sub.parent_id ?? '';
+        (acc[key] ??= []).push(sub);
+        return acc;
+      }, {}),
     [subCategories],
   );
 
   const handleCloseModal = () => setIsModalOpen(false);
-
   const handleOpenModal = () => setIsModalOpen(true);
+
+  const handleDelete = (id: string) => setDeleteCategoryId(id);
+
+  const handleCloseConfirmModal = () => setDeleteCategoryId(null);
+
+  const handleConfirmDelete = () => {
+    if (!deleteCategoryId) return;
+
+    startTransition(async () => {
+      const error = await deleteCategory(deleteCategoryId);
+
+      setDeleteCategoryId(null);
+
+      if (error) {
+        return showToast({
+          status: 'error',
+          title: ERROR_MESSAGES.UNKNOWN_ERROR,
+          description: error,
+        });
+      }
+
+      showToast({
+        status: 'success',
+        title: SUCCESS_MESSAGES.CATEGORY_DELETED,
+      });
+    });
+  };
+
+  const categoryToDelete = [...expenseCategories, ...incomeCategories, ...subCategories].find(
+    (c) => c.id === deleteCategoryId,
+  );
 
   return (
     <div className="flex flex-col gap-4">
@@ -82,6 +126,7 @@ export const CategoryList = ({
               key={category.id}
               category={category}
               subCategories={subCategoriesMap[category.id] ?? []}
+              onDelete={handleDelete}
             />
           ))}
         </div>
@@ -96,6 +141,17 @@ export const CategoryList = ({
             onSubmit={handleCloseModal}
           />
         </Modal>
+      )}
+
+      {deleteCategoryId && (
+        <ConfirmModal
+          isOpen
+          title="Delete Category"
+          description={`Are you sure you want to delete "${categoryToDelete?.name}"? This action cannot be undone.`}
+          confirmLabel="Delete"
+          onConfirm={handleConfirmDelete}
+          onCancel={handleCloseConfirmModal}
+        />
       )}
     </div>
   );

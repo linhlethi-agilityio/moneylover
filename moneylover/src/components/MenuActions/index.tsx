@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { type MouseEvent, useEffect, useRef, useState } from 'react';
 
 // Icons
 import { MoreVerticalIcon } from '@/icons';
@@ -15,8 +15,10 @@ interface MenuActionsProps {
 
 export const MenuActions = ({ onEdit, onDelete }: MenuActionsProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
 
-  const handleToggle = () => {
+  const handleToggle = (e: MouseEvent) => {
+    e.stopPropagation();
     setIsOpen((prev) => !prev);
   };
 
@@ -30,8 +32,20 @@ export const MenuActions = ({ onEdit, onDelete }: MenuActionsProps) => {
     setIsOpen(false);
   };
 
+  useEffect(() => {
+    const handleClickOutside = ({ target }: Event) => {
+      if (ref.current && !ref.current.contains(target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   return (
-    <div className="relative">
+    <div ref={ref} className="relative">
       <Button variant="ghost" size="sm" onClick={handleToggle} className="h-6 w-6 p-0">
         <MoreVerticalIcon />
       </Button>

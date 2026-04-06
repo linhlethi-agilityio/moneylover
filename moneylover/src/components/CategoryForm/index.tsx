@@ -99,7 +99,8 @@ export const CategoryForm = ({
 
   const selectedType = useWatch({ control, name: 'type' });
 
-  const parentCategories = selectedType === FinanceType.Income ? incomeCategories : expenseCategories;
+  const parentCategories =
+    selectedType === FinanceType.Income ? incomeCategories : expenseCategories;
 
   const formattedDropdownCategories = useMemo(
     () => parentCategories.map((cat) => ({ id: cat.id, label: cat.name })),
