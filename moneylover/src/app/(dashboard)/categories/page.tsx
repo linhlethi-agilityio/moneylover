@@ -1,12 +1,13 @@
-// Mocks
-import { MOCK_CATEGORIES } from '@/mocks';
+import { Suspense } from 'react';
 
 // Components
-import { CategoryList } from '@/components';
+import { CategorySkeleton, CategoriesContent } from '@/components';
 
 const CategoriesPage = () => (
-  <div className="mx-auto max-w-2xl bg-gray-50 p-6">
-    <CategoryList categories={MOCK_CATEGORIES} />
+  <div className="mx-auto max-w-2xl p-6">
+    <Suspense fallback={<CategorySkeleton />}>
+      <CategoriesContent />
+    </Suspense>
   </div>
 );
 

@@ -16,3 +16,4 @@ export * from './DashboardContent';
 export * from './Skeleton';
 export * from './CategoryItem';
 export * from './CategoryList';
+export * from './CategoriesContent';
