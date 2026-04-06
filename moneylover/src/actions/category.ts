@@ -13,6 +13,7 @@ import {
   addCategory,
   getParentCategories,
   getSubCategoriesByParentIds,
+  editCategory,
   removeCategory,
 } from '@/services';
 
@@ -49,6 +50,33 @@ export const createCategory = async ({
     parent_id: parentId,
     name,
     type: type as FinanceType,
+  });
+
+  if (error) {
+    return error.message;
+  }
+
+  updateTag(CACHE_TAGS.CATEGORIES);
+};
+
+interface UpdateCategoryParams {
+  id: string;
+  name: string;
+  type: string;
+  parentId?: string | null;
+}
+
+export const updateCategory = async ({
+  id,
+  name,
+  type,
+  parentId = null,
+}: UpdateCategoryParams): Promise<void | string> => {
+  const { error } = await editCategory({
+    id,
+    name,
+    type: type as FinanceType,
+    parent_id: parentId,
   });
 
   if (error) {

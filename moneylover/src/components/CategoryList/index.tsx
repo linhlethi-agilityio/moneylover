@@ -35,6 +35,7 @@ export const CategoryList = ({
 }: CategoryListProps) => {
   const [activeTab, setActiveTab] = useState<FinanceType>(FinanceType.Expense);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editCategory, setEditCategory] = useState<Category | null>(null);
   const [deleteCategoryId, setDeleteCategoryId] = useState<string | null>(null);
   const [, startTransition] = useTransition();
   const { showToast } = useToast();
@@ -58,6 +59,9 @@ export const CategoryList = ({
 
   const handleCloseModal = () => setIsModalOpen(false);
   const handleOpenModal = () => setIsModalOpen(true);
+
+  const handleEdit = (category: Category) => setEditCategory(category);
+  const handleCloseEdit = () => setEditCategory(null);
 
   const handleDelete = (id: string) => setDeleteCategoryId(id);
 
@@ -126,6 +130,7 @@ export const CategoryList = ({
               key={category.id}
               category={category}
               subCategories={subCategoriesMap[category.id] ?? []}
+              onEdit={handleEdit}
               onDelete={handleDelete}
             />
           ))}
@@ -139,6 +144,18 @@ export const CategoryList = ({
             expenseCategories={expenseCategories}
             incomeCategories={incomeCategories}
             onSubmit={handleCloseModal}
+          />
+        </Modal>
+      )}
+
+      {editCategory && (
+        <Modal isOpen title="Edit Category" onClose={handleCloseEdit}>
+          <CategoryForm
+            userId={userId}
+            expenseCategories={expenseCategories}
+            incomeCategories={incomeCategories}
+            previewData={editCategory}
+            onSubmit={handleCloseEdit}
           />
         </Modal>
       )}

@@ -34,6 +34,19 @@ export const addCategory = async ({ user_id, parent_id, name, type }: Partial<Ca
   return { error };
 };
 
+export const editCategory = async ({ id, name, type, parent_id }: Partial<Category>) => {
+  if (parent_id) {
+    await supabase.from('categories').update({ parent_id }).eq('parent_id', id);
+  }
+
+  const { error } = await supabase
+    .from('categories')
+    .update({ name, type, parent_id })
+    .eq('id', id);
+
+  return { error };
+};
+
 export const removeCategory = async (categoryId: string) => {
   const { error } = await supabase.from('categories').delete().eq('id', categoryId);
 

@@ -14,10 +14,16 @@ import { CategoryInfo, MenuActions } from '@/components';
 interface CategoryItemProps {
   category: Category;
   subCategories?: Category[];
+  onEdit?: (category: Category) => void;
   onDelete?: (id: string) => void;
 }
 
-export const CategoryItem = ({ category, subCategories = [], onDelete }: CategoryItemProps) => {
+export const CategoryItem = ({
+  category,
+  subCategories = [],
+  onEdit,
+  onDelete,
+}: CategoryItemProps) => {
   const { name, image_url, id } = category;
   const [isExpanded, setIsExpanded] = useState(false);
   const hasChildren = subCategories.length > 0;
@@ -32,6 +38,10 @@ export const CategoryItem = ({ category, subCategories = [], onDelete }: Categor
     onDelete?.(id);
   };
 
+  const handleEditCategory = () => {
+    onEdit?.(category);
+  };
+
   return (
     <div>
       <div
@@ -40,7 +50,7 @@ export const CategoryItem = ({ category, subCategories = [], onDelete }: Categor
       >
         <CategoryInfo name={name} imageUrl={image_url} />
         <div className="flex-1" />
-        <MenuActions onDelete={handleDeleteCategory} />
+        <MenuActions onEdit={handleEditCategory} onDelete={handleDeleteCategory} />
         {hasChildren && (
           <ChevronRightIcon className={`transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
         )}
@@ -55,7 +65,7 @@ export const CategoryItem = ({ category, subCategories = [], onDelete }: Categor
             >
               <CategoryInfo name={sub.name} imageUrl={sub.image_url} size="sm" />
               <div className="flex-1" />
-              <MenuActions onDelete={() => onDelete?.(sub.id)} />
+              <MenuActions onEdit={() => onEdit?.(sub)} onDelete={() => onDelete?.(sub.id)} />
             </div>
           ))}
         </div>
