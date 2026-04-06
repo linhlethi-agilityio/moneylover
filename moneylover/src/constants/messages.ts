@@ -15,6 +15,7 @@ export const SUCCESS_MESSAGES = {
   WALLET_DELETED: 'Wallet deleted successfully!',
   CATEGORY_CREATED: 'Category created successfully!',
   CATEGORY_UPDATED: 'Category updated successfully!',
+  CATEGORY_DELETED: 'Category deleted successfully!',
 };
 
 export const AUTH_METHODS = {
