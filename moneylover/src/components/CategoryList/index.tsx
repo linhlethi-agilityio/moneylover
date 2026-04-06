@@ -1,35 +1,81 @@
+'use client';
+
+import { useMemo, useState } from 'react';
+
 // Types
 import { Category, FinanceType } from '@/types';
 
+// Utils
+import { cn } from '@/utils';
+
+// Constants
+import { CATEGORY_TYPES } from '@/constants';
+
 // Components
-import { CategoryItem } from '@/components/CategoryItem';
+import { Button, CategoryItem } from '@/components';
 
 interface CategoryListProps {
-  categories: Category[];
+  expenseCategories: Category[];
+  incomeCategories: Category[];
+  subCategories: Category[];
 }
 
-export const CategoryList = ({ categories }: CategoryListProps) => {
-  const expenseCategories = categories.filter((c) => c.type === FinanceType.Expense);
-  const incomeCategories = categories.filter((c) => c.type === FinanceType.Income);
+export const CategoryList = ({
+  expenseCategories,
+  incomeCategories,
+  subCategories,
+}: CategoryListProps) => {
+  const [activeTab, setActiveTab] = useState<FinanceType>(FinanceType.Expense);
 
-  return categories.length === 0 ? (
-    <p className="py-8 text-center text-sm text-gray-400">No categories yet</p>
-  ) : (
-    <div className="flex flex-col gap-6">
-      {expenseCategories.length > 0 && (
-        <div className="rounded-lg border border-gray-200 bg-white">
-          <p className="px-4 py-2 text-xs font-medium uppercase text-gray-400">Expense</p>
-          {expenseCategories.map((category) => (
-            <CategoryItem key={category.id} category={category} />
-          ))}
-        </div>
-      )}
+  const categoriesMap = {
+    [FinanceType.Expense]: expenseCategories,
+    [FinanceType.Income]: incomeCategories,
+  };
 
-      {incomeCategories.length > 0 && (
+  const activeCategories = categoriesMap[activeTab];
+
+  const subCategoriesMap = useMemo(
+    () => Object.groupBy(subCategories, (sub) => sub.parent_id ?? ''),
+    [subCategories],
+  );
+
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="flex gap-2 rounded-lg bg-gray-200 p-1">
+        {CATEGORY_TYPES.map(({ key, label }) => (
+          <Button
+            key={key}
+            variant="ghost"
+            onClick={() => setActiveTab(key)}
+            className={cn(
+              'flex-1 rounded-md py-2 text-sm font-medium',
+              activeTab === key
+                ? 'bg-white text-gray-900 shadow-sm hover:bg-white'
+                : 'bg-transparent text-gray-500 hover:bg-transparent hover:text-gray-700',
+            )}
+          >
+            {label}
+          </Button>
+        ))}
+      </div>
+
+      <Button variant="outline" className="w-full">
+        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-lime-100 text-xs text-lime-600">
+          +
+        </span>
+        New category
+      </Button>
+
+      {activeCategories.length === 0 ? (
+        <p className="py-8 text-center text-sm text-gray-400">No categories yet</p>
+      ) : (
         <div className="rounded-lg border border-gray-200 bg-white">
-          <p className="px-4 py-2 text-xs font-medium uppercase text-gray-400">Income</p>
-          {incomeCategories.map((category) => (
-            <CategoryItem key={category.id} category={category} />
+          {activeCategories.map((category) => (
+            <CategoryItem
+              key={category.id}
+              category={category}
+              subCategories={subCategoriesMap[category.id] ?? []}
+            />
           ))}
         </div>
       )}
