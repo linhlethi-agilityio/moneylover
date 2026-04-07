@@ -2,8 +2,9 @@ import { CURRENCIES } from '@/constants';
 
 export const formattedBalance = (
   amount: number,
-  currencyCode = 'VND',
+  currencyCode = CURRENCIES[0].code,
   showSign = true,
+  outflow = false,
 ): string => {
   const isPositive = amount >= 0;
   const formatted = Math.abs(amount)
@@ -12,5 +13,5 @@ export const formattedBalance = (
   const sign = showSign ? (isPositive ? '+' : '-') : amount < 0 ? '-' : '';
   const symbol = CURRENCIES.find((c) => c.code === currencyCode)?.symbol ?? currencyCode;
 
-  return `${sign}${formatted} ${symbol}`;
+  return `${outflow ? '-' : sign}${formatted} ${symbol}`;
 };
