@@ -1,0 +1,31 @@
+// Services
+import { getTransactionsByDate } from '@/services';
+
+// Configs
+import { auth } from '@/configs/auth';
+
+// Utils
+import { getMonthRange } from '@/utils';
+
+// Components
+import { TransactionList } from '@/components/TransactionList';
+
+interface TransactionsContentProps {
+  period: string;
+}
+
+export const TransactionsContent = async ({ period }: TransactionsContentProps) => {
+  const session = await auth();
+  const userId = session?.user?.id || '';
+
+  const { startDate, endDate } = getMonthRange(period);
+  const { inflow, outflow, groupedByCategory } = await getTransactionsByDate(
+    userId,
+    startDate,
+    endDate,
+  );
+
+  return (
+    <TransactionList inflow={inflow} outflow={outflow} groupedByCategory={groupedByCategory} />
+  );
+};

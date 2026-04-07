@@ -1,0 +1,32 @@
+// Libs
+import { supabase } from '@/libs/supabase';
+
+export const getTransactions = async (userId: string, startDate: string, endDate: string) => {
+  const { data } = await supabase
+    .from('transactions')
+    .select('*, category:categories(name, image_url, type)')
+    .eq('user_id', userId)
+    .gte('date', startDate)
+    .lte('date', endDate)
+    .order('date', { ascending: false });
+
+  return data ?? [];
+};
+
+export const getTransactionBalanceByDate = async (
+  userId: string,
+  startDate: string,
+  endDate: string,
+) => {
+  const { data } = await supabase.rpc('get_transaction_summary', {
+    user_id_input: userId,
+    start_date: startDate,
+    end_date: endDate,
+  });
+
+  const result = data?.[0];
+
+  const { inflow = 0, outflow = 0 } = result || {};
+
+  return { inflow, outflow };
+};
