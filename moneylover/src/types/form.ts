@@ -20,3 +20,11 @@ export interface WalletFormData {
   currency: string;
   balance?: string | number;
 }
+
+export interface TransactionFormData {
+  type: string;
+  categoryId: string;
+  amount: string;
+  date: string;
+  note?: string;
+}

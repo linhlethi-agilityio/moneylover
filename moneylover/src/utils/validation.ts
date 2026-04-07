@@ -60,3 +60,11 @@ export const walletSchema = z.object({
   currency: z.string().nonempty(ERROR_MESSAGES.REQUIRED('Currency')),
   balance: z.union([z.string(), z.number()]).optional(),
 });
+
+export const transactionSchema = z.object({
+  type: z.string().nonempty(ERROR_MESSAGES.REQUIRED('Type')),
+  categoryId: z.string().nonempty(ERROR_MESSAGES.REQUIRED('Category')),
+  amount: z.string().nonempty(ERROR_MESSAGES.REQUIRED('Amount')),
+  date: z.string().nonempty(ERROR_MESSAGES.REQUIRED('Date')),
+  note: z.string().optional(),
+});
