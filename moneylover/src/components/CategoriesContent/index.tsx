@@ -1,5 +1,5 @@
-// Actions
-import { getCategoriesInfo } from '@/actions';
+// Services
+import { getCategoriesInfo } from '@/services';
 
 // Configs
 import { auth } from '@/configs/auth';

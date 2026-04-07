@@ -1,54 +1,26 @@
-// Libs
-import { supabase } from '@/libs/supabase';
+'use cache';
+
+import { cacheTag } from 'next/cache';
+
+// Constants
+import { CACHE_TAGS } from '@/constants';
 
 // Types
-import { Category, FinanceType } from '@/types';
+import { FinanceType } from '@/types';
 
-export const getParentCategories = async (userId: string, type: FinanceType) => {
-  const { data } = await supabase
-    .from('categories')
-    .select('*')
-    .eq('user_id', userId)
-    .eq('type', type)
-    .is('parent_id', null);
+// Libs
+import { getParentCategories, getSubCategoriesByParentIds } from '@/libs';
 
-  return data ?? [];
-};
+export const getCategoriesInfo = async (userId: string) => {
+  cacheTag(CACHE_TAGS.CATEGORIES);
 
-export const getSubCategoriesByParentIds = async (parentIds: string[]) => {
-  if (!parentIds.length) return [];
+  const [expenseCategories, incomeCategories] = await Promise.all([
+    getParentCategories(userId, FinanceType.Expense),
+    getParentCategories(userId, FinanceType.Income),
+  ]);
 
-  const { data } = await supabase.from('categories').select('*').in('parent_id', parentIds);
+  const allParentIds = [...expenseCategories, ...incomeCategories].map((c) => c.id);
+  const subCategories = await getSubCategoriesByParentIds(allParentIds);
 
-  return data ?? [];
-};
-
-export const addCategory = async ({ user_id, parent_id, name, type }: Partial<Category>) => {
-  const { error } = await supabase.from('categories').insert({
-    user_id,
-    parent_id,
-    name,
-    type,
-  });
-
-  return { error };
-};
-
-export const editCategory = async ({ id, name, type, parent_id }: Partial<Category>) => {
-  if (parent_id) {
-    await supabase.from('categories').update({ parent_id }).eq('parent_id', id);
-  }
-
-  const { error } = await supabase
-    .from('categories')
-    .update({ name, type, parent_id })
-    .eq('id', id);
-
-  return { error };
-};
-
-export const removeCategory = async (categoryId: string) => {
-  const { error } = await supabase.from('categories').delete().eq('id', categoryId);
-
-  return { error };
+  return { expenseCategories, incomeCategories, subCategories };
 };

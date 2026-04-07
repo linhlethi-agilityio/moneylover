@@ -1,6 +1,6 @@
 'use server';
 
-import { cacheTag, updateTag } from 'next/cache';
+import { updateTag } from 'next/cache';
 
 // Constants
 import { CACHE_TAGS } from '@/constants';
@@ -8,14 +8,8 @@ import { CACHE_TAGS } from '@/constants';
 // Types
 import { FinanceType } from '@/types';
 
-// Services
-import {
-  addCategory,
-  getParentCategories,
-  getSubCategoriesByParentIds,
-  editCategory,
-  removeCategory,
-} from '@/services';
+// Libs
+import { addCategory, editCategory, removeCategory } from '@/libs';
 
 interface CreateCategoryParams {
   userId: string;
@@ -23,21 +17,6 @@ interface CreateCategoryParams {
   type: string;
   parentId?: string | null;
 }
-
-export const getCategoriesInfo = async (userId: string) => {
-  'use cache';
-  cacheTag(CACHE_TAGS.CATEGORIES);
-
-  const [expenseCategories, incomeCategories] = await Promise.all([
-    getParentCategories(userId, FinanceType.Expense),
-    getParentCategories(userId, FinanceType.Income),
-  ]);
-
-  const allParentIds = [...expenseCategories, ...incomeCategories].map((c) => c.id);
-  const subCategories = await getSubCategoriesByParentIds(allParentIds);
-
-  return { expenseCategories, incomeCategories, subCategories };
-};
 
 export const createCategory = async ({
   userId,
