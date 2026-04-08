@@ -1,6 +1,9 @@
 // Libs
 import { supabase } from '@/libs/supabase';
 
+// Types
+import { Transaction } from '@/types';
+
 export const getTransactions = async (userId: string, startDate: string, endDate: string) => {
   const { data } = await supabase
     .from('transactions')
@@ -39,4 +42,10 @@ export const getTransactionBalanceByDate = async (
   const { inflow = 0, outflow = 0 } = result || {};
 
   return { inflow, outflow };
+};
+
+export const addTransaction = async (params: Partial<Transaction>) => {
+  const { error } = await supabase.from('transactions').insert(params);
+
+  return { error };
 };

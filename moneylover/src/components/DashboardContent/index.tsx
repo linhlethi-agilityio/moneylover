@@ -2,7 +2,7 @@ import { type ReactNode } from 'react';
 import { redirect } from 'next/navigation';
 
 // Services
-import { getWalletsInfo } from '@/services';
+import { getWalletsInfo, getCategoriesInfo } from '@/services';
 
 // Configs
 import { auth } from '@/configs/auth';
@@ -21,6 +21,7 @@ export const DashboardContent = async ({ children }: { children: ReactNode }) =>
   const email = user?.email || '';
 
   const { wallets, totalBalance, currency } = await getWalletsInfo(userId);
+  const { expenseCategories, incomeCategories } = await getCategoriesInfo(userId);
 
   if (!wallets.length) {
     redirect(ROUTES.ONBOARDING);
@@ -34,6 +35,8 @@ export const DashboardContent = async ({ children }: { children: ReactNode }) =>
         totalBalance={totalBalance}
         currency={currency}
         wallets={wallets}
+        expenseCategories={expenseCategories}
+        incomeCategories={incomeCategories}
       />
       <main className="flex-1 bg-gray-50">{children}</main>
     </div>
