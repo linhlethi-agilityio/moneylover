@@ -55,3 +55,9 @@ export const addTransaction = async (params: Partial<Transaction>) => {
 
   return { error };
 };
+
+export const editTransaction = async (id: string, params: Partial<Transaction>) => {
+  const { error } = await supabase.from('transactions').update(params).eq('id', id);
+
+  return { error };
+};

@@ -28,30 +28,41 @@ import {
   TransactionDetailModal,
   LoadingIndicator,
   ConfirmModal,
+  TransactionForm,
+  Modal,
 } from '@/components';
 
-interface TransactionWithCategory extends Transaction {
+export interface TransactionWithCategory extends Transaction {
   category: Category;
 }
 
 interface TransactionListProps {
+  userId?: string;
+  walletId?: string;
   inflow: number;
   outflow: number;
   groupedByCategory: Record<string, TransactionWithCategory[]>;
   currency?: string;
+  expenseCategories?: Category[];
+  incomeCategories?: Category[];
 }
 
 export const TransactionList = ({
+  userId = '',
+  walletId = '',
   inflow,
   outflow,
   groupedByCategory,
   currency,
+  expenseCategories = [],
+  incomeCategories = [],
 }: TransactionListProps) => {
   const [selectedTransaction, setSelectedTransaction] = useState<TransactionWithCategory | null>(
     null,
   );
   const [isPending, startTransition] = useTransition();
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState(false);
+  const [isOpenTransactionModal, setIsOpenTransactionModal] = useState(false);
   const { showToast } = useToast();
   const isTransactions = Object.keys(groupedByCategory).length > 0;
 
@@ -65,8 +76,22 @@ export const TransactionList = ({
     });
   };
 
+  const handleOpenTransactionModal = () => {
+    setIsOpenTransactionModal(true);
+  };
+
   const handleEditTransaction = () => {
-    // TODO: Implement edit transaction logic
+    if (!selectedTransaction) return;
+
+    startTransition(async () => {
+      const data = await getTransactionDetailById(selectedTransaction.id);
+
+      if (data) {
+        setSelectedTransaction(data);
+      }
+
+      setIsOpenTransactionModal(false);
+    });
   };
 
   const handleDeleteTransaction = () => {
@@ -101,6 +126,10 @@ export const TransactionList = ({
 
   const handleCloseConfirmModal = () => {
     setIsOpenConfirmModal(false);
+  };
+
+  const handleCloseEditTransactionModal = () => {
+    setIsOpenTransactionModal(false);
   };
 
   return (
@@ -174,7 +203,7 @@ export const TransactionList = ({
         <TransactionDetailModal
           transaction={selectedTransaction}
           currency={currency}
-          onEdit={handleEditTransaction}
+          onEdit={handleOpenTransactionModal}
           onDelete={handleDeleteTransaction}
           onClose={handleCloseTransactionDetailModal}
         />
@@ -189,6 +218,19 @@ export const TransactionList = ({
           onConfirm={handleConfirmDelete}
           onCancel={handleCloseConfirmModal}
         />
+      )}
+
+      {isOpenTransactionModal && (
+        <Modal isOpen title="Update Transaction" onClose={handleCloseEditTransactionModal}>
+          <TransactionForm
+            userId={userId}
+            walletId={walletId}
+            expenseCategories={expenseCategories}
+            previewData={selectedTransaction ?? undefined}
+            incomeCategories={incomeCategories}
+            onSubmit={handleEditTransaction}
+          />
+        </Modal>
       )}
     </>
   );

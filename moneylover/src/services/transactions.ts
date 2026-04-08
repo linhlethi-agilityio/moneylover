@@ -9,7 +9,7 @@ import { CACHE_TAGS } from '@/constants';
 import { getTransactions, getTransactionBalanceByDate, getTransactionById } from '@/libs';
 
 export const getTransactionDetailById = async (id: string) => {
-  cacheTag(CACHE_TAGS.TRANSACTION);
+  cacheTag(`${CACHE_TAGS.TRANSACTION}/${id}`);
   return getTransactionById(id);
 };
 
