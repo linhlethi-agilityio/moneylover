@@ -4,10 +4,16 @@ import { useState, useTransition } from 'react';
 import Image from 'next/image';
 
 // Constants
-import { IMAGES } from '@/constants';
+import { ERROR_MESSAGES, IMAGES, SUCCESS_MESSAGES } from '@/constants';
 
 // Types
 import { Category, Transaction } from '@/types';
+
+// Actions
+import { deleteTransaction } from '@/actions';
+
+// Hooks
+import { useToast } from '@/hooks';
 
 // Services
 import { getTransactionDetailById } from '@/services';
@@ -21,6 +27,7 @@ import {
   CategoryInfo,
   TransactionDetailModal,
   LoadingIndicator,
+  ConfirmModal,
 } from '@/components';
 
 interface TransactionWithCategory extends Transaction {
@@ -44,6 +51,8 @@ export const TransactionList = ({
     null,
   );
   const [isPending, startTransition] = useTransition();
+  const [isOpenConfirmModal, setIsOpenConfirmModal] = useState(false);
+  const { showToast } = useToast();
   const isTransactions = Object.keys(groupedByCategory).length > 0;
 
   const handleTransactionClick = (id: string) => {
@@ -61,11 +70,37 @@ export const TransactionList = ({
   };
 
   const handleDeleteTransaction = () => {
-    // TODO: Implement delete transaction logic
+    setIsOpenConfirmModal(true);
   };
 
-  const handleCloseModal = () => {
+  const handleConfirmDelete = () => {
+    if (!selectedTransaction) return;
+
+    startTransition(async () => {
+      const { id = '' } = selectedTransaction;
+
+      const error = await deleteTransaction(id);
+
+      if (error) {
+        return showToast({
+          status: 'error',
+          title: ERROR_MESSAGES.SOMETHING_WENT_WRONG,
+          description: error,
+        });
+      }
+
+      showToast({ status: 'success', title: SUCCESS_MESSAGES.TRANSACTION_DELETED });
+      setIsOpenConfirmModal(false);
+      setSelectedTransaction(null);
+    });
+  };
+
+  const handleCloseTransactionDetailModal = () => {
     setSelectedTransaction(null);
+  };
+
+  const handleCloseConfirmModal = () => {
+    setIsOpenConfirmModal(false);
   };
 
   return (
@@ -141,7 +176,18 @@ export const TransactionList = ({
           currency={currency}
           onEdit={handleEditTransaction}
           onDelete={handleDeleteTransaction}
-          onClose={handleCloseModal}
+          onClose={handleCloseTransactionDetailModal}
+        />
+      )}
+
+      {isOpenConfirmModal && (
+        <ConfirmModal
+          isOpen
+          title="Delete transaction"
+          description="Are you sure you want to delete this transaction?"
+          confirmLabel="Delete"
+          onConfirm={handleConfirmDelete}
+          onCancel={handleCloseConfirmModal}
         />
       )}
     </>
