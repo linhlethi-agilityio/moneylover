@@ -9,7 +9,7 @@ import { CACHE_TAGS } from '@/constants';
 import { TransactionFormData } from '@/types';
 
 // Libs
-import { addTransaction } from '@/libs';
+import { addTransaction, removeTransaction } from '@/libs';
 
 interface CreateTransactionParams extends TransactionFormData {
   userId: string;
@@ -34,6 +34,16 @@ export const createTransaction = async ({
     date,
     note,
   });
+
+  if (error) {
+    return error.message;
+  }
+
+  updateTag(CACHE_TAGS.TRANSACTIONS);
+};
+
+export const deleteTransaction = async (id: string): Promise<void | string> => {
+  const { error } = await removeTransaction(id);
 
   if (error) {
     return error.message;

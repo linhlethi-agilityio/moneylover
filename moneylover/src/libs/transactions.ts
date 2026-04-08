@@ -26,6 +26,12 @@ export const getTransactionById = async (id: string) => {
   return data;
 };
 
+export const removeTransaction = async (id: string) => {
+  const { error } = await supabase.from('transactions').delete().eq('id', id);
+
+  return { error };
+};
+
 export const getTransactionBalanceByDate = async (
   userId: string,
   startDate: string,
