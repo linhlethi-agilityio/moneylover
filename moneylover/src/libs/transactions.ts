@@ -13,6 +13,16 @@ export const getTransactions = async (userId: string, startDate: string, endDate
   return data ?? [];
 };
 
+export const getTransactionById = async (id: string) => {
+  const { data } = await supabase
+    .from('transactions')
+    .select('*, category:categories(name, image_url, type)')
+    .eq('id', id)
+    .single();
+
+  return data;
+};
+
 export const getTransactionBalanceByDate = async (
   userId: string,
   startDate: string,

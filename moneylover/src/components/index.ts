@@ -20,6 +20,7 @@ export * from './CategoriesContent';
 export * from './CategoryForm';
 export * from './Dropdown';
 export * from './CategoryInfo';
+export * from './TransactionDetail';
 export * from './TransactionForm';
 export * from './TransactionItem';
 export * from './TransactionList';
