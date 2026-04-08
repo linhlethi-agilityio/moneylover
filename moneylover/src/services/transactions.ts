@@ -6,7 +6,12 @@ import { cacheTag } from 'next/cache';
 import { CACHE_TAGS } from '@/constants';
 
 // Libs
-import { getTransactions, getTransactionBalanceByDate } from '@/libs';
+import { getTransactions, getTransactionBalanceByDate, getTransactionById } from '@/libs';
+
+export const getTransactionDetailById = async (id: string) => {
+  cacheTag(CACHE_TAGS.TRANSACTION);
+  return getTransactionById(id);
+};
 
 export const getTransactionsByDate = async (userId: string, startDate: string, endDate: string) => {
   cacheTag(CACHE_TAGS.TRANSACTIONS);
