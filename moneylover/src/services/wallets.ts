@@ -1,36 +1,19 @@
-// Types
-import { Wallet } from '@/types';
+'use cache';
+
+import { cacheTag } from 'next/cache';
+
+// Constants
+import { CACHE_TAGS } from '@/constants';
 
 // Libs
-import { supabase } from '@/libs/supabase';
+import { getWallets } from '@/libs';
 
-type InsertWalletParams = Omit<Wallet, 'id' | 'created_at'>;
+export const getWalletsInfo = async (userId: string) => {
+  cacheTag(CACHE_TAGS.WALLETS);
 
-export const getWallets = async (userId: string) => {
-  const { data } = await supabase.from('wallets').select('*').eq('user_id', userId);
+  const wallets = await getWallets(userId);
+  const totalBalance = wallets.reduce((sum, wallet) => sum + (wallet.balance ?? 0), 0);
+  const currency = wallets[0]?.currency;
 
-  return data ?? [];
-};
-
-export const addWallet = async ({ user_id, name, currency, balance = 0 }: InsertWalletParams) => {
-  const { error } = await supabase.from('wallets').insert({
-    user_id,
-    name,
-    currency,
-    balance,
-  });
-
-  return { error };
-};
-
-export const editWallet = async ({ id, name, currency, balance }: Partial<Wallet>) => {
-  const { error } = await supabase.from('wallets').update({ name, currency, balance }).eq('id', id);
-
-  return { error };
-};
-
-export const removeWallet = async (walletId: string) => {
-  const { error } = await supabase.from('wallets').delete().eq('id', walletId);
-
-  return { error };
+  return { wallets, totalBalance, currency };
 };

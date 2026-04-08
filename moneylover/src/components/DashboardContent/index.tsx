@@ -1,8 +1,8 @@
 import { type ReactNode } from 'react';
 import { redirect } from 'next/navigation';
 
-// Actions
-import { getWalletsInfo } from '@/actions';
+// Services
+import { getWalletsInfo } from '@/services';
 
 // Configs
 import { auth } from '@/configs/auth';
