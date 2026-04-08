@@ -22,13 +22,13 @@ import {
 } from '@/utils';
 
 // Actions
-import { createTransaction } from '@/actions';
+import { createTransaction, updateTransaction } from '@/actions';
 
 // Hooks
 import { useToast } from '@/hooks';
 
 // Components
-import { Button, Input, Dropdown } from '@/components';
+import { Button, Input, Dropdown, TransactionWithCategory } from '@/components';
 
 const REQUIRED_FIELDS = ['categoryId', 'amount'];
 
@@ -37,6 +37,8 @@ interface TransactionFormProps {
   walletId: string;
   expenseCategories?: Category[];
   incomeCategories?: Category[];
+  previewData?: TransactionWithCategory;
+  isLoading?: boolean;
   onSubmit: () => void;
 }
 
@@ -45,10 +47,14 @@ export const TransactionForm = ({
   walletId,
   expenseCategories = [],
   incomeCategories = [],
+  previewData,
+  isLoading = false,
   onSubmit,
 }: TransactionFormProps) => {
   const [isPending, startTransition] = useTransition();
   const { showToast } = useToast();
+
+  const isEditMode = !!previewData;
 
   const {
     control,
@@ -60,20 +66,31 @@ export const TransactionForm = ({
     resolver: zodResolver(transactionSchema),
     mode: 'onBlur',
     reValidateMode: 'onBlur',
-    defaultValues: {
-      type: FinanceType.Expense,
-      categoryId: '',
-      amount: 0,
-      date: new Date().toISOString().split('T')[0],
-      note: '',
-    },
+    defaultValues: previewData
+      ? {
+          type: previewData.type,
+          categoryId: previewData.category_id,
+          amount: previewData.amount,
+          date: previewData.date,
+          note: previewData.note ?? '',
+        }
+      : {
+          type: FinanceType.Expense,
+          categoryId: '',
+          amount: 0,
+          date: new Date().toISOString().split('T')[0],
+          note: '',
+        },
   });
 
   const dirtyItems = Object.keys(dirtyFields);
 
   const enableSubmit = useMemo(
-    () => isEnableSubmitButton(REQUIRED_FIELDS, dirtyItems, errors),
-    [dirtyItems, errors],
+    () =>
+      isEditMode
+        ? dirtyItems.length > 0 && !Object.keys(errors).length
+        : isEnableSubmitButton(REQUIRED_FIELDS, dirtyItems, errors),
+    [isEditMode, dirtyItems, errors],
   );
 
   const selectedType = useWatch({ control, name: 'type' });
@@ -94,16 +111,9 @@ export const TransactionForm = ({
 
   const handleFormSubmit = (data: TransactionFormData) => {
     startTransition(async () => {
-      const { date, categoryId, amount, note, type } = data;
-      const error = await createTransaction({
-        userId,
-        walletId,
-        date,
-        categoryId,
-        amount,
-        note,
-        type,
-      });
+      const error = isEditMode
+        ? await updateTransaction(previewData.id, data)
+        : await createTransaction({ userId, walletId, ...data });
 
       if (error) {
         return showToast({
@@ -113,7 +123,12 @@ export const TransactionForm = ({
         });
       }
 
-      showToast({ status: 'success', title: SUCCESS_MESSAGES.TRANSACTION_CREATED });
+      showToast({
+        status: 'success',
+        title: isEditMode
+          ? SUCCESS_MESSAGES.TRANSACTION_UPDATED
+          : SUCCESS_MESSAGES.TRANSACTION_CREATED,
+      });
       onSubmit();
     });
   };
@@ -227,7 +242,7 @@ export const TransactionForm = ({
       <Button
         type="submit"
         size="lg"
-        isLoading={isPending}
+        isLoading={isPending || isLoading}
         disabled={!enableSubmit}
         className="w-full"
       >

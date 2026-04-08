@@ -1,5 +1,5 @@
 // Services
-import { getTransactionsByDate } from '@/services';
+import { getCategoriesInfo, getTransactionsByDate, getWalletsInfo } from '@/services';
 
 // Configs
 import { auth } from '@/configs/auth';
@@ -25,7 +25,15 @@ export const TransactionsContent = async ({ period }: TransactionsContentProps) 
     endDate,
   );
 
+  const { expenseCategories, incomeCategories } = await getCategoriesInfo(userId);
+
   return (
-    <TransactionList inflow={inflow} outflow={outflow} groupedByCategory={groupedByCategory} />
+    <TransactionList
+      inflow={inflow}
+      outflow={outflow}
+      groupedByCategory={groupedByCategory}
+      expenseCategories={expenseCategories}
+      incomeCategories={incomeCategories}
+    />
   );
 };

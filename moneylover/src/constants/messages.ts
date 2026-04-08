@@ -17,6 +17,7 @@ export const SUCCESS_MESSAGES = {
   CATEGORY_UPDATED: 'Category updated successfully!',
   CATEGORY_DELETED: 'Category deleted successfully!',
   TRANSACTION_CREATED: 'Transaction created successfully!',
+  TRANSACTION_UPDATED: 'Transaction updated successfully!',
   TRANSACTION_DELETED: 'Transaction deleted successfully!',
 };
 

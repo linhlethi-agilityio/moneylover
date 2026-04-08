@@ -1,5 +1,5 @@
 // Types
-import { FinanceType, Transaction } from '@/types';
+import { FinanceType } from '@/types';
 
 // Constants
 import { CURRENCIES } from '@/constants';
@@ -8,10 +8,10 @@ import { CURRENCIES } from '@/constants';
 import { cn, formattedBalance, getFullDate } from '@/utils';
 
 // Components
-import { Button, CategoryInfo, Modal } from '@/components';
+import { Button, CategoryInfo, Modal, TransactionWithCategory } from '@/components';
 
 interface TransactionDetailProps {
-  transaction: Transaction;
+  transaction: TransactionWithCategory;
   currency?: string;
   onEdit: () => void;
   onDelete: () => void;
