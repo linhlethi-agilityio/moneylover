@@ -3,6 +3,9 @@ import { z } from 'zod';
 // Constants
 import { ERROR_MESSAGES } from '@/constants';
 
+// Types
+import { FinanceType } from '@/types';
+
 /**
  * @param requiredFields [] The required fields on form
  * @param dirtyFields [] The fields, which the users touched and fill data on
@@ -62,9 +65,9 @@ export const walletSchema = z.object({
 });
 
 export const transactionSchema = z.object({
-  type: z.string().nonempty(ERROR_MESSAGES.REQUIRED('Type')),
+  type: z.enum([FinanceType.Expense, FinanceType.Income]),
   categoryId: z.string().nonempty(ERROR_MESSAGES.REQUIRED('Category')),
-  amount: z.string().nonempty(ERROR_MESSAGES.REQUIRED('Amount')),
+  amount: z.number({ message: ERROR_MESSAGES.REQUIRED('Amount') }).min(0),
   date: z.string().nonempty(ERROR_MESSAGES.REQUIRED('Date')),
   note: z.string().optional(),
 });

@@ -26,7 +26,7 @@ export const authenticate = async (formData: SignInFormData): Promise<void | str
         [ERROR_TYPES.CREDENTIALS_SIGN_IN]: ERROR_MESSAGES.EMAIL_PASSWORD_INVALID,
       };
 
-      return errorMap[error.type] || ERROR_MESSAGES.UNKNOWN_ERROR;
+      return errorMap[error.type] || ERROR_MESSAGES.SOMETHING_WENT_WRONG;
     }
 
     throw error;

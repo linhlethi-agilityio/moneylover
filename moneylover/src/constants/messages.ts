@@ -6,7 +6,7 @@ export const ERROR_MESSAGES = {
 
   SIGN_UP_FAILED: 'Sign up failed. Please try again.',
   EMAIL_PASSWORD_INVALID: 'Email or password is invalid',
-  UNKNOWN_ERROR: 'Something went wrong. Please try again later',
+  SOMETHING_WENT_WRONG: 'Something went wrong. Please try again later',
 };
 
 export const SUCCESS_MESSAGES = {
@@ -16,6 +16,7 @@ export const SUCCESS_MESSAGES = {
   CATEGORY_CREATED: 'Category created successfully!',
   CATEGORY_UPDATED: 'Category updated successfully!',
   CATEGORY_DELETED: 'Category deleted successfully!',
+  TRANSACTION_CREATED: 'Transaction created successfully!',
 };
 
 export const AUTH_METHODS = {

@@ -12,8 +12,8 @@ export const validateBalance = (value: string): number => {
 /**
  * Format number with commas (e.g. 1,000,000)
  */
-export const formatCurrency = (value: string): string => {
-  const num = typeof value === 'string' ? value.replace(/\D/g, '') : String(value);
+export const formatCurrency = (value: string | number): string => {
+  const num = typeof value === 'number' ? String(value) : value.replace(/\D/g, '');
 
   return num.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };

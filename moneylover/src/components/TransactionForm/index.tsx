@@ -1,12 +1,12 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useTransition } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
 
 // Constants
-import { CATEGORY_TYPES } from '@/constants';
+import { CATEGORY_TYPES, ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/constants';
 
 // Types
 import { Category, FinanceType, TransactionFormData } from '@/types';
@@ -18,24 +18,38 @@ import {
   transactionSchema,
   formatCurrency,
   isEnableSubmitButton,
+  validateBalance,
 } from '@/utils';
+
+// Actions
+import { createTransaction } from '@/actions';
+
+// Hooks
+import { useToast } from '@/hooks';
 
 // Components
 import { Button, Input, Dropdown } from '@/components';
 
-const REQUIRED_FIELDS = ['categoryId', 'amount', 'date'];
+const REQUIRED_FIELDS = ['categoryId', 'amount'];
 
 interface TransactionFormProps {
+  userId: string;
+  walletId: string;
   expenseCategories?: Category[];
   incomeCategories?: Category[];
-  onSubmit?: (data: TransactionFormData) => void;
+  onSubmit: () => void;
 }
 
 export const TransactionForm = ({
+  userId,
+  walletId,
   expenseCategories = [],
   incomeCategories = [],
   onSubmit,
 }: TransactionFormProps) => {
+  const [isPending, startTransition] = useTransition();
+  const { showToast } = useToast();
+
   const {
     control,
     formState: { errors, dirtyFields },
@@ -49,7 +63,7 @@ export const TransactionForm = ({
     defaultValues: {
       type: FinanceType.Expense,
       categoryId: '',
-      amount: '',
+      amount: 0,
       date: new Date().toISOString().split('T')[0],
       note: '',
     },
@@ -79,7 +93,29 @@ export const TransactionForm = ({
   );
 
   const handleFormSubmit = (data: TransactionFormData) => {
-    onSubmit?.(data);
+    startTransition(async () => {
+      const { date, categoryId, amount, note, type } = data;
+      const error = await createTransaction({
+        userId,
+        walletId,
+        date,
+        categoryId,
+        amount,
+        note,
+        type,
+      });
+
+      if (error) {
+        return showToast({
+          status: 'error',
+          title: ERROR_MESSAGES.SOMETHING_WENT_WRONG,
+          description: error,
+        });
+      }
+
+      showToast({ status: 'success', title: SUCCESS_MESSAGES.TRANSACTION_CREATED });
+      onSubmit();
+    });
   };
 
   return (
@@ -145,7 +181,7 @@ export const TransactionForm = ({
             errorMessage={error?.message}
             value={formatCurrency(value)}
             onChange={(e) => {
-              onChange(e.target.value);
+              onChange(validateBalance(e.target.value));
               clearErrorOnChange(name, errors, clearErrors);
             }}
             {...rest}
@@ -188,7 +224,13 @@ export const TransactionForm = ({
         )}
       />
 
-      <Button type="submit" size="lg" disabled={!enableSubmit} className="w-full">
+      <Button
+        type="submit"
+        size="lg"
+        isLoading={isPending}
+        disabled={!enableSubmit}
+        className="w-full"
+      >
         Submit
       </Button>
     </form>

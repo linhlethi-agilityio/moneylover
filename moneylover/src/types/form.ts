@@ -1,3 +1,5 @@
+import { FinanceType } from './transaction';
+
 export interface SignInFormData {
   email: string;
   password: string;
@@ -22,9 +24,9 @@ export interface WalletFormData {
 }
 
 export interface TransactionFormData {
-  type: string;
+  type: FinanceType;
   categoryId: string;
-  amount: string;
+  amount: number;
   date: string;
   note?: string;
 }

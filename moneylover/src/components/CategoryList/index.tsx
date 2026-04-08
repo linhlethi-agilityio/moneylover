@@ -78,7 +78,7 @@ export const CategoryList = ({
       if (error) {
         return showToast({
           status: 'error',
-          title: ERROR_MESSAGES.UNKNOWN_ERROR,
+          title: ERROR_MESSAGES.SOMETHING_WENT_WRONG,
           description: error,
         });
       }
