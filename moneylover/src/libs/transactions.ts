@@ -16,6 +16,17 @@ export const getTransactions = async (userId: string, startDate: string, endDate
   return data ?? [];
 };
 
+export const getRecentTransactions = async (userId: string, limit: number) => {
+  const { data } = await supabase
+    .from('transactions')
+    .select('*, category:categories(name, image_url, type)')
+    .eq('user_id', userId)
+    .order('date', { ascending: false })
+    .limit(limit);
+
+  return data ?? [];
+};
+
 export const getTransactionById = async (id: string) => {
   const { data } = await supabase
     .from('transactions')

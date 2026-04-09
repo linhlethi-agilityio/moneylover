@@ -8,3 +8,4 @@ export * from './wallet';
 export * from './tags';
 export * from './category';
 export * from './period';
+export * from './number';
