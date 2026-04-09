@@ -25,6 +25,7 @@ export interface WalletFormData {
 
 export interface TransactionFormData {
   type: FinanceType;
+  walletId: string;
   categoryId: string;
   amount: number;
   date: string;

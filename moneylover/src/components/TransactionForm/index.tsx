@@ -9,7 +9,7 @@ import Image from 'next/image';
 import { CATEGORY_TYPES, ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/constants';
 
 // Types
-import { Category, FinanceType, TransactionFormData } from '@/types';
+import { Category, FinanceType, TransactionFormData, Wallet } from '@/types';
 
 // Utils
 import {
@@ -34,7 +34,7 @@ const REQUIRED_FIELDS = ['categoryId', 'amount'];
 
 interface TransactionFormProps {
   userId: string;
-  walletId: string;
+  wallets: Wallet[];
   expenseCategories?: Category[];
   incomeCategories?: Category[];
   previewData?: TransactionWithCategory;
@@ -44,7 +44,7 @@ interface TransactionFormProps {
 
 export const TransactionForm = ({
   userId,
-  walletId,
+  wallets,
   expenseCategories = [],
   incomeCategories = [],
   previewData,
@@ -69,6 +69,7 @@ export const TransactionForm = ({
     defaultValues: previewData
       ? {
           type: previewData.type,
+          walletId: previewData.wallet_id,
           categoryId: previewData.category_id,
           amount: previewData.amount,
           date: previewData.date,
@@ -76,6 +77,7 @@ export const TransactionForm = ({
         }
       : {
           type: FinanceType.Expense,
+          walletId: wallets[0]?.id ?? '',
           categoryId: '',
           amount: 0,
           date: new Date().toISOString().split('T')[0],
@@ -113,7 +115,7 @@ export const TransactionForm = ({
     startTransition(async () => {
       const error = isEditMode
         ? await updateTransaction(previewData.id, data)
-        : await createTransaction({ userId, walletId, ...data });
+        : await createTransaction({ userId, ...data });
 
       if (error) {
         return showToast({
@@ -132,6 +134,15 @@ export const TransactionForm = ({
       onSubmit();
     });
   };
+
+  const formattedWalletsDropdown = useMemo(
+    () =>
+      wallets.map(({ id, name }) => ({
+        id,
+        label: name,
+      })),
+    [wallets],
+  );
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="flex flex-col gap-4">
@@ -166,6 +177,24 @@ export const TransactionForm = ({
           )}
         />
       </div>
+
+      {/* Wallet */}
+      <Controller
+        name="walletId"
+        control={control}
+        render={({ field: { value, onChange, name } }) => (
+          <Dropdown
+            label="Wallet"
+            placeholder="Select wallet"
+            items={formattedWalletsDropdown}
+            value={value}
+            onChange={(item) => {
+              onChange(item.id);
+              clearErrorOnChange(name, errors, clearErrors);
+            }}
+          />
+        )}
+      />
 
       {/* Category */}
       <Controller

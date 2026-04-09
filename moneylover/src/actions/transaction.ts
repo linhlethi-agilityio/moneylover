@@ -40,14 +40,16 @@ export const createTransaction = async ({
   }
 
   updateTag(CACHE_TAGS.TRANSACTIONS);
+  updateTag(CACHE_TAGS.WALLETS);
 };
 
 export const updateTransaction = async (
   id: string,
   data: TransactionFormData,
 ): Promise<void | string> => {
-  const { categoryId, type, amount, date, note } = data;
+  const { walletId, categoryId, type, amount, date, note } = data;
   const { error } = await editTransaction(id, {
+    wallet_id: walletId,
     category_id: categoryId,
     type,
     amount,
@@ -61,6 +63,7 @@ export const updateTransaction = async (
 
   updateTag(CACHE_TAGS.TRANSACTIONS);
   updateTag(`${CACHE_TAGS.TRANSACTION}/${id}`);
+  updateTag(CACHE_TAGS.WALLETS);
 };
 
 export const deleteTransaction = async (id: string): Promise<void | string> => {
@@ -71,4 +74,5 @@ export const deleteTransaction = async (id: string): Promise<void | string> => {
   }
 
   updateTag(CACHE_TAGS.TRANSACTIONS);
+  updateTag(CACHE_TAGS.WALLETS);
 };

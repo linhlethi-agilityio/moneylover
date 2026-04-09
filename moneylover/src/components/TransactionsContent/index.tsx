@@ -1,5 +1,5 @@
 // Services
-import { getCategoriesInfo, getTransactionsByDate } from '@/services';
+import { getCategoriesInfo, getTransactionsByDate, getWalletsInfo } from '@/services';
 
 // Configs
 import { auth } from '@/configs/auth';
@@ -28,9 +28,12 @@ export const TransactionsContent = async ({ period, query = '' }: TransactionsCo
   );
 
   const { expenseCategories, incomeCategories } = await getCategoriesInfo(userId);
+  const { wallets } = await getWalletsInfo(userId);
 
   return (
     <TransactionList
+      userId={userId}
+      wallets={wallets}
       inflow={inflow}
       outflow={outflow}
       groupedByCategory={groupedByCategory}
