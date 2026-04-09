@@ -1,4 +1,7 @@
-import { type ChangeEvent, type InputHTMLAttributes } from 'react';
+'use client';
+
+import { type ChangeEvent } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useDebouncedCallback } from 'use-debounce';
 
 // Components
@@ -7,20 +10,28 @@ import { Input } from '@/components';
 // Icons
 import { SearchIcon } from '@/icons';
 
-interface SearchInputProps extends InputHTMLAttributes<HTMLInputElement> {
-  onSearch?: (query: string) => void;
+interface SearchInputProps {
+  placeholder?: string;
 }
 
-export const SearchInput = ({
-  defaultValue = '',
-  placeholder = 'Search...',
-  onSearch,
-  ...props
-}: SearchInputProps) => {
+export const SearchInput = ({ placeholder = 'Search...', ...props }: SearchInputProps) => {
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { replace } = useRouter();
+
+  const defaultValue = searchParams.get('query') ?? '';
+
   const handleSearch = useDebouncedCallback((e: ChangeEvent<HTMLInputElement>) => {
-    // TODO: Implement search logic
-    console.log('Search query:', e.target.value);
-    onSearch?.(e.target.value);
+    const params = new URLSearchParams(searchParams.toString());
+    const value = e.target.value;
+
+    if (value) {
+      params.set('query', value);
+    } else {
+      params.delete('query');
+    }
+
+    replace(`${pathname}?${params.toString()}`);
   }, 500);
 
   return (

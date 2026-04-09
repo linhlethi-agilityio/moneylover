@@ -1,6 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import { usePathname } from 'next/navigation';
+
+// Constants
+import { ROUTES } from '@/constants';
 
 // Types
 import { Category, Wallet } from '@/types';
@@ -28,11 +32,7 @@ const Header = ({
   incomeCategories = [],
 }: HeaderProps) => {
   const [isOpen, setIsOpen] = useState(false);
-
-  const handleSearchValue = (query: string) => {
-    //TODO: Implement search logic
-    console.log('Search query:', query);
-  };
+  const pathname = usePathname();
 
   const handleOpenAddTransaction = () => {
     setIsOpen(true);
@@ -53,9 +53,11 @@ const Header = ({
           wallets={wallets}
         />
 
-        <div className="w-full max-w-sm">
-          <SearchInput onSearch={handleSearchValue} />
-        </div>
+        {pathname !== ROUTES.DASHBOARD && (
+          <div className="w-full max-w-sm">
+            <SearchInput />
+          </div>
+        )}
 
         <Button className="shrink-0 uppercase" onClick={handleOpenAddTransaction}>
           Add Transaction

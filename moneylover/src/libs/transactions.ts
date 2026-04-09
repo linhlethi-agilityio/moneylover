@@ -4,14 +4,30 @@ import { supabase } from '@/libs/supabase';
 // Types
 import { Transaction } from '@/types';
 
-export const getTransactions = async (userId: string, startDate: string, endDate: string) => {
-  const { data } = await supabase
-    .from('transactions')
-    .select('*, category:categories(name, image_url, type)')
-    .eq('user_id', userId)
-    .gte('date', startDate)
-    .lte('date', endDate)
-    .order('date', { ascending: false });
+export const getTransactions = async (
+  userId: string,
+  startDate: string,
+  endDate: string,
+  query?: string,
+) => {
+  const baseBuilder = (select: string) =>
+    supabase
+      .from('transactions')
+      .select(select)
+      .eq('user_id', userId)
+      .gte('date', startDate)
+      .lte('date', endDate)
+      .order('date', { ascending: false });
+
+  if (!query) {
+    const { data } = await baseBuilder('*, category:categories(name, image_url, type)');
+    return data ?? [];
+  }
+
+  const { data } = await baseBuilder('*, category:categories!inner(name, image_url, type)').ilike(
+    'categories.name',
+    `%${query}%`,
+  );
 
   return data ?? [];
 };
