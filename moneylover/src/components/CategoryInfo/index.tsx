@@ -1,7 +1,11 @@
 import Image from 'next/image';
 
+// Utils
+import { getFullDate } from '@/utils';
+
 interface CategoryInfoProps {
   name: string;
+  date?: string;
   imageUrl?: string;
   size?: 'sm' | 'md';
 }
@@ -11,7 +15,7 @@ const sizes = {
   md: { container: 'h-10 w-10', text: 'text-sm', image: 40 },
 };
 
-export const CategoryInfo = ({ name, imageUrl, size = 'md' }: CategoryInfoProps) => {
+export const CategoryInfo = ({ name, imageUrl, date, size = 'md' }: CategoryInfoProps) => {
   const { container, text, image } = sizes[size];
 
   return (
@@ -31,7 +35,14 @@ export const CategoryInfo = ({ name, imageUrl, size = 'md' }: CategoryInfoProps)
           {name.charAt(0)}
         </div>
       )}
-      <p className={`${text} font-medium text-gray-900`}>{name}</p>
+      <div>
+        <p className={`${text} font-medium text-gray-900`}>{name}</p>
+        {date && (
+          <div className="flex-1">
+            <p className="text-xs text-gray-400">{getFullDate(date)}</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

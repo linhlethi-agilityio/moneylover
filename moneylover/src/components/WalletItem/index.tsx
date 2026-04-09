@@ -12,6 +12,7 @@ interface WalletItemProps {
   balance: number;
   currency?: string;
   showMenu?: boolean;
+  showBalance?: boolean;
   onEdit?: () => void;
   onDelete?: () => void;
 }
@@ -21,6 +22,7 @@ export const WalletItem = ({
   balance,
   currency = '0',
   showMenu = false,
+  showBalance = false,
   onEdit,
   onDelete,
 }: WalletItemProps) => (
@@ -28,9 +30,16 @@ export const WalletItem = ({
     <Avatar size="sm" src={IMAGES.TRANSACTION} />
     <div className="flex-1">
       <p className="text-sm font-medium text-gray-900">{name}</p>
-      <p className="text-xs text-gray-500">{formattedBalance(balance, currency, false)}</p>
+      {!showBalance && (
+        <p className="text-xs text-gray-500">{formattedBalance(balance, currency, false)}</p>
+      )}
     </div>
 
+    {showBalance && (
+      <p className="text-sm font-semibold text-gray-900">
+        {formattedBalance(balance, currency, false)}
+      </p>
+    )}
     {showMenu && <MenuActions onEdit={onEdit} onDelete={onDelete} />}
   </div>
 );
