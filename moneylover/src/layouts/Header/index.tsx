@@ -14,7 +14,6 @@ import { Button, SearchInput, WalletSelector, Modal, TransactionForm } from '@/c
 
 interface HeaderProps {
   userId: string;
-  email: string;
   totalBalance: number;
   currency: string;
   wallets: Wallet[];
@@ -24,7 +23,6 @@ interface HeaderProps {
 
 const Header = ({
   userId,
-  email,
   totalBalance,
   currency,
   wallets,
@@ -44,10 +42,9 @@ const Header = ({
 
   return (
     <>
-      <header className="relative z-10 flex items-center justify-between border-b border-gray-200 bg-white px-6 py-3 max-w-full gap-4">
+      <header className="sticky top-0 z-10 flex items-center justify-between border-b border-gray-200 bg-white px-6 py-3 gap-4">
         <WalletSelector
           userId={userId}
-          email={email}
           totalBalance={totalBalance}
           currency={currency}
           wallets={wallets}

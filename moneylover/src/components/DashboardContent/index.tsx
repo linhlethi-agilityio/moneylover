@@ -18,7 +18,6 @@ export const DashboardContent = async ({ children }: { children: ReactNode }) =>
 
   const { user } = session || {};
   const userId = user?.id || '';
-  const email = user?.email || '';
 
   const { wallets, totalBalance, currency } = await getWalletsInfo(userId);
   const { expenseCategories, incomeCategories } = await getCategoriesInfo(userId);
@@ -31,7 +30,6 @@ export const DashboardContent = async ({ children }: { children: ReactNode }) =>
     <div className="flex flex-1 flex-col">
       <Header
         userId={userId}
-        email={email}
         totalBalance={totalBalance}
         currency={currency}
         wallets={wallets}

@@ -8,22 +8,35 @@ interface WalletListProps {
   wallets: Wallet[];
   totalBalance: number;
   currency?: string;
+  selectedWalletId?: string | null;
   onAddWallet?: () => void;
   onEditWallet?: (id: string) => void;
   onDeleteWallet?: (id: string) => void;
+  onSelectWallet?: (wallet: Wallet | null) => void;
 }
 
 export const WalletList = ({
   wallets,
   totalBalance,
   currency,
+  selectedWalletId,
   onAddWallet,
   onEditWallet,
   onDeleteWallet,
+  onSelectWallet,
 }: WalletListProps) => {
+  const handleClickTotalWallet = () => {
+    onSelectWallet?.(null);
+  };
   return (
     <div className="absolute left-0 top-full z-10 mt-2 min-w-64 rounded-lg border border-gray-200 bg-white py-1 shadow-lg">
-      <WalletItem name="Total" balance={totalBalance} currency={currency} />
+      <WalletItem
+        name="Total"
+        balance={totalBalance}
+        currency={currency}
+        isSelected={!selectedWalletId}
+        onClick={handleClickTotalWallet}
+      />
       {wallets.length > 0 && (
         <p className="px-4 py-2 text-xs font-medium uppercase text-gray-400">Included in Total</p>
       )}
@@ -37,9 +50,11 @@ export const WalletList = ({
               name={name}
               balance={balance}
               currency={currency}
+              isSelected={selectedWalletId === id}
               showMenu
               onEdit={() => onEditWallet?.(id)}
               onDelete={() => onDeleteWallet?.(id)}
+              onClick={() => onSelectWallet?.(wallet)}
             />
           );
         })}
