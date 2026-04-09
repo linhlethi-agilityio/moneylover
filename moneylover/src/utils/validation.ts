@@ -66,6 +66,7 @@ export const walletSchema = z.object({
 
 export const transactionSchema = z.object({
   type: z.enum([FinanceType.Expense, FinanceType.Income]),
+  walletId: z.string().nonempty(ERROR_MESSAGES.REQUIRED('Wallet')),
   categoryId: z.string().nonempty(ERROR_MESSAGES.REQUIRED('Category')),
   amount: z.number({ message: ERROR_MESSAGES.REQUIRED('Amount') }).min(0),
   date: z.string().nonempty(ERROR_MESSAGES.REQUIRED('Date')),

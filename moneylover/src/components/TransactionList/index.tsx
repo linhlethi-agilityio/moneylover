@@ -7,7 +7,7 @@ import Image from 'next/image';
 import { ERROR_MESSAGES, IMAGES, SUCCESS_MESSAGES } from '@/constants';
 
 // Types
-import { Category, Transaction } from '@/types';
+import { Category, Transaction, Wallet } from '@/types';
 
 // Actions
 import { deleteTransaction } from '@/actions';
@@ -38,7 +38,7 @@ export interface TransactionWithCategory extends Transaction {
 
 interface TransactionListProps {
   userId?: string;
-  walletId?: string;
+  wallets?: Wallet[];
   inflow: number;
   outflow: number;
   groupedByCategory: Record<string, TransactionWithCategory[]>;
@@ -49,7 +49,7 @@ interface TransactionListProps {
 
 export const TransactionList = ({
   userId = '',
-  walletId = '',
+  wallets = [],
   inflow,
   outflow,
   groupedByCategory,
@@ -224,7 +224,7 @@ export const TransactionList = ({
         <Modal isOpen title="Update Transaction" onClose={handleCloseEditTransactionModal}>
           <TransactionForm
             userId={userId}
-            walletId={walletId}
+            wallets={wallets}
             expenseCategories={expenseCategories}
             previewData={selectedTransaction ?? undefined}
             incomeCategories={incomeCategories}

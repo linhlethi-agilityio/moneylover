@@ -65,7 +65,7 @@ const Header = ({
         <Modal isOpen title="Add Transaction" onClose={handleCloseAddTransaction}>
           <TransactionForm
             userId={userId}
-            walletId={wallets[0]?.id}
+            wallets={wallets}
             expenseCategories={expenseCategories}
             incomeCategories={incomeCategories}
             onSubmit={handleCloseAddTransaction}
