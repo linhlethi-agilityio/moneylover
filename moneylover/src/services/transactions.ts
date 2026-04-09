@@ -3,10 +3,23 @@
 import { cacheTag } from 'next/cache';
 
 // Constants
-import { CACHE_TAGS } from '@/constants';
+import { CACHE_TAGS, RECENT_TRANSACTION_LIMIT } from '@/constants';
 
 // Libs
-import { getTransactions, getTransactionBalanceByDate, getTransactionById } from '@/libs';
+import {
+  getTransactions,
+  getTransactionBalanceByDate,
+  getTransactionById,
+  getRecentTransactions,
+} from '@/libs';
+
+export const getRecentTransactionsList = async (
+  userId: string,
+  limit = RECENT_TRANSACTION_LIMIT,
+) => {
+  cacheTag(CACHE_TAGS.TRANSACTIONS);
+  return getRecentTransactions(userId, limit);
+};
 
 export const getTransactionDetailById = async (id: string) => {
   cacheTag(`${CACHE_TAGS.TRANSACTION}/${id}`);
