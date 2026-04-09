@@ -34,7 +34,7 @@ const Sidebar = () => {
   };
 
   return (
-    <aside className="flex h-screen w-64 flex-col border-r border-gray-200 bg-white">
+    <aside className="flex h-screen w-64 flex-col border-r border-gray-200 bg-white sticky top-0 overflow-hidden">
       <div className="flex flex-col items-center gap-2 border-b border-gray-200 py-6">
         <Avatar size="lg" />
         <div className="text-center">

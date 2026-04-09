@@ -10,3 +10,4 @@ export * from './TransactionIcon';
 export * from './CategoryIcon';
 export * from './ChevronRightIcon';
 export * from './MoreVerticalIcon';
+export * from './CheckIcon';

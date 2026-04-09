@@ -32,7 +32,6 @@ import {
 
 interface WalletSelectorProps {
   userId: string;
-  email: string;
   totalBalance: number;
   currency: string;
   wallets: Wallet[];
@@ -40,7 +39,6 @@ interface WalletSelectorProps {
 
 export const WalletSelector = ({
   userId,
-  email,
   totalBalance,
   currency,
   wallets,
@@ -49,11 +47,17 @@ export const WalletSelector = ({
   const [isOpenAddWalletModal, setIsOpenAddWalletModal] = useState(false);
   const [idWalletEdit, setIdWalletEdit] = useState<string | null>(null);
   const [idWalletDelete, setIdWalletDelete] = useState<string | null>(null);
+  const [selectedWallet, setSelectedWallet] = useState<Wallet | null>(null);
   const [pending, startTransition] = useTransition();
   const ref = useRef<HTMLDivElement>(null);
   const { showToast } = useToast();
 
   const handleToggle = () => setIsOpen((prev) => !prev);
+
+  const handleSelectWallet = (wallet: Wallet | null) => {
+    setSelectedWallet(wallet);
+    setIsOpen(false);
+  };
 
   const handleAddWallet = () => {
     setIsOpen(false);
@@ -124,11 +128,13 @@ export const WalletSelector = ({
             <Avatar size="sm" src={IMAGES.TRANSACTION} />
             <div>
               <div className="flex items-center gap-1">
-                <p className="text-sm font-medium text-gray-800">{email}</p>
+                <p className="text-sm font-medium text-gray-800">
+                  {selectedWallet ? selectedWallet.name : 'Total'}
+                </p>
                 <ChevronRightIcon className="rotate-90" />
               </div>
               <p className="text-sm font-semibold text-green-600">
-                {formattedBalance(totalBalance, currency)}
+                {formattedBalance(selectedWallet ? selectedWallet.balance : totalBalance, currency)}
               </p>
             </div>
           </div>
@@ -139,9 +145,11 @@ export const WalletSelector = ({
             wallets={wallets}
             totalBalance={totalBalance}
             currency={currency}
+            selectedWalletId={selectedWallet?.id}
             onAddWallet={handleAddWallet}
             onEditWallet={handleEditWallet}
             onDeleteWallet={handleDeleteWallet}
+            onSelectWallet={handleSelectWallet}
           />
         )}
       </div>
