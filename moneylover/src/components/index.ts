@@ -28,3 +28,4 @@ export * from './TransactionList';
 export * from './TransactionTabs';
 export * from './TransactionsContent';
 export * from './HomeContent';
+export * from './OnboardingContent';

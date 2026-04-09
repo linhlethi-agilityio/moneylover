@@ -1,11 +1,12 @@
 'use client';
 
 import { useMemo, useTransition } from 'react';
+import { useRouter } from 'next/navigation';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 // Constants
-import { CURRENCIES, ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/constants';
+import { CURRENCIES, ERROR_MESSAGES, ROUTES, SUCCESS_MESSAGES } from '@/constants';
 
 // Actions
 import { createWallet, updateWallet } from '@/actions';
@@ -45,6 +46,7 @@ export const WalletForm = ({
 }: WalletFormProps) => {
   const [isPending, startTransition] = useTransition();
   const { showToast } = useToast();
+  const router = useRouter();
 
   const {
     control,
@@ -82,8 +84,6 @@ export const WalletForm = ({
         ? await updateWallet({ id: previewData.id, ...formData, balance })
         : await createWallet({ userId, ...formData, balance });
 
-      onSubmit && onSubmit();
-
       if (error) {
         return showToast({
           status: 'error',
@@ -96,6 +96,12 @@ export const WalletForm = ({
         status: 'success',
         title: previewData ? SUCCESS_MESSAGES.WALLET_UPDATED : SUCCESS_MESSAGES.WALLET_CREATED,
       });
+
+      if (onSubmit) {
+        onSubmit();
+      } else {
+        router.replace(ROUTES.DASHBOARD);
+      }
     });
   };
 
