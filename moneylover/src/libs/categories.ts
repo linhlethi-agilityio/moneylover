@@ -4,13 +4,17 @@ import { supabase } from '@/libs/supabase';
 // Types
 import { Category, FinanceType } from '@/types';
 
-export const getParentCategories = async (userId: string, type: FinanceType) => {
-  const { data } = await supabase
+export const getParentCategories = async (userId: string, type: FinanceType, query?: string) => {
+  const baseQuery = supabase
     .from('categories')
     .select('*')
     .eq('user_id', userId)
     .eq('type', type)
     .is('parent_id', null);
+
+  const finalQuery = query ? baseQuery.ilike('name', `%${query}%`) : baseQuery;
+
+  const { data } = await finalQuery;
 
   return data ?? [];
 };
