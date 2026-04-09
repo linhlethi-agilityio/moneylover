@@ -26,10 +26,15 @@ export const getTransactionDetailById = async (id: string) => {
   return getTransactionById(id);
 };
 
-export const getTransactionsByDate = async (userId: string, startDate: string, endDate: string) => {
+export const getTransactionsByDate = async (
+  userId: string,
+  startDate: string,
+  endDate: string,
+  query?: string,
+) => {
   cacheTag(CACHE_TAGS.TRANSACTIONS);
 
-  const transactions = await getTransactions(userId, startDate, endDate);
+  const transactions = await getTransactions(userId, startDate, endDate, query);
   const { inflow, outflow } = await getTransactionBalanceByDate(userId, startDate, endDate);
 
   const groupedByCategory = transactions.reduce<Record<string, typeof transactions>>((acc, t) => {
