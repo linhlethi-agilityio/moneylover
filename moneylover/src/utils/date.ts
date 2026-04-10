@@ -11,52 +11,74 @@ export const getFullDate = (date: string): string =>
     day: 'numeric',
   });
 
+export const toDateString = (date: Date): string => date.toISOString().split('T')[0];
+
 export const getMonthOffset = (period: string): number => {
-  if (period === Period.This) return 0;
-  if (period === Period.Last) return -1;
-  return Number(period) || 0;
+  const map: Record<string, number> = {
+    [Period.This]: 0,
+    [Period.Last]: -1,
+  };
+
+  return (map[period] ?? Number(period)) || 0;
+};
+
+const createMonthDate = (offset: number, day = 1): Date => {
+  const now = new Date();
+  return new Date(now.getFullYear(), now.getMonth() + offset, day);
 };
 
 export const getMonthLabel = (offset: number): string => {
-  const now = new Date();
-  const date = new Date(now.getFullYear(), now.getMonth() + offset, 1);
+  const specialLabels: Record<number, string> = {
+    0: 'THIS MONTH',
+    [-1]: 'LAST MONTH',
+  };
 
-  if (offset === 0) return 'THIS MONTH';
-  if (offset === -1) return 'LAST MONTH';
+  if (offset in specialLabels) return specialLabels[offset];
 
-  return date.toLocaleDateString('en-US', { month: '2-digit', year: 'numeric' });
+  return createMonthDate(offset).toLocaleDateString('en-US', {
+    month: '2-digit',
+    year: 'numeric',
+  });
 };
 
 export const getOffsetKey = (offset: number): string => {
-  if (offset === 0) return Period.This;
-  if (offset === -1) return Period.Last;
-  return String(offset);
+  const reverseMap: Record<number, string> = {
+    0: Period.This,
+    [-1]: Period.Last,
+  };
+
+  return reverseMap[offset] ?? String(offset);
 };
 
 export const getMonthRange = (period: string) => {
   const now = new Date();
 
   if (period === Period.Future) {
-    const startDate = new Date(now.getFullYear(), now.getMonth() + 1, 1).toISOString();
-    const endDate = new Date(2099, 11, 31, 23, 59, 59).toISOString();
+    const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
 
-    return { startDate, endDate, startLabel: 'Future', endLabel: '' };
+    const endFuture = new Date(now.getFullYear(), now.getMonth() + 12, now.getDate());
+
+    return {
+      startDate: toDateString(tomorrow),
+      endDate: toDateString(endFuture),
+      startLabel: 'Future',
+      endLabel: '',
+    };
   }
 
-  const offsetMap: Record<string, number> = { [Period.Last]: -1, [Period.This]: 0 };
-  const monthOffset = offsetMap[period] ?? (Number(period) || 0);
-  const month = now.getMonth() + monthOffset;
+  const offset = getMonthOffset(period);
 
-  const startDate = new Date(now.getFullYear(), month, 1).toISOString();
-  const endDate = new Date(now.getFullYear(), month + 1, 0, 23, 59, 59).toISOString();
+  const start = new Date(now.getFullYear(), now.getMonth() + offset, 1);
 
-  const formatted = (d: Date) =>
-    d.toLocaleDateString('en-US', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  const end = offset === 0 ? now : new Date(now.getFullYear(), now.getMonth() + offset + 1, 0);
+
+  const startDate = toDateString(start);
+  const endDate = toDateString(end);
 
   return {
     startDate,
     endDate,
-    startLabel: formatted(new Date(startDate)),
-    endLabel: formatted(new Date(endDate)),
+    startLabel: startDate,
+    endLabel: endDate,
   };
 };
