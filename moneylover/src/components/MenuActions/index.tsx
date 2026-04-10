@@ -51,7 +51,7 @@ export const MenuActions = ({ onEdit, onDelete }: MenuActionsProps) => {
       </Button>
 
       {isOpen && (
-        <div className="absolute right-0 top-full z-20 mt-1 min-w-28 rounded-lg border border-gray-200 bg-white py-1 shadow-lg">
+        <div className="absolute right-0 top-full z-50 mt-1 min-w-28 rounded-lg border border-gray-200 bg-white py-1 shadow-lg">
           <Button
             variant="ghost"
             size="sm"

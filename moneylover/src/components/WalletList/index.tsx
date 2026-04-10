@@ -29,7 +29,7 @@ export const WalletList = ({
     onSelectWallet?.(null);
   };
   return (
-    <div className="absolute left-0 top-full z-10 mt-2 min-w-64 rounded-lg border border-gray-200 bg-white py-1 shadow-lg">
+    <div className="absolute left-0 top-full z-50 mt-2 min-w-64 min-h-80 rounded-lg border border-gray-200 bg-white py-1 shadow-lg flex flex-col overflow-visible">
       <WalletItem
         name="Total"
         balance={totalBalance}
@@ -40,7 +40,7 @@ export const WalletList = ({
       {wallets.length > 0 && (
         <p className="px-4 py-2 text-xs font-medium uppercase text-gray-400">Included in Total</p>
       )}
-      <div className="scrollbar-thin max-h-72 overflow-y-auto">
+      <div className="scrollbar-thin">
         {wallets.map((wallet) => {
           const { id = '', name = '', balance = 0, currency = '' } = wallet;
 
@@ -62,7 +62,7 @@ export const WalletList = ({
       <Button
         variant="ghost"
         onClick={onAddWallet}
-        className="w-full justify-start gap-2 rounded-none px-4 py-3 text-sm font-medium text-lime-600 hover:text-lime-600"
+        className="mt-auto w-full justify-start gap-2 rounded-none px-4 py-3 text-sm font-medium text-lime-600 hover:text-lime-600"
       >
         <span className="flex h-6 w-6 items-center justify-center rounded-full bg-lime-100 text-lime-600">
           +
