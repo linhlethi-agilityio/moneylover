@@ -57,6 +57,15 @@ git checkout feat/moneylover
 npm install
 ```
 
+### Set up Supabase
+
+1. Create a new project at [supabase.com](https://supabase.com).
+2. In the **SQL Editor**, run the migration files in `supabase/migrations/`.
+
+### Configure environment variables
+
+Create a `.env.local` file at the root and fill in the values following `.env.sample`.
+
 ### Run the application
 
 ```bash
