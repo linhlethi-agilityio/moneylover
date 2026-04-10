@@ -1,4 +1,10 @@
+import { type Metadata } from 'next';
 import { Suspense } from 'react';
+
+export const metadata: Metadata = {
+  title: 'Money Lover | Dashboard',
+  description: 'Overview of your wallets and recent transactions.',
+};
 
 // Components
 import { HomeSkeleton, HomeContent } from '@/components';

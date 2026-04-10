@@ -1,4 +1,10 @@
+import { type Metadata } from 'next';
 import { Suspense } from 'react';
+
+export const metadata: Metadata = {
+  title: 'Money Lover | Categories',
+  description: 'View and manage your spending categories.',
+};
 
 // Types
 import { SearchParams } from '@/types';

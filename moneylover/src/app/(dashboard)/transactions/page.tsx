@@ -1,4 +1,10 @@
+import { type Metadata } from 'next';
 import { Suspense } from 'react';
+
+export const metadata: Metadata = {
+  title: 'Money Lover | Transactions',
+  description: 'View and manage your transactions.',
+};
 
 // Constants
 import { Period } from '@/constants';
