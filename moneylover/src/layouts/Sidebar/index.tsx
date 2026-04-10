@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 // Icons
 import { HomeIcon, TransactionIcon, CategoryIcon, ChevronRightIcon } from '@/icons';
@@ -26,20 +27,17 @@ const navItems = [
 
 const Sidebar = () => {
   const pathname = usePathname();
+  const { data: session } = useSession();
+  const { user } = session ?? {};
 
-  // TODO: Replace with real user data
-  const mockData = {
-    username: 'Admin',
-    email: 'admin@gmail.com',
-  };
+  const { email = '' } = user ?? {};
 
   return (
     <aside className="flex h-screen w-64 flex-col border-r border-gray-200 bg-white sticky top-0 overflow-hidden">
       <div className="flex flex-col items-center gap-2 border-b border-gray-200 py-6">
         <Avatar size="lg" />
         <div className="text-center">
-          <p className="text-sm font-semibold text-gray-800">{mockData.username}</p>
-          <p className="text-xs text-gray-400">{mockData.email}</p>
+          <p className="text-xs text-gray-400">{email}</p>
         </div>
       </div>
 
