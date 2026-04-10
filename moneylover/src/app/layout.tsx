@@ -7,7 +7,7 @@ import './globals.css';
 import { SITE_URL } from '@/constants';
 
 // Contexts
-import ToastProvider from '@/contexts/ToastProvider';
+import { ToastProvider, SessionProvider } from '@/contexts';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -42,7 +42,9 @@ const RootLayout = ({
 }>) => (
   <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
     <body className="min-h-full flex flex-col">
-      <ToastProvider>{children}</ToastProvider>
+      <SessionProvider>
+        <ToastProvider>{children}</ToastProvider>
+      </SessionProvider>
     </body>
   </html>
 );

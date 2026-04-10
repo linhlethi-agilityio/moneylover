@@ -134,7 +134,7 @@ export const TransactionList = ({
 
   return (
     <>
-      {isPending && <LoadingIndicator />}
+      {isPending && <LoadingIndicator variant="overlay" />}
       {isTransactions ? (
         <div className="flex flex-col gap-4">
           <div className="rounded-lg border border-gray-200 bg-white">
@@ -202,6 +202,7 @@ export const TransactionList = ({
       {selectedTransaction && (
         <TransactionDetailModal
           transaction={selectedTransaction}
+          wallets={wallets}
           currency={currency}
           onEdit={handleOpenTransactionModal}
           onDelete={handleDeleteTransaction}
