@@ -7,4 +7,5 @@ export interface Category {
   name: string;
   image_url: string;
   type: FinanceType;
+  is_default?: boolean;
 }

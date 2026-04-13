@@ -50,7 +50,9 @@ export const CategoryItem = ({
       >
         <CategoryInfo name={name} imageUrl={image_url} />
         <div className="flex-1" />
-        <MenuActions onEdit={handleEditCategory} onDelete={handleDeleteCategory} />
+        {!category.is_default && (
+          <MenuActions onEdit={handleEditCategory} onDelete={handleDeleteCategory} />
+        )}
         {hasChildren && (
           <ChevronRightIcon className={`transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
         )}
