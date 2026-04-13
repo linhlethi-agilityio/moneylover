@@ -13,9 +13,10 @@ import { TransactionList } from '@/components/TransactionList';
 interface TransactionsContentProps {
   period: string;
   query?: string;
+  walletId?: string;
 }
 
-export const TransactionsContent = async ({ period, query = '' }: TransactionsContentProps) => {
+export const TransactionsContent = async ({ period, query = '', walletId }: TransactionsContentProps) => {
   const session = await auth();
   const userId = session?.user?.id || '';
 
@@ -25,6 +26,7 @@ export const TransactionsContent = async ({ period, query = '' }: TransactionsCo
     startDate,
     endDate,
     query,
+    walletId,
   );
 
   const { expenseCategories, incomeCategories } = await getCategoriesInfo(userId);

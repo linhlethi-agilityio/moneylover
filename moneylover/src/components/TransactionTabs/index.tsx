@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 // Constants
 import { Period, ROUTES } from '@/constants';
@@ -17,6 +17,7 @@ interface TransactionTabsProps {
 
 export const TransactionTabs = ({ period }: TransactionTabsProps) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const currentOffset = getMonthOffset(period);
   const isFuture = period === Period.Future;
 
@@ -39,7 +40,9 @@ export const TransactionTabs = ({ period }: TransactionTabsProps) => {
       ];
 
   const handleTabChange = (key: string) => {
-    router.push(`${ROUTES.TRANSACTIONS}?period=${key}`);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('period', key);
+    router.push(`${ROUTES.TRANSACTIONS}?${params.toString()}`);
   };
 
   return (

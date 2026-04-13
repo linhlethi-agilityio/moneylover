@@ -100,8 +100,8 @@ export const WalletForm = ({
       if (onSubmit) {
         onSubmit();
       } else {
-        router.refresh();
         router.replace(ROUTES.DASHBOARD);
+        router.refresh();
       }
     });
   };

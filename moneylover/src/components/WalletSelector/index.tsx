@@ -1,12 +1,13 @@
 'use client';
 
 import { useEffect, useRef, useState, useTransition } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 // Icons
 import { ChevronRightIcon } from '@/icons';
 
 // Constants
-import { ERROR_MESSAGES, IMAGES, SUCCESS_MESSAGES } from '@/constants';
+import { ERROR_MESSAGES, IMAGES, ROUTES, SUCCESS_MESSAGES } from '@/constants';
 
 // Utils
 import { formattedBalance } from '@/utils';
@@ -47,16 +48,27 @@ export const WalletSelector = ({
   const [isOpenAddWalletModal, setIsOpenAddWalletModal] = useState(false);
   const [idWalletEdit, setIdWalletEdit] = useState<string | null>(null);
   const [idWalletDelete, setIdWalletDelete] = useState<string | null>(null);
-  const [selectedWallet, setSelectedWallet] = useState<Wallet | null>(null);
   const [pending, startTransition] = useTransition();
   const ref = useRef<HTMLDivElement>(null);
   const { showToast } = useToast();
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const selectedWalletId = searchParams.get('walletId');
+  const selectedWallet = wallets.find((w) => w.id === selectedWalletId) ?? null;
 
   const handleToggle = () => setIsOpen((prev) => !prev);
 
   const handleSelectWallet = (wallet: Wallet | null) => {
-    setSelectedWallet(wallet);
     setIsOpen(false);
+
+    if (pathname === ROUTES.TRANSACTIONS) {
+      const params = new URLSearchParams(searchParams.toString());
+      if (wallet) params.set('walletId', wallet.id);
+      else params.delete('walletId');
+      router.push(`${pathname}?${params.toString()}`);
+    }
   };
 
   const handleAddWallet = () => {

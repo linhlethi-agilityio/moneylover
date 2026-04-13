@@ -34,6 +34,7 @@ export const getTransactionsByDate = async (
   startDate: string,
   endDate: string,
   query?: string,
+  walletId?: string,
 ) => {
   cacheTag(CACHE_TAGS.TRANSACTIONS);
 
@@ -42,6 +43,7 @@ export const getTransactionsByDate = async (
     startDate,
     endDate,
     query,
+    walletId,
   )) as unknown as TransactionWithCategory[];
   const { inflow, outflow } = await getTransactionBalanceByDate(userId, startDate, endDate);
 
