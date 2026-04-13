@@ -56,4 +56,5 @@ export const deleteWallet = async (walletId: string): Promise<void | string> => 
   }
 
   updateTag(CACHE_TAGS.WALLETS);
+  updateTag(CACHE_TAGS.TRANSACTIONS);
 };

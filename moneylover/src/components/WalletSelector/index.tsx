@@ -187,7 +187,7 @@ export const WalletSelector = ({
         <ConfirmModal
           isOpen
           title="Delete Wallet"
-          description={`Are you sure you want to delete "${walletDelete?.name}"? This action cannot be undone.`}
+          description={`Are you sure you want to delete "${walletDelete?.name}"? All transactions in this wallet will also be deleted. This action cannot be undone.`}
           confirmLabel="Delete"
           onConfirm={handleConfirmDelete}
           onCancel={handleCloseDeleteModal}
