@@ -118,8 +118,11 @@ export const CategoryForm = ({
     selectedType === FinanceType.Income ? incomeCategories : expenseCategories;
 
   const formattedDropdownCategories = useMemo(
-    () => parentCategories.map((cat) => ({ id: cat.id, label: cat.name })),
-    [parentCategories],
+    () =>
+      parentCategories
+        .filter((cat) => !cat.is_default && cat.id !== previewData?.id)
+        .map((cat) => ({ id: cat.id, label: cat.name })),
+    [parentCategories, previewData?.id],
   );
 
   return (
