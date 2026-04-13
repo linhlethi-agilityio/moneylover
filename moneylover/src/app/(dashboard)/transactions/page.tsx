@@ -20,14 +20,14 @@ interface TransactionsPageProps {
 }
 
 const TransactionsPage = async ({ searchParams }: TransactionsPageProps) => {
-  const { period = Period.This, query = '' } = await searchParams;
+  const { period = Period.This, query = '', walletId } = await searchParams;
 
   return (
     <div className="mx-auto max-w-2xl p-6">
       <div className="flex flex-col gap-4">
         <TransactionTabs period={period} />
-        <Suspense key={`${period}-${query}`} fallback={<TransactionSkeleton />}>
-          <TransactionsContent period={period} query={query} />
+        <Suspense key={`${period}-${query}-${walletId}`} fallback={<TransactionSkeleton />}>
+          <TransactionsContent period={period} query={query} walletId={walletId} />
         </Suspense>
       </div>
     </div>

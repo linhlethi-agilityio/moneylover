@@ -9,15 +9,21 @@ export const getTransactions = async (
   startDate: string,
   endDate: string,
   query?: string,
+  walletId?: string,
 ) => {
-  const baseBuilder = (select: string) =>
-    supabase
+  const baseBuilder = (select: string) => {
+    let builder = supabase
       .from('transactions')
       .select(select)
       .eq('user_id', userId)
       .gte('date', startDate)
       .lte('date', endDate)
       .order('date', { ascending: false });
+
+    if (walletId) builder = builder.eq('wallet_id', walletId);
+
+    return builder;
+  };
 
   if (!query) {
     const { data } = await baseBuilder('*, category:categories(name, image_url, type)');
