@@ -3,6 +3,7 @@
 import { useMemo, useState, useTransition } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -33,6 +34,7 @@ export const SignInForm = () => {
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+  const { update } = useSession();
   const { showToast } = useToast();
 
   const {
@@ -62,6 +64,7 @@ export const SignInForm = () => {
         });
       }
 
+      await update();
       router.push(ROUTES.DASHBOARD);
     });
   };
