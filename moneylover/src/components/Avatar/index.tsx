@@ -2,7 +2,7 @@ import { type ComponentProps } from 'react';
 import Image from 'next/image';
 
 // Constants
-import { DEFAULT_AVATAR } from '@/constants/image';
+import { IMAGES } from '@/constants/image';
 
 // Utils
 import { cn } from '@/utils';
@@ -20,7 +20,7 @@ const sizes = {
 };
 
 export const Avatar = ({
-  src = DEFAULT_AVATAR,
+  src = IMAGES.DEFAULT_AVATAR,
   alt = '',
   size = 'md',
   className,
