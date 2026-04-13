@@ -2,6 +2,7 @@
 
 import { useMemo, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -47,6 +48,7 @@ export const WalletForm = ({
   const [isPending, startTransition] = useTransition();
   const { showToast } = useToast();
   const router = useRouter();
+  const { update } = useSession();
 
   const {
     control,
@@ -100,6 +102,7 @@ export const WalletForm = ({
       if (onSubmit) {
         onSubmit();
       } else {
+        await update();
         router.replace(ROUTES.DASHBOARD);
         router.refresh();
       }
