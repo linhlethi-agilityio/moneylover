@@ -39,4 +39,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ...authConfig,
   secret: PROCESS_ENV.AUTH_SECRET,
   providers: [CredentialsProvider],
+  session: {
+    maxAge: 30 * 60, // 30 minutes
+  },
 });
