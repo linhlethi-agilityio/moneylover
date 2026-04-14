@@ -16,9 +16,13 @@ interface TransactionsContentProps {
   walletId?: string;
 }
 
-export const TransactionsContent = async ({ period, query = '', walletId }: TransactionsContentProps) => {
+export const TransactionsContent = async ({
+  period,
+  query = '',
+  walletId,
+}: TransactionsContentProps) => {
   const session = await auth();
-  const userId = session?.user?.id || '';
+  const userId = session?.user?.id ?? '';
 
   const { startDate, endDate } = getMonthRange(period);
   const { inflow, outflow, groupedByCategory } = await getTransactionsByDate(

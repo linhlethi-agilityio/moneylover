@@ -16,13 +16,10 @@ import { Header } from '@/layouts';
 export const DashboardContent = async ({ children }: { children: ReactNode }) => {
   const session = await auth();
 
-  const { user } = session || {};
-  const userId = user?.id || '';
+  const userId = session?.user?.id ?? '';
 
-  const [{ wallets, totalBalance, currency }, { expenseCategories, incomeCategories }] = await Promise.all([
-    getWalletsInfo(userId),
-    getCategoriesInfo(userId),
-  ]);
+  const [{ wallets, totalBalance, currency }, { expenseCategories, incomeCategories }] =
+    await Promise.all([getWalletsInfo(userId), getCategoriesInfo(userId)]);
 
   if (!wallets.length) {
     redirect(ROUTES.ONBOARDING);
