@@ -19,8 +19,10 @@ export const DashboardContent = async ({ children }: { children: ReactNode }) =>
   const { user } = session || {};
   const userId = user?.id || '';
 
-  const { wallets, totalBalance, currency } = await getWalletsInfo(userId);
-  const { expenseCategories, incomeCategories } = await getCategoriesInfo(userId);
+  const [{ wallets, totalBalance, currency }, { expenseCategories, incomeCategories }] = await Promise.all([
+    getWalletsInfo(userId),
+    getCategoriesInfo(userId),
+  ]);
 
   if (!wallets.length) {
     redirect(ROUTES.ONBOARDING);
