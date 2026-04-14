@@ -78,7 +78,7 @@ export const getTransactionBalanceByDate = async (
 
   const result = data?.[0];
 
-  const { inflow = 0, outflow = 0 } = result || {};
+  const { inflow = 0, outflow = 0 } = result ?? {};
 
   return { inflow, outflow };
 };

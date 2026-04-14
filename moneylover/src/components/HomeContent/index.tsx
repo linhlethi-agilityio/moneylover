@@ -9,7 +9,7 @@ import { RecentTransactions } from '@/components/RecentTransactions';
 
 export const HomeContent = async () => {
   const session = await auth();
-  const userId = session?.user?.id || '';
+  const userId = session?.user?.id ?? '';
 
   const [{ wallets, currency }, transactions] = await Promise.all([
     getWalletsInfo(userId),

@@ -163,7 +163,7 @@ export const TransactionList = ({
           {Object.entries(groupedByCategory).map(([categoryId, transactions]) => {
             const category = transactions[0]?.category;
 
-            const { name = '', image_url = '' } = category || {};
+            const { name = '', image_url = '' } = category ?? {};
             const totalAmount = transactions.reduce((sum, t) => sum + (t.amount ?? 0), 0);
 
             return (

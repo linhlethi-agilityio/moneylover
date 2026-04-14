@@ -13,7 +13,7 @@ interface CategoriesContentProps {
 
 export const CategoriesContent = async ({ query = '' }: CategoriesContentProps) => {
   const session = await auth();
-  const userId = session?.user?.id || '';
+  const userId = session?.user?.id ?? '';
 
   const { expenseCategories, incomeCategories, subCategories } = await getCategoriesInfo(
     userId,
