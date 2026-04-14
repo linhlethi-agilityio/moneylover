@@ -29,8 +29,10 @@ export const TransactionsContent = async ({ period, query = '', walletId }: Tran
     walletId,
   );
 
-  const { expenseCategories, incomeCategories } = await getCategoriesInfo(userId);
-  const { wallets } = await getWalletsInfo(userId);
+  const [{ expenseCategories, incomeCategories }, { wallets }] = await Promise.all([
+    getCategoriesInfo(userId),
+    getWalletsInfo(userId),
+  ]);
 
   return (
     <TransactionList
