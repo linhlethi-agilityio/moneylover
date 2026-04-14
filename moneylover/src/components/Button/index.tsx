@@ -1,4 +1,4 @@
-import { forwardRef, type ButtonHTMLAttributes } from 'react';
+import { type ButtonHTMLAttributes, type Ref } from 'react';
 
 // Utils
 import { cn } from '@/utils';
@@ -10,6 +10,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'default' | 'outline' | 'ghost';
   size?: 'sm' | 'md' | 'lg';
   isLoading?: boolean;
+  ref?: Ref<HTMLButtonElement>;
 }
 
 const variants = {
@@ -24,27 +25,29 @@ const sizes = {
   lg: 'h-11 px-6 text-base',
 };
 
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  (
-    { className, variant = 'default', size = 'md', isLoading, disabled, children, ...props },
-    ref,
-  ) => (
-    <button
-      ref={ref}
-      disabled={disabled || isLoading}
-      className={cn(
-        'inline-flex items-center justify-center gap-2 rounded-md transition-colors cursor-pointer',
-        'disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none',
-        variants[variant],
-        sizes[size],
-        className,
-      )}
-      {...props}
-    >
-      {isLoading && <LoadingIndicator size="sm" className="border-current border-t-transparent" />}
-      {children}
-    </button>
-  ),
+export const Button = ({
+  className,
+  variant = 'default',
+  size = 'md',
+  isLoading,
+  disabled,
+  children,
+  ref,
+  ...props
+}: ButtonProps) => (
+  <button
+    ref={ref}
+    disabled={disabled || isLoading}
+    className={cn(
+      'inline-flex items-center justify-center gap-2 rounded-md transition-colors cursor-pointer',
+      'disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none',
+      variants[variant],
+      sizes[size],
+      className,
+    )}
+    {...props}
+  >
+    {isLoading && <LoadingIndicator size="sm" className="border-current border-t-transparent" />}
+    {children}
+  </button>
 );
-
-Button.displayName = 'Button';
