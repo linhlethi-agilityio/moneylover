@@ -35,7 +35,7 @@ To get started with this project, follow the instructions below.
 ### Prerequisites
 
 - node v20.
-- npm
+- pnpm
 
 ### Installation
 
@@ -54,7 +54,7 @@ git checkout feat/moneylover
 3. Install dependencies:
 
 ```bash
-npm install
+pnpm install
 ```
 
 ### Set up Supabase
@@ -69,7 +69,7 @@ Create a `.env.local` file at the root and fill in the values following `.env.sa
 ### Run the application
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
@@ -77,12 +77,12 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ### Build
 
 ```bash
-npm run build
-npm start
+pnpm run build
+pnpm start
 ```
 
 ### Lint
 
 ```bash
-npm run lint
+pnpm run lint
 ```
