@@ -2,7 +2,7 @@ import { type Metadata } from 'next';
 import { Suspense } from 'react';
 
 export const metadata: Metadata = {
-  title: 'Money Lover | Get Started',
+  title: 'Get Started',
   description: 'Set up your first wallet to get started.',
 };
 
