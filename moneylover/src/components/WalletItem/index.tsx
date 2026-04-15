@@ -1,5 +1,5 @@
 // Constants
-import { IMAGES } from '@/constants';
+import { CURRENCIES, IMAGES } from '@/constants';
 
 // Utils
 import { formattedBalance } from '@/utils';
@@ -25,7 +25,7 @@ interface WalletItemProps {
 export const WalletItem = ({
   name,
   balance,
-  currency = '0',
+  currency = CURRENCIES[0].code,
   showMenu = false,
   showBalance = false,
   isSelected = false,

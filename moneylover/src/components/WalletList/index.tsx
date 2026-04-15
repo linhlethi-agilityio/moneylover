@@ -1,6 +1,9 @@
 // Types
 import { Wallet } from '@/types';
 
+// Constants
+import { CURRENCIES } from '@/constants/wallet';
+
 // Components
 import { Button, WalletItem } from '@/components';
 
@@ -18,7 +21,7 @@ interface WalletListProps {
 export const WalletList = ({
   wallets,
   totalBalance,
-  currency,
+  currency = CURRENCIES[0].code,
   selectedWalletId,
   onAddWallet,
   onEditWallet,

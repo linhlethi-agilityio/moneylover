@@ -4,7 +4,7 @@ import { useState, useTransition } from 'react';
 import Image from 'next/image';
 
 // Constants
-import { ERROR_MESSAGES, IMAGES, SUCCESS_MESSAGES } from '@/constants';
+import { CURRENCIES, ERROR_MESSAGES, IMAGES, SUCCESS_MESSAGES } from '@/constants';
 
 // Types
 import { Category, Transaction, Wallet } from '@/types';
@@ -53,7 +53,7 @@ export const TransactionList = ({
   inflow,
   outflow,
   groupedByCategory,
-  currency,
+  currency = CURRENCIES[0].code,
   expenseCategories = [],
   incomeCategories = [],
 }: TransactionListProps) => {

@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useTransition } from 'react';
+import { useTransition } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -17,7 +17,7 @@ import { Category, CategoryFormData, FinanceType } from '@/types';
 import { useToast } from '@/hooks';
 
 // Utils
-import { clearErrorOnChange, cn, isEnableSubmitButton, categorySchema } from '@/utils';
+import { clearErrorOnChange, cn, categorySchema } from '@/utils';
 
 // Components
 import { Button, Input, Dropdown } from '@/components';
@@ -67,15 +67,12 @@ export const CategoryForm = ({
         },
   });
 
-  const dirtyItems = Object.keys(dirtyFields);
+  const watchedValues = useWatch({ control });
 
-  const enableSubmit = useMemo(
-    () =>
-      isEditMode
-        ? dirtyItems.length > 0 && !Object.keys(errors).length
-        : isEnableSubmitButton(REQUIRED_FIELDS, dirtyItems, errors),
-    [isEditMode, dirtyItems, errors],
-  );
+  const enableSubmit = isEditMode
+    ? Object.keys(dirtyFields).length > 0 && !Object.keys(errors).length
+    : REQUIRED_FIELDS.every((field) => !!watchedValues[field as keyof CategoryFormData]) &&
+      !Object.keys(errors).length;
 
   const handleFormSubmit = (formData: CategoryFormData) => {
     startTransition(async () => {
@@ -117,13 +114,9 @@ export const CategoryForm = ({
   const parentCategories =
     selectedType === FinanceType.Income ? incomeCategories : expenseCategories;
 
-  const formattedDropdownCategories = useMemo(
-    () =>
-      parentCategories
-        .filter((cat) => !cat.is_default && cat.id !== previewData?.id)
-        .map((cat) => ({ id: cat.id, label: cat.name })),
-    [parentCategories, previewData?.id],
-  );
+  const formattedDropdownCategories = parentCategories
+    .filter((cat) => !cat.is_default && cat.id !== previewData?.id)
+    .map((cat) => ({ id: cat.id, label: cat.name }));
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="flex flex-col gap-4">

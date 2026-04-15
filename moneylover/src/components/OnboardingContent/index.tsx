@@ -6,8 +6,7 @@ import { WalletForm } from '@/components/WalletForm';
 
 export const OnboardingContent = async () => {
   const session = await auth();
-  const { user } = session ?? {};
-  const { id = '' } = user ?? {};
+  const userId = session?.user?.id ?? '';
 
-  return <WalletForm userId={id} />;
+  return <WalletForm userId={userId} />;
 };

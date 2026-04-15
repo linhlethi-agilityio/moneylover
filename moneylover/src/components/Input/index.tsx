@@ -10,7 +10,15 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   ref?: Ref<HTMLInputElement>;
 }
 
-export const Input = ({ label, className, id, rightIcon, errorMessage, ref, ...props }: InputProps) => (
+export const Input = ({
+  label,
+  className,
+  id,
+  rightIcon,
+  errorMessage,
+  ref,
+  ...props
+}: InputProps) => (
   <div>
     {label && (
       <label htmlFor={id} className="mb-1 block text-xs text-gray-400">
@@ -33,9 +41,7 @@ export const Input = ({ label, className, id, rightIcon, errorMessage, ref, ...p
         {...props}
       />
       {rightIcon && (
-        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
-          {rightIcon}
-        </span>
+        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">{rightIcon}</span>
       )}
     </div>
     {errorMessage && <p className="mt-1 min-h-[16px] text-xs text-red-500">{errorMessage}</p>}
