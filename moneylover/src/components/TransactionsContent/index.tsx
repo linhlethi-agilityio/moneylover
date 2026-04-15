@@ -19,7 +19,7 @@ interface TransactionsContentProps {
 export const TransactionsContent = async ({
   period,
   query = '',
-  walletId,
+  walletId = '',
 }: TransactionsContentProps) => {
   const session = await auth();
   const userId = session?.user?.id ?? '';

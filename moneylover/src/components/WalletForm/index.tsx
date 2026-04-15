@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useTransition } from 'react';
+import { useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
@@ -22,7 +22,6 @@ import { useToast } from '@/hooks';
 import {
   clearErrorOnChange,
   formatCurrency,
-  isEnableSubmitButton,
   validateBalance,
   walletSchema,
 } from '@/utils';
@@ -66,17 +65,14 @@ export const WalletForm = ({
     },
   });
 
-  const selectedCurrency = useWatch({ control, name: 'currency' });
+  const watchedValues = useWatch({ control });
 
-  const dirtyItems = Object.keys(dirtyFields);
+  const selectedCurrency = watchedValues.currency;
 
-  const enableSubmit = useMemo(
-    () =>
-      previewData
-        ? dirtyItems.length > 0 && !Object.keys(errors).length
-        : isEnableSubmitButton(REQUIRED_FIELDS, dirtyItems, errors),
-    [previewData, dirtyItems, errors],
-  );
+  const enableSubmit = previewData
+    ? Object.keys(dirtyFields).length > 0 && !Object.keys(errors).length
+    : REQUIRED_FIELDS.every((field) => !!watchedValues[field as keyof WalletFormData]) &&
+      !Object.keys(errors).length;
 
   const handleFormSubmit = (formData: WalletFormData) => {
     startTransition(async () => {

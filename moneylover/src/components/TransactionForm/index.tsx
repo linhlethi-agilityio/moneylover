@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useTransition } from 'react';
+import { useTransition } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
@@ -17,7 +17,6 @@ import {
   cn,
   transactionSchema,
   formatCurrency,
-  isEnableSubmitButton,
   validateBalance,
 } from '@/utils';
 
@@ -85,31 +84,24 @@ export const TransactionForm = ({
         },
   });
 
-  const dirtyItems = Object.keys(dirtyFields);
+  const watchedValues = useWatch({ control });
 
-  const enableSubmit = useMemo(
-    () =>
-      isEditMode
-        ? dirtyItems.length > 0 && !Object.keys(errors).length
-        : isEnableSubmitButton(REQUIRED_FIELDS, dirtyItems, errors),
-    [isEditMode, dirtyItems, errors],
-  );
+  const enableSubmit = isEditMode
+    ? Object.keys(dirtyFields).length > 0 && !Object.keys(errors).length
+    : REQUIRED_FIELDS.every((field) => !!watchedValues[field as keyof TransactionFormData]) &&
+      !Object.keys(errors).length;
 
-  const selectedType = useWatch({ control, name: 'type' });
+  const selectedType = watchedValues.type;
 
   const categories = selectedType === FinanceType.Income ? incomeCategories : expenseCategories;
 
-  const dropdownCategories = useMemo(
-    () =>
-      categories.map((cat) => ({
-        id: cat.id,
-        label: cat.name,
-        icon: cat.image_url ? (
-          <Image src={cat.image_url} alt={cat.name} width={32} height={32} />
-        ) : undefined,
-      })),
-    [categories],
-  );
+  const dropdownCategories = categories.map((cat) => ({
+    id: cat.id,
+    label: cat.name,
+    icon: cat.image_url ? (
+      <Image src={cat.image_url} alt={cat.name} width={32} height={32} />
+    ) : undefined,
+  }));
 
   const handleFormSubmit = (data: TransactionFormData) => {
     startTransition(async () => {
@@ -135,14 +127,10 @@ export const TransactionForm = ({
     });
   };
 
-  const formattedWalletsDropdown = useMemo(
-    () =>
-      wallets.map(({ id, name }) => ({
-        id,
-        label: name,
-      })),
-    [wallets],
-  );
+  const formattedWalletsDropdown = wallets.map(({ id, name }) => ({
+    id,
+    label: name,
+  }));
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="flex flex-col gap-4">

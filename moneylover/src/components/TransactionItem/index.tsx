@@ -18,7 +18,7 @@ interface TransactionItemProps {
 
 export const TransactionItem = ({
   date,
-  note,
+  note = '',
   amount,
   type,
   currency = CURRENCIES[0].code,

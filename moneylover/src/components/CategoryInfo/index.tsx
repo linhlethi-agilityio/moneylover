@@ -15,7 +15,12 @@ const sizes = {
   md: { container: 'h-10 w-10', text: 'text-sm', image: 40 },
 };
 
-export const CategoryInfo = ({ name, imageUrl, date, size = 'md' }: CategoryInfoProps) => {
+export const CategoryInfo = ({
+  name,
+  imageUrl = '',
+  date = '',
+  size = 'md',
+}: CategoryInfoProps) => {
   const { container, text, image } = sizes[size];
 
   return (

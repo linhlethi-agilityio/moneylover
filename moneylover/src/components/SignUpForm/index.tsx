@@ -1,9 +1,9 @@
 'use client';
 
-import { useMemo, useState, useTransition } from 'react';
+import { useState, useTransition } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 // Constants
@@ -22,7 +22,7 @@ import { SignUpFormData } from '@/types';
 import { useToast } from '@/hooks';
 
 // Utils
-import { clearErrorOnChange, isEnableSubmitButton, signUpSchema } from '@/utils';
+import { clearErrorOnChange, signUpSchema } from '@/utils';
 
 // Components
 import { Button, Input } from '@/components';
@@ -38,7 +38,7 @@ export const SignUpForm = () => {
 
   const {
     control,
-    formState: { dirtyFields, errors },
+    formState: { errors },
     clearErrors,
     handleSubmit,
   } = useForm<SignUpFormData>({
@@ -68,12 +68,11 @@ export const SignUpForm = () => {
     });
   };
 
-  const dirtyItems = Object.keys(dirtyFields);
+  const watchedValues = useWatch({ control });
 
-  const enableSubmit = useMemo(
-    () => isEnableSubmitButton(REQUIRED_FIELDS, dirtyItems, errors),
-    [dirtyItems, errors],
-  );
+  const enableSubmit =
+    REQUIRED_FIELDS.every((field) => !!watchedValues[field as keyof SignUpFormData]) &&
+    !Object.keys(errors).length;
 
   const handleToggleVisiblePassword = () => setIsShowPassword((prev) => !prev);
   const handleToggleVisibleConfirmPassword = () => setIsShowConfirmPassword((prev) => !prev);

@@ -1,9 +1,9 @@
 'use client';
 
-import { useMemo, useState, useTransition } from 'react';
+import { useState, useTransition } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 // Constants
@@ -22,7 +22,7 @@ import { SignInFormData } from '@/types';
 import { useToast } from '@/hooks';
 
 // Utils
-import { clearErrorOnChange, isEnableSubmitButton, signInSchema } from '@/utils';
+import { clearErrorOnChange, signInSchema } from '@/utils';
 
 // Components
 import { Button, Input } from '@/components';
@@ -37,7 +37,7 @@ export const SignInForm = () => {
 
   const {
     control,
-    formState: { dirtyFields, errors },
+    formState: { errors },
     clearErrors,
     handleSubmit,
   } = useForm<SignInFormData>({
@@ -67,12 +67,11 @@ export const SignInForm = () => {
     });
   };
 
-  const dirtyItems = Object.keys(dirtyFields);
+  const watchedValues = useWatch({ control });
 
-  const enableSubmit = useMemo(
-    () => isEnableSubmitButton(REQUIRED_FIELDS, dirtyItems, errors),
-    [dirtyItems, errors],
-  );
+  const enableSubmit =
+    REQUIRED_FIELDS.every((field) => !!watchedValues[field as keyof SignInFormData]) &&
+    !Object.keys(errors).length;
 
   const handleToggleVisiblePassword = () => setIsShowPassword((prev) => !prev);
 
@@ -121,7 +120,7 @@ export const SignInForm = () => {
       />
 
       <p className="text-right text-sm text-gray-500">
-        Don&apos;t have an account?&nbsp;
+        {"Don't have an account?"}&nbsp;
         <Link href={ROUTES.SIGN_UP} className="text-green-600 hover:underline">
           Sign Up
         </Link>

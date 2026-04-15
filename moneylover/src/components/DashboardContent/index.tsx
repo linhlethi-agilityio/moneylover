@@ -13,7 +13,11 @@ import { ROUTES } from '@/constants';
 // Layouts
 import { Header } from '@/layouts';
 
-export const DashboardContent = async ({ children }: { children: ReactNode }) => {
+interface DashboardContentProps {
+  children: ReactNode;
+}
+
+export const DashboardContent = async ({ children }: DashboardContentProps) => {
   const session = await auth();
 
   const userId = session?.user?.id ?? '';

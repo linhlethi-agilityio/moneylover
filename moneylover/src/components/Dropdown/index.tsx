@@ -24,10 +24,10 @@ interface DropdownProps {
 }
 
 export const Dropdown = ({
-  label,
+  label = '',
   placeholder = 'Select an option...',
   items,
-  value,
+  value = '',
   onChange,
   className,
 }: DropdownProps) => {

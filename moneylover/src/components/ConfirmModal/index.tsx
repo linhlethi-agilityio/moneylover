@@ -15,7 +15,7 @@ interface ConfirmModalProps {
 export const ConfirmModal = ({
   isOpen,
   title,
-  description,
+  description = '',
   confirmLabel = 'Confirm',
   onConfirm,
   onCancel,
