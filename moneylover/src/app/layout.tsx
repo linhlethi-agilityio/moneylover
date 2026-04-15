@@ -4,7 +4,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 
 // Constants
-import { SITE_URL } from '@/constants';
+import { BRAND_NAME, SITE_URL } from '@/constants';
 
 // Contexts
 import { ToastProvider, SessionProvider } from '@/contexts';
@@ -20,16 +20,19 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Money Lover',
+  title: {
+    default: BRAND_NAME,
+    template: `${BRAND_NAME} | %s`,
+  },
   description: 'A personal finance management app to track wallets, transactions',
   icons: {
     icon: '/favicon.ico',
   },
   metadataBase: new URL(SITE_URL),
   openGraph: {
-    title: 'Money Lover',
+    title: BRAND_NAME,
     description: 'A personal finance management app to track wallets, transactions',
-    siteName: 'Money Lover',
+    siteName: BRAND_NAME,
     url: SITE_URL,
     type: 'website',
   },

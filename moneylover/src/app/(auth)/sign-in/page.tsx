@@ -4,7 +4,7 @@ import { type Metadata } from 'next';
 import { SignInForm } from '@/components';
 
 export const metadata: Metadata = {
-  title: 'Money Lover | Sign In',
+  title: 'Sign In',
   description: 'Sign in to your Money Lover account.',
 };
 

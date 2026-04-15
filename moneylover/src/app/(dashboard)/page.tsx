@@ -2,7 +2,7 @@ import { type Metadata } from 'next';
 import { Suspense } from 'react';
 
 export const metadata: Metadata = {
-  title: 'Money Lover | Dashboard',
+  title: 'Dashboard',
   description: 'Overview of your wallets and recent transactions.',
 };
 

@@ -13,7 +13,7 @@ const AuthLayout = ({
     <div className="flex flex-col items-center gap-4 bg-green-700 px-4 pb-25 pt-15">
       <Image
         src={IMAGES.MONEYLOVER_LOGO}
-        alt="Money Lover"
+        alt={BRAND_NAME}
         width={80}
         height={80}
         className="rounded-2xl"

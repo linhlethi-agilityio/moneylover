@@ -2,7 +2,7 @@ import { type Metadata } from 'next';
 import { Suspense } from 'react';
 
 export const metadata: Metadata = {
-  title: 'Money Lover | Categories',
+  title: 'Categories',
   description: 'View and manage your spending categories.',
 };
 
