@@ -169,3 +169,13 @@ export const MOCK_CATEGORIES: Category[] = [
     type: FinanceType.Income,
   },
 ];
+
+export const MOCK_EXPENSE_CATEGORIES = MOCK_CATEGORIES.filter(
+  (c) => c.type === FinanceType.Expense && c.parent_id === null,
+);
+
+export const MOCK_INCOME_CATEGORIES = MOCK_CATEGORIES.filter(
+  (c) => c.type === FinanceType.Income && c.parent_id === null,
+);
+
+export const MOCK_SUB_CATEGORIES = MOCK_CATEGORIES.filter((c) => c.parent_id !== null);
