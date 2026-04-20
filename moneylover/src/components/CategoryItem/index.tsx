@@ -9,7 +9,10 @@ import { ChevronRightIcon } from '@/icons';
 import { Category } from '@/types';
 
 // Components
-import { CategoryInfo, MenuActions } from '@/components';
+import { MenuActions } from '@/components';
+
+// UI
+import { CategoryInfo } from '@/components';
 
 interface CategoryItemProps {
   category: Category;

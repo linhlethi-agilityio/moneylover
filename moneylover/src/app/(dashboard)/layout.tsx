@@ -4,7 +4,10 @@ import { type ReactNode, Suspense } from 'react';
 import { Sidebar } from '@/layouts';
 
 // Components
-import { LoadingIndicator, DashboardContent } from '@/components';
+import { LoadingIndicator } from '@/components';
+
+// UI
+import { DashboardContent } from '@/ui/dashboard';
 
 const DashboardLayout = ({
   children,

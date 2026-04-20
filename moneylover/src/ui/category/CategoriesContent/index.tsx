@@ -5,7 +5,7 @@ import { getCategoriesInfo } from '@/services';
 import { auth } from '@/configs/auth';
 
 // Components
-import { CategoryList } from '@/components/CategoryList';
+import { CategoryList } from '@/components';
 
 interface CategoriesContentProps {
   query?: string;

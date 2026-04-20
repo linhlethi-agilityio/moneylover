@@ -7,7 +7,7 @@ import Image from 'next/image';
 import { CURRENCIES, ERROR_MESSAGES, IMAGES, SUCCESS_MESSAGES } from '@/constants';
 
 // Types
-import { Category, Transaction, Wallet } from '@/types';
+import { Category, TransactionWithCategory, Wallet } from '@/types';
 
 // Actions
 import { deleteTransaction } from '@/actions';
@@ -24,17 +24,13 @@ import { formattedBalance } from '@/utils';
 // Components
 import {
   TransactionItem,
-  CategoryInfo,
   TransactionDetailModal,
+  TransactionForm,
+  CategoryInfo,
   LoadingIndicator,
   ConfirmModal,
-  TransactionForm,
   Modal,
 } from '@/components';
-
-export interface TransactionWithCategory extends Transaction {
-  category: Category;
-}
 
 interface TransactionListProps {
   userId?: string;

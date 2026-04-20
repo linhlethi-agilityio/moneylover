@@ -9,7 +9,7 @@ import { Period, ROUTES } from '@/constants';
 import { cn, getMonthLabel, getMonthOffset, getOffsetKey } from '@/utils';
 
 // Components
-import { Button } from '../Button';
+import { Button } from '@/components';
 
 interface TransactionTabsProps {
   period: string;

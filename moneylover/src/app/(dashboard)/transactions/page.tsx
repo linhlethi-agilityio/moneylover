@@ -1,11 +1,6 @@
 import { type Metadata } from 'next';
 import { Suspense } from 'react';
 
-export const metadata: Metadata = {
-  title: 'Transactions',
-  description: 'View and manage your transactions.',
-};
-
 // Constants
 import { Period } from '@/constants';
 
@@ -13,7 +8,15 @@ import { Period } from '@/constants';
 import { SearchParams } from '@/types';
 
 // Components
-import { TransactionSkeleton, TransactionTabs, TransactionsContent } from '@/components';
+import { TransactionTabs, TransactionSkeleton } from '@/components';
+
+// UI
+import { TransactionsContent } from '@/ui/transaction';
+
+export const metadata: Metadata = {
+  title: 'Transactions',
+  description: 'View and manage your transactions.',
+};
 
 interface TransactionsPageProps {
   searchParams: SearchParams;

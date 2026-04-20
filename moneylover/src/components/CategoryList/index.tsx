@@ -18,7 +18,7 @@ import { deleteCategory } from '@/actions';
 import { useToast } from '@/hooks';
 
 // Components
-import { Button, CategoryItem, Modal, CategoryForm, ConfirmModal } from '@/components';
+import { Button, Modal, ConfirmModal, CategoryItem, CategoryForm } from '@/components';
 
 interface CategoryListProps {
   userId: string;

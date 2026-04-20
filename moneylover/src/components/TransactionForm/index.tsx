@@ -9,7 +9,7 @@ import Image from 'next/image';
 import { CATEGORY_TYPES, ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/constants';
 
 // Types
-import { Category, FinanceType, TransactionFormData, Wallet } from '@/types';
+import { Category, FinanceType, TransactionFormData, TransactionWithCategory, Wallet } from '@/types';
 
 // Utils
 import {
@@ -27,7 +27,7 @@ import { createTransaction, updateTransaction } from '@/actions';
 import { useToast } from '@/hooks';
 
 // Components
-import { Button, Input, Dropdown, TransactionWithCategory } from '@/components';
+import { Button, Input, Dropdown } from '@/components';
 
 const REQUIRED_FIELDS = ['categoryId', 'amount'];
 

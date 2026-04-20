@@ -2,7 +2,7 @@
 import { auth } from '@/configs/auth';
 
 // Components
-import { WalletForm } from '@/components/WalletForm';
+import { WalletForm } from '@/components';
 
 export const OnboardingContent = async () => {
   const session = await auth();

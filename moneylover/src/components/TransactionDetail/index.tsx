@@ -1,5 +1,5 @@
 // Types
-import { FinanceType, Wallet } from '@/types';
+import { FinanceType, Wallet, TransactionWithCategory } from '@/types';
 
 // Constants
 import { CURRENCIES } from '@/constants';
@@ -8,7 +8,10 @@ import { CURRENCIES } from '@/constants';
 import { cn, formattedBalance, getFullDate } from '@/utils';
 
 // Components
-import { Button, CategoryInfo, Modal, TransactionWithCategory } from '@/components';
+import { Button, Modal } from '@/components';
+
+// UI
+import { CategoryInfo } from '@/components';
 
 interface TransactionDetailProps {
   transaction: TransactionWithCategory;
