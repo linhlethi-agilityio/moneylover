@@ -1,7 +1,9 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 
+// Mocks
 import { MOCK_WALLETS, MOCK_EXPENSE_CATEGORIES, MOCK_INCOME_CATEGORIES } from '@/mocks';
 
+// Layouts
 import Header from '@/layouts/Header';
 
 const defaultProps = {

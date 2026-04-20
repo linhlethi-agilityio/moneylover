@@ -1,9 +1,12 @@
+// Mocks
+import { MOCK_TRANSACTIONS_WITH_CATEGORY } from '@/mocks';
+
+// Services
 import {
   getRecentTransactionsList,
   getTransactionDetailById,
   getTransactionsByDate,
 } from '@/services/transactions';
-import { MOCK_TRANSACTIONS_WITH_CATEGORY } from '@/mocks';
 
 jest.mock('@/libs', () => ({
   getRecentTransactions: jest.fn(),
@@ -12,12 +15,8 @@ jest.mock('@/libs', () => ({
   getTransactionBalanceByDate: jest.fn(),
 }));
 
-const {
-  getRecentTransactions,
-  getTransactionById,
-  getTransactions,
-  getTransactionBalanceByDate,
-} = jest.requireMock('@/libs');
+const { getRecentTransactions, getTransactionById, getTransactions, getTransactionBalanceByDate } =
+  jest.requireMock('@/libs');
 
 describe('getRecentTransactionsList', () => {
   afterEach(() => jest.clearAllMocks());
@@ -84,7 +83,13 @@ describe('getTransactionsByDate', () => {
 
   it('calls getTransactions with all params', async () => {
     await getTransactionsByDate('user-1', '2024-03-01', '2024-03-31', 'food', 'wallet-1');
-    expect(getTransactions).toHaveBeenCalledWith('user-1', '2024-03-01', '2024-03-31', 'food', 'wallet-1');
+    expect(getTransactions).toHaveBeenCalledWith(
+      'user-1',
+      '2024-03-01',
+      '2024-03-31',
+      'food',
+      'wallet-1',
+    );
   });
 
   it('returns empty groupedByCategory when no transactions', async () => {

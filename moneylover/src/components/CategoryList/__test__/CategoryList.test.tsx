@@ -1,7 +1,9 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 
+// Mocks
 import { MOCK_EXPENSE_CATEGORIES, MOCK_INCOME_CATEGORIES, MOCK_SUB_CATEGORIES } from '@/mocks';
 
+// Components
 import { CategoryList } from '@/components/CategoryList';
 
 const defaultProps = {

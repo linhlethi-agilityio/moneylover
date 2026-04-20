@@ -17,6 +17,7 @@ const config: Config = {
     '**/?(*.)+(spec|test).[jt]s?(x)',
   ],
   testPathIgnorePatterns: ['/node_modules/', '/.next/'],
+  coveragePathIgnorePatterns: ['/node_modules/', '/.next/', '/src/icons/'],
 };
 
 export default createJestConfig(config);

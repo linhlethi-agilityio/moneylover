@@ -1,5 +1,6 @@
 import { render } from '@testing-library/react';
 
+// Components
 import {
   CategorySkeleton,
   HomeSkeleton,

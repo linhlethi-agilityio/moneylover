@@ -1,7 +1,7 @@
 import { render, waitFor } from '@testing-library/react';
 
-// UI
-import { HomeContent } from '../index';
+// Mocks
+import { MOCK_WALLETS, MOCK_TRANSACTIONS_WITH_CATEGORY } from '@/mocks';
 
 // Services
 import { getWalletsInfo, getRecentTransactionsList } from '@/services';
@@ -9,8 +9,8 @@ import { getWalletsInfo, getRecentTransactionsList } from '@/services';
 // Configs
 import { auth } from '@/configs/auth';
 
-// Mocks
-import { MOCK_WALLETS, MOCK_TRANSACTIONS_WITH_CATEGORY } from '@/mocks';
+// UI
+import { HomeContent } from '../index';
 
 jest.mock('@/services', () => ({
   ...jest.requireActual('@/services'),
@@ -32,7 +32,7 @@ describe('HomeContent', () => {
     });
     (getRecentTransactionsList as jest.Mock).mockResolvedValue(MOCK_TRANSACTIONS_WITH_CATEGORY);
 
-    const { container } = render(await HomeContent({}));
+    const { container } = render(await HomeContent());
 
     await waitFor(() => {
       expect(container).toMatchSnapshot();
@@ -48,7 +48,7 @@ describe('HomeContent', () => {
     });
     (getRecentTransactionsList as jest.Mock).mockResolvedValue([]);
 
-    const { container } = render(await HomeContent({}));
+    const { container } = render(await HomeContent());
 
     await waitFor(() => {
       expect(container).toMatchSnapshot();

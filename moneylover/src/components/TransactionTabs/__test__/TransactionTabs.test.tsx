@@ -1,8 +1,15 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 
+// Components
 import { TransactionTabs } from '@/components/TransactionTabs';
 
 const mockPush = jest.fn();
+
+jest.mock('next/navigation', () => ({
+  ...jest.requireActual('next/navigation'),
+  useRouter: jest.fn(() => ({ push: mockPush })),
+  useSearchParams: jest.fn(() => new URLSearchParams()),
+}));
 
 describe('TransactionTabs', () => {
   beforeEach(() => {
@@ -28,5 +35,18 @@ describe('TransactionTabs', () => {
   it('renders FUTURE tab when period is future', () => {
     render(<TransactionTabs period="future" />);
     expect(screen.getByText('FUTURE')).toBeInTheDocument();
+  });
+
+  it('calls router.push with correct period param when tab is clicked', () => {
+    render(<TransactionTabs period="this" />);
+    fireEvent.click(screen.getByText('FUTURE'));
+    expect(mockPush).toHaveBeenCalledWith(expect.stringContaining('period=future'));
+  });
+
+  it('renders non-future next tab label when current period is last month', () => {
+    render(<TransactionTabs period="last" />);
+    // currentOffset=-1, nextOffset=0, isNextFuture=false → third tab shows month label
+    expect(screen.queryByText('FUTURE')).not.toBeInTheDocument();
+    expect(screen.getByText('THIS MONTH')).toBeInTheDocument();
   });
 });

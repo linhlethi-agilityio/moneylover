@@ -1,3 +1,4 @@
+// Utils
 import { validateBalance, formatCurrency, clearErrorOnChange } from '@/utils/input';
 
 describe('validateBalance', () => {

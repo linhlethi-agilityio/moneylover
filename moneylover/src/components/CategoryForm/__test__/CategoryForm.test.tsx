@@ -1,9 +1,10 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 
+// Mocks
 import { MOCK_CATEGORIES, MOCK_EXPENSE_CATEGORIES, MOCK_INCOME_CATEGORIES } from '@/mocks';
 
+// Components
 import { CategoryForm } from '@/components/CategoryForm';
-
 const defaultProps = {
   userId: 'user-1',
   expenseCategories: MOCK_EXPENSE_CATEGORIES,

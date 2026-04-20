@@ -22,6 +22,7 @@ jest.mock('next/cache', () => ({
   unstable_cache: jest.fn((fn: unknown) => fn),
   cacheTag: jest.fn(),
   cacheLife: jest.fn(),
+  updateTag: jest.fn(),
 }));
 
 jest.mock('@/configs/auth', () => ({

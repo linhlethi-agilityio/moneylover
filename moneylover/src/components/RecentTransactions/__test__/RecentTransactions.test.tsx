@@ -1,7 +1,9 @@
 import { render, screen } from '@testing-library/react';
 
+// Mocks
 import { MOCK_WALLETS, MOCK_TRANSACTIONS_WITH_CATEGORY } from '@/mocks';
 
+// Components
 import { RecentTransactions } from '@/components/RecentTransactions';
 
 describe('RecentTransactions', () => {

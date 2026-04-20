@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 
+// Components
 import { CategoryInfo } from '@/components/CategoryInfo';
 
 describe('CategoryInfo', () => {

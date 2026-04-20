@@ -1,5 +1,8 @@
-import { getCategoriesInfo } from '@/services/categories';
+// Mocks
 import { MOCK_EXPENSE_CATEGORIES, MOCK_INCOME_CATEGORIES, MOCK_SUB_CATEGORIES } from '@/mocks';
+
+// Services
+import { getCategoriesInfo } from '@/services/categories';
 
 jest.mock('@/libs', () => ({
   getParentCategories: jest.fn(),

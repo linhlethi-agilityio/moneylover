@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 
+// Contexts
 import SessionProvider from '@/contexts/SessionProvider';
 
 describe('SessionProvider', () => {

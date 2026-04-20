@@ -1,3 +1,7 @@
+// Mocks
+import { MOCK_TRANSACTIONS_WITH_CATEGORY } from '@/mocks';
+
+// Libs
 import {
   getTransactions,
   getRecentTransactions,
@@ -7,7 +11,6 @@ import {
   addTransaction,
   editTransaction,
 } from '@/libs/transactions';
-import { MOCK_TRANSACTIONS_WITH_CATEGORY } from '@/mocks';
 
 jest.mock('@/libs/supabase', () => ({
   supabase: {
@@ -34,8 +37,18 @@ beforeEach(() => {
   // Restore chain after clearAllMocks resets mockReturnThis
   const s = getSupabase();
   [
-    'from', 'select', 'insert', 'update', 'delete',
-    'eq', 'gte', 'lte', 'order', 'limit', 'ilike', 'single',
+    'from',
+    'select',
+    'insert',
+    'update',
+    'delete',
+    'eq',
+    'gte',
+    'lte',
+    'order',
+    'limit',
+    'ilike',
+    'single',
   ].forEach((method) => s[method].mockReturnThis());
 });
 
@@ -69,8 +82,8 @@ describe('getTransactions', () => {
 
   it('filters by walletId when provided', async () => {
     // eq is called last in the chain for walletId case — resolve at that point
-    getSupabase().eq
-      .mockReturnValueOnce(getSupabase()) // eq('user_id', ...) → chain
+    getSupabase()
+      .eq.mockReturnValueOnce(getSupabase()) // eq('user_id', ...) → chain
       .mockResolvedValueOnce({ data: [] }); // eq('wallet_id', ...) → resolve
     await getTransactions('user-1', '2024-03-01', '2024-03-31', undefined, 'wallet-1');
     expect(getSupabase().eq).toHaveBeenCalledWith('wallet_id', 'wallet-1');

@@ -1,5 +1,8 @@
-import { getWallets, addWallet, editWallet, removeWallet } from '@/libs/wallets';
+// Mocks
 import { MOCK_WALLETS } from '@/mocks';
+
+// Libs
+import { getWallets, addWallet, editWallet, removeWallet } from '@/libs/wallets';
 
 jest.mock('@/libs/supabase', () => ({
   supabase: {
@@ -17,8 +20,8 @@ const getSupabase = () => jest.requireMock('@/libs/supabase').supabase;
 beforeEach(() => {
   jest.clearAllMocks();
   const s = getSupabase();
-  ['from', 'select', 'insert', 'update', 'delete', 'eq'].forEach(
-    (method) => s[method].mockReturnThis(),
+  ['from', 'select', 'insert', 'update', 'delete', 'eq'].forEach((method) =>
+    s[method].mockReturnThis(),
   );
 });
 
@@ -46,13 +49,23 @@ describe('getWallets', () => {
 describe('addWallet', () => {
   it('returns no error on success', async () => {
     getSupabase().insert.mockResolvedValueOnce({ error: null });
-    const result = await addWallet({ user_id: 'user-1', name: 'Cash', currency: 'VND', balance: 0 });
+    const result = await addWallet({
+      user_id: 'user-1',
+      name: 'Cash',
+      currency: 'VND',
+      balance: 0,
+    });
     expect(result.error).toBeNull();
   });
 
   it('returns error on failure', async () => {
     getSupabase().insert.mockResolvedValueOnce({ error: 'DB error' });
-    const result = await addWallet({ user_id: 'user-1', name: 'Cash', currency: 'VND', balance: 0 });
+    const result = await addWallet({
+      user_id: 'user-1',
+      name: 'Cash',
+      currency: 'VND',
+      balance: 0,
+    });
     expect(result.error).toBe('DB error');
   });
 
@@ -60,7 +73,10 @@ describe('addWallet', () => {
     getSupabase().insert.mockResolvedValueOnce({ error: null });
     await addWallet({ user_id: 'user-1', name: 'Cash', currency: 'VND', balance: 100000 });
     expect(getSupabase().insert).toHaveBeenCalledWith({
-      user_id: 'user-1', name: 'Cash', currency: 'VND', balance: 100000,
+      user_id: 'user-1',
+      name: 'Cash',
+      currency: 'VND',
+      balance: 100000,
     });
   });
 });

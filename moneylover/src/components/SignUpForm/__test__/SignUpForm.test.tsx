@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 
+// Components
 import { SignUpForm } from '@/components/SignUpForm';
 
 describe('SignUpForm', () => {
