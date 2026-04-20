@@ -1,4 +1,7 @@
+// Constants
 import { Period } from '@/constants';
+
+// Utils
 import {
   getDay,
   getFullDate,

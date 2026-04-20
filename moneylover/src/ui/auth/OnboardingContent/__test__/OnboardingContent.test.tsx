@@ -1,10 +1,10 @@
 import { render, waitFor } from '@testing-library/react';
 
-// UI
-import { OnboardingContent } from '../index';
-
 // Configs
 import { auth } from '@/configs/auth';
+
+// UI
+import { OnboardingContent } from '../index';
 
 describe('OnboardingContent', () => {
   afterEach(() => {

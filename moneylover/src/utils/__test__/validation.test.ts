@@ -1,5 +1,15 @@
-import { isEnableSubmitButton, signInSchema, signUpSchema, categorySchema, walletSchema, transactionSchema } from '@/utils/validation';
+// Types
 import { FinanceType } from '@/types';
+
+// Utils
+import {
+  isEnableSubmitButton,
+  signInSchema,
+  signUpSchema,
+  categorySchema,
+  walletSchema,
+  transactionSchema,
+} from '@/utils/validation';
 
 describe('isEnableSubmitButton', () => {
   it('returns true when all required fields are dirty and no errors', () => {
@@ -17,15 +27,21 @@ describe('isEnableSubmitButton', () => {
 
 describe('signInSchema', () => {
   it('passes with valid data', () => {
-    expect(signInSchema.safeParse({ email: 'test@example.com', password: 'pass123' }).success).toBe(true);
+    expect(signInSchema.safeParse({ email: 'test@example.com', password: 'pass123' }).success).toBe(
+      true,
+    );
   });
 
   it('fails with invalid email', () => {
-    expect(signInSchema.safeParse({ email: 'notanemail', password: 'pass123' }).success).toBe(false);
+    expect(signInSchema.safeParse({ email: 'notanemail', password: 'pass123' }).success).toBe(
+      false,
+    );
   });
 
   it('fails with short password', () => {
-    expect(signInSchema.safeParse({ email: 'test@example.com', password: '123' }).success).toBe(false);
+    expect(signInSchema.safeParse({ email: 'test@example.com', password: '123' }).success).toBe(
+      false,
+    );
   });
 
   it('fails with empty fields', () => {
@@ -59,7 +75,9 @@ describe('categorySchema', () => {
   });
 
   it('passes with optional parentId', () => {
-    expect(categorySchema.safeParse({ name: 'Food', type: 'expense', parentId: '1' }).success).toBe(true);
+    expect(categorySchema.safeParse({ name: 'Food', type: 'expense', parentId: '1' }).success).toBe(
+      true,
+    );
   });
 });
 
@@ -77,7 +95,9 @@ describe('walletSchema', () => {
   });
 
   it('passes with optional balance', () => {
-    expect(walletSchema.safeParse({ name: 'Cash', currency: 'VND', balance: 100000 }).success).toBe(true);
+    expect(walletSchema.safeParse({ name: 'Cash', currency: 'VND', balance: 100000 }).success).toBe(
+      true,
+    );
   });
 });
 

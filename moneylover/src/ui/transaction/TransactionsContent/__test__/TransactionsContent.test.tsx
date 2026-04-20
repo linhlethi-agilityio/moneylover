@@ -1,13 +1,13 @@
 import { render, waitFor } from '@testing-library/react';
 
-// UI
-import { TransactionsContent } from '../index';
-
 // Services
 import { getCategoriesInfo, getTransactionsByDate, getWalletsInfo } from '@/services';
 
 // Configs
 import { auth } from '@/configs/auth';
+
+// UI
+import { TransactionsContent } from '../index';
 
 // Mocks
 import {

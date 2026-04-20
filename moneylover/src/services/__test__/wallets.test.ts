@@ -1,5 +1,8 @@
-import { getWalletsInfo } from '@/services/wallets';
+// Mocks
 import { MOCK_WALLETS } from '@/mocks';
+
+// Services
+import { getWalletsInfo } from '@/services/wallets';
 
 jest.mock('@/libs', () => ({
   getWallets: jest.fn(),

@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 
+// Components
 import { SearchInput } from '@/components/SearchInput';
 
 describe('SearchInput', () => {

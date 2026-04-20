@@ -1,3 +1,10 @@
+// Types
+import { FinanceType } from '@/types';
+
+// Mocks
+import { MOCK_EXPENSE_CATEGORIES, MOCK_SUB_CATEGORIES } from '@/mocks';
+
+// Libs
 import {
   getParentCategories,
   getSubCategoriesByParentIds,
@@ -5,8 +12,6 @@ import {
   editCategory,
   removeCategory,
 } from '@/libs/categories';
-import { MOCK_EXPENSE_CATEGORIES, MOCK_SUB_CATEGORIES } from '@/mocks';
-import { FinanceType } from '@/types';
 
 jest.mock('@/libs/supabase', () => ({
   supabase: {

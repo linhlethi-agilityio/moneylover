@@ -1,7 +1,7 @@
 import { render, waitFor } from '@testing-library/react';
 
-// UI
-import { DashboardContent } from '../index';
+// Mocks
+import { MOCK_WALLETS, MOCK_EXPENSE_CATEGORIES, MOCK_INCOME_CATEGORIES } from '@/mocks';
 
 // Services
 import { getWalletsInfo, getCategoriesInfo } from '@/services';
@@ -9,8 +9,8 @@ import { getWalletsInfo, getCategoriesInfo } from '@/services';
 // Configs
 import { auth } from '@/configs/auth';
 
-// Mocks
-import { MOCK_WALLETS, MOCK_EXPENSE_CATEGORIES, MOCK_INCOME_CATEGORIES } from '@/mocks';
+// UI
+import { DashboardContent } from '../index';
 
 jest.mock('@/services', () => ({
   ...jest.requireActual('@/services'),

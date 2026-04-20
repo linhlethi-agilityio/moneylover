@@ -1,7 +1,9 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 
+// Mocks
 import { MOCK_CATEGORIES, MOCK_SUB_CATEGORIES } from '@/mocks';
 
+// Components
 import { CategoryItem } from '@/components/CategoryItem';
 
 const foodCategory = MOCK_CATEGORIES[0]; // Food & Beverage
@@ -61,7 +63,11 @@ describe('CategoryItem', () => {
   it('calls onEdit with subcategory when subcategory edit is clicked', () => {
     const handleEdit = jest.fn();
     render(
-      <CategoryItem category={foodCategory} subCategories={foodSubCategories} onEdit={handleEdit} />,
+      <CategoryItem
+        category={foodCategory}
+        subCategories={foodSubCategories}
+        onEdit={handleEdit}
+      />,
     );
     fireEvent.click(screen.getByText('Food & Beverage').closest('div')!);
     const menuButtons = screen.getAllByRole('button', { name: '' });

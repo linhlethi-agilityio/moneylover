@@ -1,8 +1,11 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { use } from 'react';
 
-import ToastProvider, { ToastContext } from '@/contexts/ToastProvider';
+// Hooks
 import { useToast } from '@/hooks/useToast';
+
+// Contexts
+import ToastProvider, { ToastContext } from '@/contexts/ToastProvider';
 
 // Components
 import { Button } from '@/components';

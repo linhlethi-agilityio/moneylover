@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 
+// Components
 import { Modal } from '@/components/Modal';
 
 const defaultProps = {

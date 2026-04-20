@@ -1,3 +1,4 @@
+// Utils
 import { formattedBalance } from '@/utils/number';
 
 describe('formattedBalance', () => {

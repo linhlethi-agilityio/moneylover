@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 
+// Layouts
 import Sidebar from '@/layouts/Sidebar';
 
 jest.mock('next-auth/react', () => ({

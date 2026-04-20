@@ -1,10 +1,10 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 
-// Mocks
-import { MOCK_WALLETS } from '@/mocks';
-
 // Components
 import { WalletList } from '@/components/WalletList';
+
+// Mocks
+import { MOCK_WALLETS } from '@/mocks';
 
 describe('WalletList', () => {
   it('renders with default props', () => {

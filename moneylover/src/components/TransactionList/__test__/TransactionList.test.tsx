@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 
 // Mocks
 import {
@@ -6,10 +6,33 @@ import {
   MOCK_GROUPED_BY_CATEGORY,
   MOCK_EXPENSE_CATEGORIES,
   MOCK_INCOME_CATEGORIES,
+  MOCK_TRANSACTIONS_WITH_CATEGORY,
 } from '@/mocks';
+
+// Services
+import { getTransactionDetailById } from '@/services';
+
+// Actions
+import { deleteTransaction, updateTransaction } from '@/actions';
 
 // Components
 import { TransactionList } from '@/components/TransactionList';
+
+jest.mock('@/services', () => ({
+  ...jest.requireActual('@/services'),
+  getTransactionDetailById: jest.fn(),
+}));
+
+jest.mock('@/actions', () => ({
+  ...jest.requireActual('@/actions'),
+  deleteTransaction: jest.fn(),
+  updateTransaction: jest.fn(),
+}));
+
+jest.mock('@/hooks', () => ({
+  ...jest.requireActual('@/hooks'),
+  useToast: jest.fn(() => ({ showToast: jest.fn() })),
+}));
 
 const defaultProps = {
   userId: 'user-1',
@@ -60,5 +83,118 @@ describe('TransactionList', () => {
     render(<TransactionList {...defaultProps} />);
     expect(screen.getByText('Lunch')).toBeInTheDocument();
     expect(screen.getByText('Monthly salary')).toBeInTheDocument();
+  });
+
+  it('opens transaction detail modal when transaction item is clicked', async () => {
+    (getTransactionDetailById as jest.Mock).mockResolvedValue(MOCK_TRANSACTIONS_WITH_CATEGORY[0]);
+    render(<TransactionList {...defaultProps} />);
+    fireEvent.click(screen.getByText('Lunch').closest('div')!);
+    await waitFor(() => {
+      expect(screen.getByText('Transaction detail')).toBeInTheDocument();
+    });
+  });
+
+  it('opens confirm delete modal when delete is clicked in detail modal', async () => {
+    (getTransactionDetailById as jest.Mock).mockResolvedValue(MOCK_TRANSACTIONS_WITH_CATEGORY[0]);
+    render(<TransactionList {...defaultProps} />);
+    fireEvent.click(screen.getByText('Lunch').closest('div')!);
+    await waitFor(() => screen.getByText('Transaction detail'));
+    fireEvent.click(screen.getByText('Delete'));
+    expect(screen.getByText('Delete transaction')).toBeInTheDocument();
+  });
+
+  it('closes confirm delete modal when cancel is clicked', async () => {
+    (getTransactionDetailById as jest.Mock).mockResolvedValue(MOCK_TRANSACTIONS_WITH_CATEGORY[0]);
+    render(<TransactionList {...defaultProps} />);
+    fireEvent.click(screen.getByText('Lunch').closest('div')!);
+    await waitFor(() => screen.getByText('Transaction detail'));
+    fireEvent.click(screen.getByText('Delete'));
+    fireEvent.click(screen.getByText('Cancel'));
+    expect(screen.queryByText('Delete transaction')).not.toBeInTheDocument();
+  });
+
+  it('closes transaction detail modal when close is clicked', async () => {
+    (getTransactionDetailById as jest.Mock).mockResolvedValue(MOCK_TRANSACTIONS_WITH_CATEGORY[0]);
+    render(<TransactionList {...defaultProps} />);
+    fireEvent.click(screen.getByText('Lunch').closest('div')!);
+    await waitFor(() => screen.getByText('Transaction detail'));
+    // Modal close button is the last ghost button in the modal header
+    const closeBtn = screen
+      .getAllByRole('button')
+      .find((btn) => btn.querySelector('svg') && !btn.textContent)!;
+    fireEvent.click(closeBtn);
+    expect(screen.queryByText('Transaction detail')).not.toBeInTheDocument();
+  });
+
+  it('opens edit transaction modal when Edit is clicked in detail modal', async () => {
+    (getTransactionDetailById as jest.Mock).mockResolvedValue(MOCK_TRANSACTIONS_WITH_CATEGORY[0]);
+    render(<TransactionList {...defaultProps} />);
+    fireEvent.click(screen.getByText('Lunch').closest('div')!);
+    await waitFor(() => screen.getByText('Transaction detail'));
+    fireEvent.click(screen.getByText('Edit'));
+    expect(screen.getByText('Update Transaction')).toBeInTheDocument();
+  });
+
+  it('closes edit modal after form submit', async () => {
+    (getTransactionDetailById as jest.Mock).mockResolvedValue(MOCK_TRANSACTIONS_WITH_CATEGORY[0]);
+    (updateTransaction as jest.Mock).mockResolvedValue(undefined);
+    render(<TransactionList {...defaultProps} />);
+    fireEvent.click(screen.getByText('Lunch').closest('div')!);
+    await waitFor(() => screen.getByText('Transaction detail'));
+    fireEvent.click(screen.getByText('Edit'));
+    await waitFor(() => screen.getByText('Update Transaction'));
+    // Dirty the note field to enable submit button
+    fireEvent.change(screen.getByPlaceholderText('Add a note...'), {
+      target: { value: 'Updated note' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'Submit' }));
+    await waitFor(() => {
+      expect(screen.queryByText('Update Transaction')).not.toBeInTheDocument();
+    });
+  });
+
+  it('closes edit transaction modal when close is clicked', async () => {
+    (getTransactionDetailById as jest.Mock).mockResolvedValue(MOCK_TRANSACTIONS_WITH_CATEGORY[0]);
+    render(<TransactionList {...defaultProps} />);
+    fireEvent.click(screen.getByText('Lunch').closest('div')!);
+    await waitFor(() => screen.getByText('Transaction detail'));
+    fireEvent.click(screen.getByText('Edit'));
+    await waitFor(() => screen.getByText('Update Transaction'));
+    // The close button is a sibling of the modal title heading
+    const modalTitle = screen.getByText('Update Transaction');
+    const closeBtn = modalTitle.parentElement!.querySelector('button')!;
+    fireEvent.click(closeBtn);
+    expect(screen.queryByText('Update Transaction')).not.toBeInTheDocument();
+  });
+
+  it('confirms delete and closes modal on success', async () => {
+    (getTransactionDetailById as jest.Mock).mockResolvedValue(MOCK_TRANSACTIONS_WITH_CATEGORY[0]);
+    (deleteTransaction as jest.Mock).mockResolvedValue(undefined);
+    render(<TransactionList {...defaultProps} />);
+    fireEvent.click(screen.getByText('Lunch').closest('div')!);
+    await waitFor(() => screen.getByText('Transaction detail'));
+    fireEvent.click(screen.getByText('Delete'));
+    await waitFor(() => screen.getByText('Delete transaction'));
+    const deleteBtns = screen.getAllByRole('button', { name: 'Delete' });
+    fireEvent.click(deleteBtns[deleteBtns.length - 1]);
+    await waitFor(() => {
+      expect(deleteTransaction).toHaveBeenCalledWith(MOCK_TRANSACTIONS_WITH_CATEGORY[0].id);
+      expect(screen.queryByText('Delete transaction')).not.toBeInTheDocument();
+    });
+  });
+
+  it('shows error toast when deleteTransaction fails', async () => {
+    (getTransactionDetailById as jest.Mock).mockResolvedValue(MOCK_TRANSACTIONS_WITH_CATEGORY[0]);
+    (deleteTransaction as jest.Mock).mockResolvedValue('Something went wrong');
+    render(<TransactionList {...defaultProps} />);
+    fireEvent.click(screen.getByText('Lunch').closest('div')!);
+    await waitFor(() => screen.getByText('Transaction detail'));
+    fireEvent.click(screen.getByText('Delete'));
+    await waitFor(() => screen.getByText('Delete transaction'));
+    const deleteBtns = screen.getAllByRole('button', { name: 'Delete' });
+    fireEvent.click(deleteBtns[deleteBtns.length - 1]);
+    await waitFor(() => {
+      expect(deleteTransaction).toHaveBeenCalled();
+    });
   });
 });
