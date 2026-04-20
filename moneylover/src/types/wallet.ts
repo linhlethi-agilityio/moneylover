@@ -6,3 +6,9 @@ export interface Wallet {
   balance: number;
   created_at: string;
 }
+
+export interface WalletFormData {
+  name: string;
+  currency: string;
+  balance?: string | number;
+}

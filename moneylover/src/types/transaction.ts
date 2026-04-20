@@ -14,3 +14,12 @@ export interface Transaction {
   date: string;
   created_at: string;
 }
+
+export interface TransactionFormData {
+  type: FinanceType;
+  walletId: string;
+  categoryId: string;
+  amount: number;
+  date: string;
+  note?: string;
+}
