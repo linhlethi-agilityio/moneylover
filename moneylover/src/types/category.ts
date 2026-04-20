@@ -9,3 +9,9 @@ export interface Category {
   type: FinanceType;
   is_default?: boolean;
 }
+
+export interface CategoryFormData {
+  name: string;
+  type: string;
+  parentId?: string;
+}
