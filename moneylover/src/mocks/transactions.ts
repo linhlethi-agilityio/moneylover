@@ -1,5 +1,4 @@
-import { FinanceType, Transaction } from '@/types';
-import { TransactionWithCategory } from '@/components/TransactionList';
+import { FinanceType, Transaction, TransactionWithCategory } from '@/types';
 import { MOCK_CATEGORIES } from './categories';
 
 export const MOCK_TRANSACTIONS: Transaction[] = [

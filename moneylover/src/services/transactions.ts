@@ -13,8 +13,8 @@ import {
   getRecentTransactions,
 } from '@/libs';
 
-// Components
-import { TransactionWithCategory } from '@/components';
+// Types
+import { TransactionWithCategory } from '@/types';
 
 export const getRecentTransactionsList = async (
   userId: string,

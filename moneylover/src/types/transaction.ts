@@ -1,3 +1,5 @@
+import { Category } from './category';
+
 export enum FinanceType {
   Income = 'income',
   Expense = 'expense',
@@ -13,6 +15,10 @@ export interface Transaction {
   note: string;
   date: string;
   created_at: string;
+}
+
+export interface TransactionWithCategory extends Transaction {
+  category: Category;
 }
 
 export interface TransactionFormData {

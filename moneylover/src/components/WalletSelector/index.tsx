@@ -22,14 +22,8 @@ import { deleteWallet } from '@/actions';
 import { useToast } from '@/hooks';
 
 // Components
-import {
-  Avatar,
-  WalletList,
-  Modal,
-  WalletForm,
-  ConfirmModal,
-  WalletSelectorSkeleton,
-} from '@/components';
+import { Avatar, Modal, ConfirmModal, WalletSelectorSkeleton } from '@/components';
+import { WalletList, WalletForm } from '@/components';
 
 interface WalletSelectorProps {
   userId: string;

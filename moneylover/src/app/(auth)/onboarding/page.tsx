@@ -1,13 +1,16 @@
 import { type Metadata } from 'next';
 import { Suspense } from 'react';
 
+// UI
+import { OnboardingContent } from '@/ui/auth';
+
+// Components
+import { OnboardingSkeleton } from '@/components';
+
 export const metadata: Metadata = {
   title: 'Get Started',
   description: 'Set up your first wallet to get started.',
 };
-
-// Components
-import { OnboardingContent, OnboardingSkeleton } from '@/components';
 
 const OnboardingPage = () => (
   <div className="flex flex-col gap-6">

@@ -8,7 +8,7 @@ import { auth } from '@/configs/auth';
 import { getMonthRange } from '@/utils';
 
 // Components
-import { TransactionList } from '@/components/TransactionList';
+import { TransactionList } from '@/components';
 
 interface TransactionsContentProps {
   period: string;

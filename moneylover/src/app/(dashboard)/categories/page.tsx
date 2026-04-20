@@ -1,16 +1,19 @@
 import { type Metadata } from 'next';
 import { Suspense } from 'react';
 
-export const metadata: Metadata = {
-  title: 'Categories',
-  description: 'View and manage your spending categories.',
-};
-
 // Types
 import { SearchParams } from '@/types';
 
 // Components
-import { CategorySkeleton, CategoriesContent } from '@/components';
+import { CategorySkeleton } from '@/components';
+
+// UI
+import { CategoriesContent } from '@/ui/category';
+
+export const metadata: Metadata = {
+  title: 'Categories',
+  description: 'View and manage your spending categories.',
+};
 
 interface CategoriesPageProps {
   searchParams: SearchParams;

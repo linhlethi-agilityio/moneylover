@@ -5,7 +5,7 @@ import { auth } from '@/configs/auth';
 import { getWalletsInfo, getRecentTransactionsList } from '@/services';
 
 // Components
-import { RecentTransactions } from '@/components/RecentTransactions';
+import { RecentTransactions } from '@/components';
 
 export const HomeContent = async () => {
   const session = await auth();

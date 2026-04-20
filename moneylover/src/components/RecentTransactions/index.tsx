@@ -6,13 +6,13 @@ import Link from 'next/link';
 import { CURRENCIES, ROUTES } from '@/constants';
 
 // Types
-import { FinanceType, Wallet } from '@/types';
+import { FinanceType, Wallet, TransactionWithCategory } from '@/types';
 
 // Utils
 import { formattedBalance } from '@/utils';
 
 // Components
-import { CategoryInfo, TransactionWithCategory, WalletItem } from '@/components';
+import { CategoryInfo, WalletItem } from '@/components';
 
 interface RecentTransactionsProps {
   transactions: TransactionWithCategory[];

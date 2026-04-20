@@ -10,7 +10,7 @@ import { ROUTES } from '@/constants';
 import { Category, Wallet } from '@/types';
 
 // Components
-import { Button, SearchInput, WalletSelector, Modal, TransactionForm } from '@/components';
+import { Button, SearchInput, Modal, WalletSelector, TransactionForm } from '@/components';
 
 interface HeaderProps {
   userId: string;
