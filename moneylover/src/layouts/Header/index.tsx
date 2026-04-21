@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 // Constants
 import { ROUTES } from '@/constants';
@@ -33,6 +33,7 @@ const Header = ({
 }: HeaderProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
 
   const handleOpenAddTransaction = () => {
     setIsOpen(true);
@@ -40,6 +41,11 @@ const Header = ({
 
   const handleCloseAddTransaction = () => {
     setIsOpen(false);
+  };
+
+  const handleSubmitTransaction = () => {
+    setIsOpen(false);
+    router.push(ROUTES.TRANSACTIONS);
   };
 
   return (
@@ -71,7 +77,7 @@ const Header = ({
             wallets={wallets}
             expenseCategories={expenseCategories}
             incomeCategories={incomeCategories}
-            onSubmit={handleCloseAddTransaction}
+            onSubmit={handleSubmitTransaction}
           />
         </Modal>
       )}
