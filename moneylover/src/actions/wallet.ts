@@ -6,10 +6,10 @@ import { updateTag } from 'next/cache';
 import { CACHE_TAGS } from '@/constants';
 
 // Types
-import { Wallet } from '@/types';
+import { FinanceType, Wallet } from '@/types';
 
 // Libs
-import { addWallet, editWallet, removeWallet } from '@/libs';
+import { editWallet, removeWallet, addTransaction, supabase } from '@/libs';
 
 interface CreateWalletParams {
   userId: string;
@@ -24,13 +24,41 @@ export const createWallet = async ({
   currency,
   balance = 0,
 }: CreateWalletParams): Promise<void | string> => {
-  const { error } = await addWallet({ user_id: userId, name, currency, balance });
+  const { data: walletData, error: walletError } = await supabase
+    .from('wallets')
+    .insert({ user_id: userId, name, currency, balance })
+    .select('id')
+    .single();
 
-  if (error) {
-    return error.message;
+  if (walletError) {
+    return walletError.message;
+  }
+
+  if (balance > 0) {
+    const { data: otherIncomeCategory } = await supabase
+      .from('categories')
+      .select('id')
+      .eq('user_id', userId)
+      .eq('type', FinanceType.Income)
+      .eq('is_default', true)
+      .ilike('name', '%other%')
+      .single();
+
+    if (otherIncomeCategory) {
+      await addTransaction({
+        user_id: userId,
+        wallet_id: walletData.id,
+        category_id: otherIncomeCategory.id,
+        type: FinanceType.Income,
+        amount: balance,
+        date: new Date().toISOString().split('T')[0],
+        note: 'Initial balance',
+      });
+    }
   }
 
   updateTag(CACHE_TAGS.WALLETS);
+  updateTag(CACHE_TAGS.TRANSACTIONS);
 };
 
 export const updateWallet = async ({
