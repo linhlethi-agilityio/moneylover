@@ -9,7 +9,7 @@ import { CACHE_TAGS } from '@/constants';
 import { TransactionFormData } from '@/types';
 
 // Libs
-import { addTransaction, editTransaction, removeTransaction } from '@/libs';
+import { addTransaction, editTransaction, removeTransaction, syncWalletBalance, supabase } from '@/libs';
 
 interface CreateTransactionParams extends TransactionFormData {
   userId: string;
@@ -39,6 +39,8 @@ export const createTransaction = async ({
     return error.message;
   }
 
+  await syncWalletBalance(walletId);
+
   updateTag(CACHE_TAGS.TRANSACTIONS);
   updateTag(CACHE_TAGS.WALLETS);
 };
@@ -48,6 +50,13 @@ export const updateTransaction = async (
   data: TransactionFormData,
 ): Promise<void | string> => {
   const { walletId, categoryId, type, amount, date, note } = data;
+
+  const { data: oldTx } = await supabase
+    .from('transactions')
+    .select('wallet_id')
+    .eq('id', id)
+    .single();
+
   const { error } = await editTransaction(id, {
     wallet_id: walletId,
     category_id: categoryId,
@@ -61,16 +70,32 @@ export const updateTransaction = async (
     return error.message;
   }
 
+  // Sync affected wallets
+  await syncWalletBalance(walletId);
+  if (oldTx && oldTx.wallet_id !== walletId) {
+    await syncWalletBalance(oldTx.wallet_id);
+  }
+
   updateTag(CACHE_TAGS.TRANSACTIONS);
   updateTag(`${CACHE_TAGS.TRANSACTION}/${id}`);
   updateTag(CACHE_TAGS.WALLETS);
 };
 
 export const deleteTransaction = async (id: string): Promise<void | string> => {
+  const { data: tx } = await supabase
+    .from('transactions')
+    .select('wallet_id')
+    .eq('id', id)
+    .single();
+
   const { error } = await removeTransaction(id);
 
   if (error) {
     return error.message;
+  }
+
+  if (tx) {
+    await syncWalletBalance(tx.wallet_id);
   }
 
   updateTag(CACHE_TAGS.TRANSACTIONS);

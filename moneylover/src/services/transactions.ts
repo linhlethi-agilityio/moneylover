@@ -8,7 +8,6 @@ import { CACHE_TAGS, RECENT_TRANSACTION_LIMIT } from '@/constants';
 // Libs
 import {
   getTransactions,
-  getTransactionBalanceByDate,
   getTransactionById,
   getRecentTransactions,
 } from '@/libs';
@@ -45,7 +44,15 @@ export const getTransactionsByDate = async (
     query,
     walletId,
   )) as unknown as TransactionWithCategory[];
-  const { inflow, outflow } = await getTransactionBalanceByDate(userId, startDate, endDate);
+
+  const { inflow, outflow } = transactions.reduce(
+    (acc, t) => {
+      if (t.type === 'income') acc.inflow += t.amount;
+      else acc.outflow += t.amount;
+      return acc;
+    },
+    { inflow: 0, outflow: 0 },
+  );
 
   const groupedByCategory = transactions.reduce<Record<string, typeof transactions>>((acc, t) => {
     const key = t.category_id;

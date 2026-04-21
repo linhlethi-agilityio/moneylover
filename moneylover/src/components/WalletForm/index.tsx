@@ -78,29 +78,48 @@ export const WalletForm = ({
     startTransition(async () => {
       const balance = validateBalance(String(formData.balance ?? 0));
 
-      const error = previewData
-        ? await updateWallet({ id: previewData.id, ...formData, balance })
-        : await createWallet({ userId, ...formData, balance });
+      if (previewData) {
+        const error = await updateWallet({ id: previewData.id, ...formData, balance });
 
-      if (error) {
-        return showToast({
-          status: 'error',
-          title: ERROR_MESSAGES.SOMETHING_WENT_WRONG,
-          description: error,
-        });
-      }
+        if (error) {
+          return showToast({
+            status: 'error',
+            title: ERROR_MESSAGES.SOMETHING_WENT_WRONG,
+            description: error,
+          });
+        }
 
-      showToast({
-        status: 'success',
-        title: previewData ? SUCCESS_MESSAGES.WALLET_UPDATED : SUCCESS_MESSAGES.WALLET_CREATED,
-      });
+        showToast({ status: 'success', title: SUCCESS_MESSAGES.WALLET_UPDATED });
 
-      if (onSubmit) {
-        onSubmit();
+        if (onSubmit) {
+          router.refresh();
+          onSubmit();
+        } else {
+          router.replace(ROUTES.DASHBOARD);
+          router.refresh();
+        }
       } else {
-        await update();
-        router.replace(ROUTES.DASHBOARD);
+        const result = await createWallet({ userId, ...formData, balance });
+
+        if (typeof result === 'string') {
+          return showToast({
+            status: 'error',
+            title: ERROR_MESSAGES.SOMETHING_WENT_WRONG,
+            description: result,
+          });
+        }
+
+        showToast({ status: 'success', title: SUCCESS_MESSAGES.WALLET_CREATED });
+
         router.refresh();
+
+        if (onSubmit) {
+          onSubmit();
+          router.push(`${ROUTES.TRANSACTIONS}?walletId=${result.id}`);
+        } else {
+          await update();
+          router.replace(`${ROUTES.TRANSACTIONS}?walletId=${result.id}`);
+        }
       }
     });
   };

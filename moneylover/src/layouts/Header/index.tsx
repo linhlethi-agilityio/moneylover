@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 // Constants
 import { ROUTES } from '@/constants';
@@ -34,6 +34,8 @@ const Header = ({
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const selectedWalletId = searchParams.get('walletId') ?? undefined;
 
   const handleOpenAddTransaction = () => {
     setIsOpen(true);
@@ -77,6 +79,7 @@ const Header = ({
             wallets={wallets}
             expenseCategories={expenseCategories}
             incomeCategories={incomeCategories}
+            defaultWalletId={selectedWalletId}
             onSubmit={handleSubmitTransaction}
           />
         </Modal>

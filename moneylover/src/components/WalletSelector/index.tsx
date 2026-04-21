@@ -121,10 +121,18 @@ export const WalletSelector = ({
 
   const handleCloseAddWalletModal = () => setIsOpenAddWalletModal(false);
 
+  const handleSubmitAddWallet = () => {
+    setIsOpenAddWalletModal(false);
+  };
+
   const walletDelete = wallets.find((w) => w.id === idWalletDelete);
   const walletEdit = wallets.find((w) => w.id === idWalletEdit);
 
   const handleCloseDeleteModal = () => setIdWalletDelete(null);
+
+  const handleSubmitEditWallet = () => {
+    setIdWalletEdit(null);
+  };
 
   return (
     <>
@@ -165,7 +173,7 @@ export const WalletSelector = ({
 
       {isOpenAddWalletModal && (
         <Modal isOpen title="Add Wallet" onClose={handleCloseAddWalletModal}>
-          <WalletForm userId={userId} showBalance onSubmit={handleCloseAddWalletModal} />
+          <WalletForm userId={userId} showBalance onSubmit={handleSubmitAddWallet} />
         </Modal>
       )}
 
@@ -175,7 +183,7 @@ export const WalletSelector = ({
             userId={userId}
             showBalance
             previewData={walletEdit}
-            onSubmit={handleCloseEditModal}
+            onSubmit={handleSubmitEditWallet}
           />
         </Modal>
       )}

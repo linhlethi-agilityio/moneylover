@@ -43,6 +43,7 @@ interface TransactionFormProps {
   expenseCategories?: Category[];
   incomeCategories?: Category[];
   previewData?: TransactionWithCategory;
+  defaultWalletId?: string;
   isLoading?: boolean;
   onSubmit: () => void;
 }
@@ -53,6 +54,7 @@ export const TransactionForm = ({
   expenseCategories = [],
   incomeCategories = [],
   previewData,
+  defaultWalletId,
   isLoading = false,
   onSubmit,
 }: TransactionFormProps) => {
@@ -82,7 +84,7 @@ export const TransactionForm = ({
         }
       : {
           type: FinanceType.Expense,
-          walletId: wallets[0]?.id ?? '',
+          walletId: defaultWalletId ?? wallets[0]?.id ?? '',
           categoryId: '',
           amount: 0,
           date: new Date().toISOString().split('T')[0],
