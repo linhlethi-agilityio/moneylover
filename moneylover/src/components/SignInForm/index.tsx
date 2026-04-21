@@ -63,7 +63,6 @@ export const SignInForm = () => {
       }
 
       router.push(ROUTES.DASHBOARD);
-      router.refresh();
     });
   };
 

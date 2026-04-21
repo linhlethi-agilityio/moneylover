@@ -2,7 +2,6 @@
 
 import { useTransition } from 'react';
 import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -19,12 +18,7 @@ import { Wallet, WalletFormData } from '@/types';
 import { useToast } from '@/hooks';
 
 // Utils
-import {
-  clearErrorOnChange,
-  formatCurrency,
-  validateBalance,
-  walletSchema,
-} from '@/utils';
+import { clearErrorOnChange, formatCurrency, validateBalance, walletSchema } from '@/utils';
 
 // Components
 import { Button, Input } from '@/components';
@@ -47,7 +41,6 @@ export const WalletForm = ({
   const [isPending, startTransition] = useTransition();
   const { showToast } = useToast();
   const router = useRouter();
-  const { update } = useSession();
 
   const {
     control,
@@ -98,9 +91,7 @@ export const WalletForm = ({
       if (onSubmit) {
         onSubmit();
       } else {
-        await update();
         router.replace(ROUTES.DASHBOARD);
-        router.refresh();
       }
     });
   };
