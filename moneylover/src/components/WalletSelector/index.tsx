@@ -30,6 +30,7 @@ interface WalletSelectorProps {
   totalBalance: number;
   currency: string;
   wallets: Wallet[];
+  isApproximate?: boolean;
 }
 
 export const WalletSelector = ({
@@ -37,6 +38,7 @@ export const WalletSelector = ({
   totalBalance,
   currency,
   wallets,
+  isApproximate = false,
 }: WalletSelectorProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenAddWalletModal, setIsOpenAddWalletModal] = useState(false);
@@ -140,7 +142,8 @@ export const WalletSelector = ({
                 <ChevronRightIcon className="rotate-90" />
               </div>
               <p className="text-sm font-semibold text-green-600">
-                {formattedBalance(selectedWallet ? selectedWallet.balance : totalBalance, currency)}
+                {!selectedWallet && isApproximate ? '≈ ' : ''}
+                {formattedBalance(selectedWallet ? selectedWallet.balance : totalBalance, selectedWallet ? selectedWallet.currency : 'VND')}
               </p>
             </div>
           </div>

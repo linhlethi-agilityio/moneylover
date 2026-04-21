@@ -22,7 +22,7 @@ export const DashboardContent = async ({ children }: DashboardContentProps) => {
 
   const userId = session?.user?.id ?? '';
 
-  const [{ wallets, totalBalance, currency }, { expenseCategories, incomeCategories }] =
+  const [{ wallets, totalBalance, currency, isApproximate }, { expenseCategories, incomeCategories }] =
     await Promise.all([getWalletsInfo(userId), getCategoriesInfo(userId)]);
 
   if (!wallets.length) {
@@ -38,6 +38,7 @@ export const DashboardContent = async ({ children }: DashboardContentProps) => {
         wallets={wallets}
         expenseCategories={expenseCategories}
         incomeCategories={incomeCategories}
+        isApproximate={isApproximate}
       />
       <main className="flex-1 bg-gray-50">{children}</main>
     </div>

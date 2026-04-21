@@ -6,10 +6,16 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
 
 // Constants
-import { CATEGORY_TYPES, ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/constants';
+import { CATEGORY_TYPES, CURRENCIES, ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/constants';
 
 // Types
-import { Category, FinanceType, TransactionFormData, TransactionWithCategory, Wallet } from '@/types';
+import {
+  Category,
+  FinanceType,
+  TransactionFormData,
+  TransactionWithCategory,
+  Wallet,
+} from '@/types';
 
 // Utils
 import {
@@ -132,6 +138,9 @@ export const TransactionForm = ({
     label: name,
   }));
 
+  const selectedWallet = wallets.find((w) => w.id === watchedValues.walletId);
+  const currencySymbol = CURRENCIES.find((c) => c.code === selectedWallet?.currency)?.symbol ?? '';
+
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="flex flex-col gap-4">
       {/* Type */}
@@ -212,6 +221,7 @@ export const TransactionForm = ({
             placeholder="0"
             errorMessage={error?.message}
             value={formatCurrency(value)}
+            rightIcon={<span className="text-xs text-gray-500">{currencySymbol}</span>}
             onChange={(e) => {
               onChange(validateBalance(e.target.value));
               clearErrorOnChange(name, errors, clearErrors);

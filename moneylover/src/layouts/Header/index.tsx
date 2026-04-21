@@ -19,6 +19,7 @@ interface HeaderProps {
   wallets: Wallet[];
   expenseCategories?: Category[];
   incomeCategories?: Category[];
+  isApproximate?: boolean;
 }
 
 const Header = ({
@@ -28,6 +29,7 @@ const Header = ({
   wallets,
   expenseCategories = [],
   incomeCategories = [],
+  isApproximate = false,
 }: HeaderProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
@@ -48,6 +50,7 @@ const Header = ({
           totalBalance={totalBalance}
           currency={currency}
           wallets={wallets}
+          isApproximate={isApproximate}
         />
 
         {pathname !== ROUTES.DASHBOARD && (
