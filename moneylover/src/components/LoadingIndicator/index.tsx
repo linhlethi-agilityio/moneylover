@@ -4,7 +4,7 @@ import { cn } from '@/utils';
 interface LoadingIndicatorProps {
   size?: 'sm' | 'md';
   className?: string;
-  variant?: 'inline' | 'overlay';
+  variant?: 'inline' | 'overlay' | 'backdrop';
 }
 
 const sizes = {
@@ -27,11 +27,21 @@ export const LoadingIndicator = ({
   className,
   variant = 'inline',
 }: LoadingIndicatorProps) => {
-  return variant === 'overlay' ? (
-    <div className="fixed inset-0 z-40 flex items-center justify-center bg-white">
-      <Spinner size={size} className={className} />
-    </div>
-  ) : (
-    <Spinner size={size} className={className} />
-  );
+  if (variant === 'overlay') {
+    return (
+      <div className="fixed inset-0 z-40 flex items-center justify-center bg-white">
+        <Spinner size={size} className={className} />
+      </div>
+    );
+  }
+
+  if (variant === 'backdrop') {
+    return (
+      <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+        <Spinner size={size} className={className} />
+      </div>
+    );
+  }
+
+  return <Spinner size={size} className={className} />;
 };

@@ -57,19 +57,18 @@ export const TransactionList = ({
     null,
   );
   const [isPending, startTransition] = useTransition();
+  const [isFetchingDetail, setIsFetchingDetail] = useState(false);
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState(false);
   const [isOpenTransactionModal, setIsOpenTransactionModal] = useState(false);
   const { showToast } = useToast();
   const isTransactions = Object.keys(groupedByCategory).length > 0;
 
-  const handleTransactionClick = (id: string) => {
-    startTransition(async () => {
-      const data = await getTransactionDetailById(id);
+  const handleTransactionClick = async (id: string) => {
+    setIsFetchingDetail(true);
+    const data = await getTransactionDetailById(id);
 
-      if (data) {
-        setSelectedTransaction(data);
-      }
-    });
+    if (data) setSelectedTransaction(data);
+    setIsFetchingDetail(false);
   };
 
   const handleOpenTransactionModal = () => {
@@ -130,6 +129,7 @@ export const TransactionList = ({
 
   return (
     <>
+      {isFetchingDetail && <LoadingIndicator variant="backdrop" />}
       {isPending && <LoadingIndicator variant="overlay" />}
       {isTransactions ? (
         <div className="flex flex-col gap-4">
