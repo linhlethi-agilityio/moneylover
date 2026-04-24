@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, useTransition } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 // Icons
 import { ChevronRightIcon } from '@/icons';
@@ -47,7 +47,6 @@ export const WalletSelector = ({
   const [pending, startTransition] = useTransition();
   const ref = useRef<HTMLDivElement>(null);
   const { showToast } = useToast();
-  const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -59,12 +58,10 @@ export const WalletSelector = ({
   const handleSelectWallet = (wallet: Wallet | null) => {
     setIsOpen(false);
 
-    if (pathname === ROUTES.TRANSACTIONS) {
-      const params = new URLSearchParams(searchParams.toString());
-      if (wallet) params.set('walletId', wallet.id);
-      else params.delete('walletId');
-      router.push(`${pathname}?${params.toString()}`);
-    }
+    const params = new URLSearchParams(searchParams.toString());
+    if (wallet) params.set('walletId', wallet.id);
+    else params.delete('walletId');
+    router.push(`${ROUTES.TRANSACTIONS}?${params.toString()}`);
   };
 
   const handleAddWallet = () => {
